@@ -190,15 +190,15 @@ module.exports = async function (app) {
 	
 	app.post('/api/remove_team', async function(req, res){
 			
-		var data = req.body.account;
+	var data = [req.body.account, req.body.author];
 			
 		try {
-			var sql = "CALL remove_team(?)";
+			var sql = "CALL remove_team(?,?)";
 			await pool.query(sql, data);
 			res.sendStatus(200);
 		}
 		catch(err) {
-			//console.log(err.message);
+			console.log(err);
 			res.sendStatus(500);
 		}
 			

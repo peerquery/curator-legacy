@@ -296,26 +296,11 @@
 <script>
 	//
 	
-	var index = 0;
-
-
-	function remove(i) {
-		
-		index = i;
-		
-		$('.ui.basic.modal')
-		.modal({
-			onHide: function(){
-				$("#remove_btn").removeClass("disabled");
-			}
-		})
-			.modal('show')
-		;
-	}	
 	
 $( document ).ready(function() {
     
 	var action = "";
+	var index = 0;
 	var blacklist_type = "";
 	
 	const active_user = user_data.username;
@@ -463,7 +448,7 @@ $( document ).ready(function() {
 		if (blacklist_type == "opt_out") { 
 			cell5.innerHTML = "";
 		} else {
-			cell5.innerHTML = "<button class='circular ui icon mini button' onClick='remove(this.parentNode.parentNode.rowIndex)'>  <i class='icon user times'></i>  </button>";
+			cell5.innerHTML = "<button class='circular ui icon remove mini button'>  <i class='icon user times'></i>  </button>";
 		}
 		
 		
@@ -563,6 +548,20 @@ $( document ).ready(function() {
 	
 	}
 	
+	
+	$(document).on('click','.remove',function(){
+		
+		index = this.parentNode.parentNode.rowIndex;
+		
+		$('.ui.basic.modal')
+		.modal({
+			onHide: function(){
+				$("#remove_btn").removeClass("disabled");
+			}
+		})
+			.modal('show')
+		;
+	});
 	
 
 

@@ -499,7 +499,7 @@ $( document ).ready(function() {
 		if (team_type == "inactive") { 
 			cell6.innerHTML = "";
 		} else {
-			cell6.innerHTML = "<botton class='circular ui icon mini button' onClick='remove(this.parentNode.parentNode.rowIndex)'>  <i class='icon user times'></i>  </button>";
+			cell6.innerHTML = "<botton class='circular ui icon mini remove button'>  <i class='icon user times'></i>  </button>";
 		}
 		
 	}
@@ -568,9 +568,9 @@ $( document ).ready(function() {
 	}
 	
 	
-	function remove(i) {
+	$(document).on('click','.remove',function(){
 		
-		index = i;
+		index = this.parentNode.parentNode.rowIndex;
 		
 		$('.ui.basic.modal')
 		.modal({
@@ -580,7 +580,7 @@ $( document ).ready(function() {
 		})
 			.modal('show')
 		;
-	}
+	});
 	
 	
 	
@@ -603,7 +603,7 @@ $( document ).ready(function() {
 		$.post("/api/remove_team",
 		{
 			account: delete_team_account,
-			author: ''
+			author: active_user
 		},
 		function(data, status){
 			if (status === "success") {
