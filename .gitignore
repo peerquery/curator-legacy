@@ -1,0 +1,12 @@
+
+#.env file
+.env
+
+#npm modules
+node_modules/
+
+# local files
+local/
+
+#log files
+logs/

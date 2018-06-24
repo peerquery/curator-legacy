@@ -1,0 +1,66 @@
+
+		<div class="ui padded segment">
+	
+			<img class="ui circular centered small image" id="user-image-sidebar" src="/img/person.png">
+		
+		
+			<div class="ui center aligned basic segment">
+				
+				<p id="user-account-sidebar"> </p>
+			
+				<div class="ui pink label">
+					<i class="smile outline icon"></i>
+						Welcome
+					<a class="detail" id = "user-role-sidebar"> </a>
+				</div>
+	
+			</div>
+			
+			
+			<div class="ui divider"></div>
+			
+			
+			<div class="ui secondary borderless fluid vertical menu">
+				<a class="item" id="dashboard-menu" href="/office/dashboard">
+					<i class="tachometer alternate icon"></i>
+					Dashboard
+				</a>
+				<a class="item" id="curation-menu" href="/office/curation">
+					<i class="coffee icon"></i>
+					Curation
+				</a>
+				<a class="item" id="blacklist-menu" href="/office/blacklist">
+					<i class="user times icon"></i>
+					Blacklist
+				</a>
+				<a class="item" id="team-menu" href="/office/team">
+					<i class="group icon"></i>
+					Team
+				</a>
+				<a class="item" id="activity-menu" href="/office/activity">
+					<i class="history icon"></i>
+					Activity
+				</a>
+			</div>
+
+		</div>
+	
+	<script>
+	
+	var page = window.location.pathname;
+	 if (page == "/office/dashboard") $("#dashboard-menu").addClass("active");
+	 if (page == "/office/curation") $("#curation-menu").addClass("active");
+	 if (page == "/office/blacklist") $("#blacklist-menu").addClass("active");
+	 if (page == "/office/team") $("#team-menu").addClass("active");
+	 if (page == "/office/activity") $("#activity-menu").addClass("active");
+	 
+	 $( document ).ready(function() {
+	 
+		$('#user-account-sidebar').text("@" + user_data.username);
+		$('#user-role-sidebar').text(user_data.role.toUpperCase());
+		$('#user-image-sidebar').attr('src', "https://steemitimages.com/u/" + user_data.username + "/avatar");
+		
+	 });
+	 
+	 
+	</script>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Team</title>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+<script src="/js/timeago.js"></script>
+
+  <style type="text/css">
+  body {
+    background-color: #FFFFFF;
+  }
+  .ui.menu .item img.logo {
+    margin-right: 1.5em;
+  }
+  .main.container {
+    margin-top: 7em;
+  }
+  .wireframe {
+    margin-top: 2em;
+  }
+  .ui.footer.segment {
+    margin: 5em 0em 0em;
+    padding: 5em 0em;
+  }
+  
+    .masthead.segment {
+      min-height: 700px;
+      padding: 1em 0em;
+    }
+    .masthead .logo.item img {
+      margin-right: 1em;
+    }
+    .masthead .ui.menu .ui.button {
+      margin-left: 0.5em;
+    }
+    .masthead h1.ui.header {
+      margin-top: 3em;
+      margin-bottom: 0em;
+      font-size: 4em;
+      font-weight: normal;
+    }
+    .masthead h2 {
+      font-size: 1.7em;
+      font-weight: normal;
+    }
+	
+	
+    .ui.vertical.stripe {
+      padding: 8em 0em;
+    }
+    .ui.vertical.stripe h3 {
+      font-size: 2em;
+    }
+    .ui.vertical.stripe .button + h3,
+    .ui.vertical.stripe p + h3 {
+      margin-top: 3em;
+    }
+    .ui.vertical.stripe .floated.image {
+      clear: both;
+    }
+    .ui.vertical.stripe p {
+      font-size: 1.33em;
+    }
+    .ui.vertical.stripe .horizontal.divider {
+      margin: 3em 0em;
+    }
+
+    .quote.stripe.segment {
+      padding: 0em;
+    }
+    .quote.stripe.segment .grid .column {
+      padding-top: 5em;
+      padding-bottom: 5em;
+    }
+  </style>
+
+</head>
+<body>
+
+  <!-- ejs -->
+  
+  	<% include ../partials/navbar.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+
+<div class="ui container" style="margin-top:100px">
+
+<div class="ui stackable grid">
+
+	<div class="four wide column">
+	
+
+  <!-- ejs -->
+  
+  	<% include ../partials/sidebar.ejs %>
+  
+  <!-- ejs -->
+  
+	
+	</div>
+  
+  
+	<div class="twelve wide column">
+	
+	
+  <!-- ejs -->
+  
+  	<% include ../partials/notifications.ejs %>
+  
+  <!-- ejs -->
+  
+  
+			
+  
+		<div class="ui five item menu">
+			<a class="active item" id="team_admins">
+				<i class="chess king icon"></i>
+				Admins
+			</a>
+			<a class="item" id="team_mods">
+				<i class="chess queen icon"></i>
+				Moderators
+			</a>
+			<a class="item" id="team_curies">
+				<i class="chess rook icon"></i>
+				Curators
+			</a>
+			<a class="item" id="team_pending">
+				<i class="hourglass half icon"></i>
+				Pending
+			</a>
+			<a class="item" id="team_inactive">
+				<i class="user times icon"></i>
+				Inactive
+			</a>
+		</div>
+			
+
+		<div class="ui segment" id="team_list_segment">
+			
+			<table class="ui very basic selectable table" id="team_list">
+  <thead>
+    <tr>
+      <th>Account</th>
+      <th>Email</th>
+      <th>Joined</th>
+      <th>Status</th>
+      <th>Tag</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    </tr>
+    <tr>
+    </tr>
+    <tr>
+    </tr>
+  </tbody>
+</table>
+			
+			<div id="message"></div>
+			
+			<div class="ui divider"></div>
+			
+			<button class="ui basic button" id="add">
+				<i class="icon user plus"></i>
+				Add member
+			</button>
+
+
+		</div>
+
+	
+	
+	</div>
+
+</div>
+
+
+<!-- add modal -->
+
+<div class="ui new_team tiny modal">
+	<i class="close icon"></i>
+	
+	<div class="header">
+			New admin, moderator or curator
+	</div>
+	<div class="content">
+
+	<form class="ui form" id="new_team_form">
+  
+		<div class="two fields">
+	  
+			<div class="required form_inputs field" id="new_team_account_field">
+				<label>Steem account</label>
+				<input type="text" name="account" maxlength="20" placeholder="@me-too" id="new_team_account">
+			</div>
+    
+			<div class="required form_inputs field" id="new_team_role_field">
+				<label>Role</label>
+				<select class="ui fluid search dropdown" name="user[role]" id="new_team_role">
+					<option value="">role</option>
+					<option value="admin">admin</option>
+					<option value="moderator">moderator</option>
+					<option value="curator">curator</option>
+				</select>
+			</div>
+			
+		</div>
+		
+		<div class="two fields">
+			<div class="required form_inputs ten wide field" id="new_team_email_field">
+				<label>Email</label>
+				<input type="email" name="email" placeholder="me-too@me.too" id="new_team_email">
+			</div>
+			<div class="required form_inputs six wide field" id="new_team_tag_field">
+				<label>Tag(visible to all)</label>
+				<input type="text" placeholder="auditor" id="new_team_tag">
+			</div>
+		</div>
+  
+		
+		<div class="required form_inputs field" id="new_team_message_field">
+			<label>
+				<i class="info circle icon"></i>
+				Email invite message(plain text or HTML)
+			</label>
+			<textarea id="new_team_message" name="description" placeholder="For all your contributions to the growth of #Curators trend, please come and join us."></textarea>
+		</div>
+		
+		<div class="ui success message">
+			<div class="header">Great!</div>
+			<p>You've successfully added the new user!</p>
+		</div>
+		
+		<div class="ui error message">
+			<div class="header">Sorry</div>
+			<p>There was an error, please try again.</p>
+		</div>
+		
+		<div class="ui message" id="form_message">
+			<div class="header">Important things to note:</div>
+			<ul class="list">
+				<li>New user will receive invitation email with auto-generated password</li>
+				<li>For the sake of credibility, set account to the Steem account of new user</li>
+				<li>Account and email of new user must be unique to that of existing users </li>
+			</ul>
+		</div>
+  
+	</form>
+
+	</div>
+	
+	<div class="actions">
+		<div class="ui green form_inputs button" id="add_team" id="add_member_button">Invite</div>
+		<div class="ui cancel button">Cancel</div>
+	</div>
+
+</div>
+
+
+<!-- modal end -->
+
+
+
+<!-- delete modal -->
+
+
+<div class="ui basic modal">
+	<div class="ui icon header">
+		<i class="user times icon"></i>
+		Remove team member
+	</div>
+	<div class="content">
+		<p>Are you sure you want to part ways with this team member? You could add them later.</p>
+	</div>
+	<div class="actions">
+		<div class="ui red basic cancel inverted button">
+			<i class="remove icon"></i>
+			No
+		</div>
+		<div class="ui green inverted button" id="remove_team" id="remove_btn">
+			<i class="checkmark icon"></i>
+			Yes
+		</div>
+	</div>
+</div>
+
+
+<!-- modal end -->
+
+
+
+
+
+
+</div>
+
+<script>
+	//
+	
+$( document ).ready(function() {
+	
+	var action = "";
+	var index = 0;
+	var team_type = "";
+	
+	const active_user = user_data.username;
+	const active_user_authority = user_data.authority;
+	
+	
+	function team_admins() {
+	
+		team_type = "admin";
+		
+		$("#message").html("");
+		clear_table();
+		$("#team_list_segment").addClass("loading");
+	
+		$.get("/api/team_admins", function(data, status){
+			if(status == "success") {
+			
+				$("#team_list_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#message").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						add_row(data[x]);
+					}
+					
+				}
+				
+			} else {
+				alert("Err fetching results, please try again");
+			}
+		});
+	}
+	
+	function team_mods() {
+	
+		team_type = "moderator";
+	
+		$("#message").html("");
+		clear_table();
+		$("#team_list_segment").addClass("loading");
+	
+		$.get("/api/team_mods", function(data, status){
+			if(status == "success") {
+			
+				$("#team_list_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#message").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						add_row(data[x]);
+					}
+					
+				}
+				
+			} else {
+				alert("Err fetching results, please try again");
+			}
+		});
+	}
+	
+	function team_curies() {
+	
+		team_type = "curator";
+	
+		$("#message").html("");
+		clear_table();
+		$("#team_list_segment").addClass("loading");
+	
+		$.get("/api/team_curies", function(data, status){
+			if(status == "success") {
+			
+				$("#team_list_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#message").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						add_row(data[x]);
+					}
+					
+				}
+				
+			} else {
+				alert("Err fetching results, please try again");
+			}
+		});
+	}
+	
+	function team_pending() {
+	
+		team_type = "pending";
+	
+		$("#message").html("");
+		clear_table();
+		$("#team_list_segment").addClass("loading");
+	
+		$.get("/api/team_pending", function(data, status){
+			if(status == "success") {
+			
+				$("#team_list_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#message").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						add_row(data[x]);
+					}
+					
+				}
+				
+			} else {
+				alert("Err fetching results, please try again");
+			}
+		});
+	}
+	
+	function team_inactive() {
+	
+		team_type = "inactive";
+	
+		$("#message").html("");
+		clear_table();
+		$("#team_list_segment").addClass("loading");
+	
+		$.get("/api/team_inactive", function(data, status){
+			if(status == "success") {
+			
+				$("#team_list_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#message").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						add_row(data[x]);
+					}
+					
+				}
+				
+			} else {
+				alert("Err fetching results, please try again");
+			}
+		});
+	}
+	
+	
+	
+	function add_row(data) {
+		
+		var table = document.getElementById("team_list");
+	
+		var row = table.insertRow(-1);
+		
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(2);
+		var cell4 = row.insertCell(3);
+		var cell5 = row.insertCell(4);
+		var cell6 = row.insertCell(5);
+		
+		cell1.innerHTML = "@" + data.account;
+		cell2.innerHTML = data.email;
+		cell3.innerHTML =  jQuery.timeago(data.created);
+		cell4.innerHTML = data.status;
+		cell5.innerHTML = data.tag;
+		if (team_type == "inactive") { 
+			cell6.innerHTML = "";
+		} else {
+			cell6.innerHTML = "<botton class='circular ui icon mini button' onClick='remove(this.parentNode.parentNode.rowIndex)'>  <i class='icon user times'></i>  </button>";
+		}
+		
+	}
+	
+	
+	
+	function add_team() {
+		$("#message").html("");
+		
+		var new_team_account = $('#new_team_account').val();
+		var new_team_email = $('#new_team_email').val();
+		var new_team_role = $('#new_team_role').val();
+		var new_team_tag = $('#new_team_tag').val();
+		var new_team_message = $('#new_team_message').val();
+		var new_team_authority = get_new_team_authority(new_team_role);
+		
+		if (new_team_account == "") $("#new_team_account_field").addClass("error");
+		else if(new_team_email == "") $('#new_team_email_field').addClass("error");
+		else if(new_team_role == "") $('#new_team_role_field').addClass("error");
+		else if(new_team_tag == "") $('#new_team_tag_field').addClass("error");
+		else if(new_team_message == "") $('#new_team_message_field').addClass("error");
+		else {
+			
+			$("#new_team_account_field").removeClass("error");
+			$('#new_team_email_field').removeClass("error");
+			$('#new_team_role_field').removeClass("error");
+			$('#new_team_tag_field').removeClass("error");
+			$('#new_team_message_field').removeClass("error");
+		
+			$("#new_team_form").addClass("loading");
+			$(".form_inputs").addClass("disabled");
+			$('.form .ui.dropdown').addClass("disabled");
+			
+			$.post("/api/new_team",
+			{
+				account: new_team_account,
+				author: active_user,
+				email: new_team_email,
+				role: new_team_role,
+				tag: new_team_tag,
+				message: new_team_message,
+				authority: new_team_authority
+			},
+			function(data, status){
+				$("#new_team_form").removeClass("loading");
+				if (status === "success") {
+					$("#new_team_form").addClass("success");
+					
+					if(team_type == "pending") {
+						var data = {};
+						data.account = new_team_account;
+						data.email = new_team_email;
+						data.created = new Date();
+						data.tag = new_team_tag;
+						data.status = "pending";
+						
+						add_row(data) 
+					};
+				} else {
+					$("#new_team_form").addClass("error");
+				}
+			});
+		
+		}
+		
+	}
+	
+	
+	function remove(i) {
+		
+		index = i;
+		
+		$('.ui.basic.modal')
+		.modal({
+			onHide: function(){
+				$("#remove_btn").removeClass("disabled");
+			}
+		})
+			.modal('show')
+		;
+	}
+	
+	
+	
+	function get_new_team_authority(role) {
+		if(role == "admin") return 3;
+		else if(role == "moderator") return 2;
+		else if(role == "curator") return 1;
+	}
+	
+	
+	function remove_team() {
+	
+		$("#remove_btn").addClass("disabled");
+		
+		var table = document.getElementById("team_list");
+		
+		var delete_team_account = table.rows[index].cells[0].innerHTML.substring(1);
+		
+		
+		$.post("/api/remove_team",
+		{
+			account: delete_team_account,
+			author: ''
+		},
+		function(data, status){
+			if (status === "success") {
+				
+				$('.ui.basic.modal')
+					.modal({
+						onHide: function(){
+							$("#remove_btn").removeClass("disabled");
+						}
+					})
+					.modal('hide')
+				;
+				
+				document.getElementById('team_list').deleteRow(index);
+				
+			} else {
+				alert("Sorry, there was an error. Pease try again.");
+				$('.ui.basic.modal')
+					.modal({
+						onHide: function(){
+							$("#remove_btn").removeClass("disabled");
+						}
+					})
+					.modal('hide')
+				;
+			}
+		});
+	
+	}
+	
+	
+	
+	team_admins();
+	
+
+
+	$( "#add" ).click(function() {
+	
+		$('.new_team.modal').modal({
+			onHide: function(){
+				$('.ui.dropdown').removeClass("disabled");
+				$('.form_inputs').removeClass("disabled");
+				$("#new_team_form").attr("class", "ui form");
+				$('form').form('clear');
+			}
+		}).modal('show');
+	
+	});
+	
+	
+	
+	function clear_table() {
+	
+		var tableHeaderRowCount = 1;
+		var table = document.getElementById('team_list');
+		var rowCount = table.rows.length;
+		for (var i = tableHeaderRowCount; i < rowCount; i++) {
+			table.deleteRow(tableHeaderRowCount);
+		}
+		
+	}
+	
+	
+	//set up click event listeners
+	
+	$('#team_admins').click(function() {
+		team_admins();
+	})
+	
+	$('#team_mods').click(function() {
+		team_mods();
+	})
+	
+	$('#team_curies').click(function() {
+		team_curies();
+	})
+	
+	$('#team_pending').click(function() {
+		team_pending();
+	})
+	
+	$('#team_inactive').click(function() {
+		team_inactive();
+	})
+	
+	//
+	$('#add_team').click(function() {
+		add_team();
+	})
+	
+	$('#remove_team').click(function() {
+		remove_team();
+	})
+	
+	
+
+});
+	
+	
+	$('.ui.dropdown')
+		.dropdown()
+	;
+	
+	
+</script>
+
+  <!-- ejs -->
+  
+  	<% include ../partials/footer.ejs %>
+  
+  <!-- ejs -->
+  
+
+</body>
+
+</html>

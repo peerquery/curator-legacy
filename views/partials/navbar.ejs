@@ -1,0 +1,89 @@
+
+  <div class="ui fixed inverted menu">
+    <div class="ui container">
+      <a href="/" class="header item">
+        <img class="logo" src="/img/logo.png">
+        The Curators <span><small>[beta]</small></span>
+      </a>
+      <a href="/" class="item">Service</a>
+      <a href="/" class="item">Bot</a>
+      <a href="/" class="item">Trail</a>
+      <a href="/" class="item">Community</a>
+      <a href="/" class="item">Sponsors</a>
+        
+		<div class="right item">
+		
+			<a class="ui inverted button" href='/login' id='login-menu' style='display:none'>Log in</a>
+        
+		
+			<span id='office-menu' style='display:none'>
+			<div class="ui inline dropdown">
+				<div class="text">
+					<img id='user-img' class="ui avatar image">
+					<span id="user-account"></span>
+				</div>
+				
+				<i class="dropdown icon"></i>
+				
+				<div class="menu">
+	  
+					<a class="item" id="logout-btn">
+						<i class="sign out alternate icon"></i>
+						Log out
+					</a>
+	  
+				</div>
+			</div>
+			</span>
+
+		
+		</div>	
+	
+	</div>
+  </div>
+  
+    
+<script>
+	
+	
+	
+  $(document).ready(function() {
+	
+	
+	<% if(typeof user == 'object' && user){ %>
+		
+		window.user_data = <%- JSON.stringify(user) %>
+		
+	<% } %>
+	
+	
+	if( typeof user_data == 'object' && user_data ) {
+		$('#office-menu').show();
+		var account = user_data.username;
+	
+		$('#user-account').text(account);
+		$('#user-img').attr('src', "https://steemitimages.com/u/" + account + "/avatar")
+	
+	} else { 
+		$('#login-menu').show();
+	}
+	
+	
+      $('.ui.menu .ui.dropdown').dropdown({
+        on: 'hover'
+      });
+      $('.ui.menu a.item')
+        .on('click', function() {
+          $(this)
+            .addClass('active')
+            .siblings()
+            .removeClass('active')
+          ;
+        });
+  });
+  
+  $('#logout-btn').click(function() {
+	window.location.href = '/login';
+  });
+</script>
+

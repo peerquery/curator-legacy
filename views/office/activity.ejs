@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Activity</title>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+<script src="/js/timeago.js"></script>
+
+  <style type="text/css">
+  body {
+    background-color: #FFFFFF;
+  }
+  .ui.menu .item img.logo {
+    margin-right: 1.5em;
+  }
+  .main.container {
+    margin-top: 7em;
+  }
+  .wireframe {
+    margin-top: 2em;
+  }
+  .ui.footer.segment {
+    margin: 5em 0em 0em;
+    padding: 5em 0em;
+  }
+  
+    .masthead.segment {
+      min-height: 700px;
+      padding: 1em 0em;
+    }
+    .masthead .logo.item img {
+      margin-right: 1em;
+    }
+    .masthead .ui.menu .ui.button {
+      margin-left: 0.5em;
+    }
+    .masthead h1.ui.header {
+      margin-top: 3em;
+      margin-bottom: 0em;
+      font-size: 4em;
+      font-weight: normal;
+    }
+    .masthead h2 {
+      font-size: 1.7em;
+      font-weight: normal;
+    }
+	
+	
+    .ui.vertical.stripe {
+      padding: 8em 0em;
+    }
+    .ui.vertical.stripe h3 {
+      font-size: 2em;
+    }
+    .ui.vertical.stripe .button + h3,
+    .ui.vertical.stripe p + h3 {
+      margin-top: 3em;
+    }
+    .ui.vertical.stripe .floated.image {
+      clear: both;
+    }
+    .ui.vertical.stripe p {
+      font-size: 1.33em;
+    }
+    .ui.vertical.stripe .horizontal.divider {
+      margin: 3em 0em;
+    }
+
+    .quote.stripe.segment {
+      padding: 0em;
+    }
+    .quote.stripe.segment .grid .column {
+      padding-top: 5em;
+      padding-bottom: 5em;
+    }
+  </style>
+
+</head>
+<body>
+
+  <!-- ejs -->
+  
+  	<% include ../partials/navbar.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+
+<div class="ui container" style="margin-top:100px">
+
+<div class="ui stackable grid">
+
+	<div class="four wide column">
+	
+
+  <!-- ejs -->
+  
+  	<% include ../partials/sidebar.ejs %>
+  
+  <!-- ejs -->
+  
+	
+	</div>
+  
+  
+	<div class="twelve wide column">
+	
+	
+	
+  <!-- ejs -->
+  
+  	<% include ../partials/notifications.ejs %>
+  
+  <!-- ejs -->
+  
+  
+		<div class="ui six item menu">
+			<a class="active item" onClick="all_activity()">
+				<i class="rss icon"></i>
+				All
+			</a>
+			<a class="item" onClick="curation_activity()">
+				<i class="balance scale icon"></i>
+				Curation
+			</a>
+			<a class="item" onClick="re_curation_activity()">
+				<i class="redo icon"></i>
+				Re-curation
+			</a>
+			<a class="item" onClick="finance_activity()">
+				<i class="dollar icon"></i>
+				Finance
+			</a>
+			<a class="item" onClick="team_activity()">
+				<i class="group icon"></i>
+				Team
+			</a>
+			<a class="item" onClick="discussions_activity()">
+				<i class="comments icon"></i>
+				Discussions
+			</a>
+		</div>
+
+  
+  
+  
+
+  <div class="ui basic segment" id="activity_segment">
+	
+	<div class="ui pointing below violet label">
+		Activity stream
+    </div>
+	
+	<div class="ui relaxed divided list" id="activity_list">
+  
+	</div>
+  
+	
+</div>
+
+	
+	</div>
+
+	</div>
+
+</div>
+
+
+<script>
+	//
+	
+	$( document ).ready(function() {
+    
+		const active_user = user_data.username;
+		const active_user_authority = user_data.authority;
+	
+	});
+	
+	
+	function all_activity() {
+	
+		$("#activity_list").html("");
+		$("#activity_segment").addClass("loading");
+	
+		$.get("/api/all_activity", function(data, status){
+			if(status == "success") {
+			
+				$("#activity_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#activity_list").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						create_items(data[x]);
+					}
+					
+				}
+				
+			} else {
+				alert("Err fetching results, please try again");
+			}
+		});
+	}
+	
+	function curation_activity() {
+	
+		$("#activity_list").html("");
+		$("#activity_segment").addClass("loading");
+	
+		$.get("/api/curation_activity", function(data, status){
+			if(status == "success") {
+			
+				$("#activity_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#activity_list").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						create_items(data[x]);
+					}
+					
+				}
+				
+			} else {
+				alert("Err fetching results, please try again");
+			}
+		});
+	}
+	
+	function re_curation_activity() {
+	
+		$("#activity_list").html("");
+		$("#activity_segment").addClass("loading");
+	
+		$.get("/api/re_curation_activity", function(data, status){
+			if(status == "success") {
+			
+				$("#activity_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#activity_list").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						create_items(data[x]);
+					}
+					
+				}
+				
+			} else {
+				alert("Err fetching results, please try again");
+			}
+		});
+	}
+	
+	function finance_activity() {
+	
+		$("#activity_list").html("");
+		$("#activity_segment").addClass("loading");
+	
+		$.get("/api/finance_activity", function(data, status){
+			if(status == "success") {
+			
+				$("#activity_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#activity_list").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						create_items(data[x]);
+					}
+					
+				}
+				
+			} else {
+				alert("Err fetching results, please try again");
+			}
+		});
+	}
+	
+	function team_activity() {
+	
+		$("#activity_list").html("");
+		$("#activity_segment").addClass("loading");
+	
+		$.get("/api/team_activity", function(data, status){
+			if(status == "success") {
+			
+				$("#activity_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#activity_list").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						create_items(data[x]);
+					}
+					
+				}
+				
+			} else {
+				alert("Err fetching results, please try again");
+			}
+		});
+	}
+	
+	function discussions_activity() {
+	
+		$("#activity_list").html("");
+		$("#activity_segment").addClass("loading");
+	
+		$.get("/api/discussions_activity", function(data, status){
+			if(status == "success") {
+			
+				$("#activity_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#activity_list").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						create_items(data[x]);
+					}
+					
+				}
+				
+			} else {
+				alert("Err fetching results, please try again");
+			}
+		});
+	}
+	
+	
+	function create_items(data) {
+		
+		var item = document.createElement("div");
+		item.className = "item";
+	
+		var i = document.createElement("i");
+		i.className = get_icon(data.type);
+		
+		var content = document.createElement("div");
+		content.className = "content";
+		
+		var a = document.createElement("a");
+		a.className = "header";
+		a.innerText = data.comments;
+		a.href = data.link;
+		a.setAttribute("target", "_blank");
+		
+		var div = document.createElement("div");
+		div.className = "description";
+		
+		var author = document.createElement("a");
+		author.className = "ui label";
+		author.innerHTML = "<i class='user icon'></i>" + data.author;
+		
+		var type = document.createElement("a");
+		type.className = "ui label";
+		type.innerHTML = "<i class='tag icon'></i>" + data.type;
+		
+		var time = document.createElement("a");
+		time.className = "ui label";
+		time.innerHTML = "<i class='wait icon'></i> " + jQuery.timeago(data.time);
+		
+		div.appendChild(author);
+		div.appendChild(type);
+		div.appendChild(time);
+		
+		content.appendChild(a);
+		content.appendChild(div);
+		
+		item.appendChild(i);
+		item.appendChild(content);
+		
+		document.getElementById("activity_list").appendChild(item);
+		
+	}
+	
+	function get_icon(type) {
+		
+		if (type == "approve") return "large green check middle aligned icon";
+		else if (type == "reject") return "large red times middle aligned icon";
+		else if (type == "re-approve") return "large green thumbs up outline middle aligned icon";
+		else if (type == "re-reject") return "large red thumbs up outline middle aligned icon";
+		else if (type == "finance") return "large yello dollar middle aligned icon";
+		else if (type == "add_team") return "large green user plus middle aligned icon";
+		else if (type == "remove_team") return "large red user times middle aligned icon";
+		else if (type == "add_sponsor") return "large green handshake outline middle aligned icon";
+		else if (type == "remove_sponsor") return "large red hand paper outline middle aligned icon";
+		else if (type == "add_to_blacklist") return "large red eye slash outline middle aligned icon";
+		else if (type == "remove_from_blacklist") return "large green eye outline middle aligned icon";
+		else if (type == "discussions") return "large teal comments middle aligned icon";
+	
+	}
+	
+	
+	all_activity();
+	
+  
+</script>
+
+
+
+  <!-- ejs -->
+  
+  	<% include ../partials/footer.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+</body>
+
+</html>

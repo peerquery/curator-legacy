@@ -1,0 +1,44 @@
+{
+  "name": "curator",
+  "version": "1.0.0",
+  "description": "steem content curation interface\u001b[D\u001b[C\u001b[C\u001b",
+  "main": "setup.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node setup.js"
+  },
+  "engines": {
+    "node": "8.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "\u001b[D\u001b[D\u001b[C\u001b[C\u001b"
+  },
+  "keywords": [
+    "steem",
+    "curator",
+    "moderate"
+  ],
+  "author": "dzivenu",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^2.0.1",
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^5.0.1",
+    "dsteem": "^0.8.7",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "fs": "0.0.1-security",
+    "jwt-simple": "^0.5.1",
+    "morgan": "^1.9.0",
+    "mysql": "^2.15.0",
+    "nodemailer": "^4.6.5",
+    "rotating-file-stream": "^1.3.6",
+    "serve-favicon": "^2.5.0",
+    "util": "^0.10.3",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.4"
+  }
+}

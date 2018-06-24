@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dashboard</title>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+<script src="https://unpkg.com/dsteem@latest/dist/dsteem.js"></script>
+
+  <style type="text/css">
+  body {
+    background-color: #FFFFFF;
+  }
+  .ui.menu .item img.logo {
+    margin-right: 1.5em;
+  }
+  .main.container {
+    margin-top: 7em;
+  }
+  .wireframe {
+    margin-top: 2em;
+  }
+  .ui.footer.segment {
+    margin: 5em 0em 0em;
+    padding: 5em 0em;
+  }
+  
+    .masthead.segment {
+      min-height: 700px;
+      padding: 1em 0em;
+    }
+    .masthead .logo.item img {
+      margin-right: 1em;
+    }
+    .masthead .ui.menu .ui.button {
+      margin-left: 0.5em;
+    }
+    .masthead h1.ui.header {
+      margin-top: 3em;
+      margin-bottom: 0em;
+      font-size: 4em;
+      font-weight: normal;
+    }
+    .masthead h2 {
+      font-size: 1.7em;
+      font-weight: normal;
+    }
+	
+	
+    .ui.vertical.stripe {
+      padding: 8em 0em;
+    }
+    .ui.vertical.stripe h3 {
+      font-size: 2em;
+    }
+    .ui.vertical.stripe .button + h3,
+    .ui.vertical.stripe p + h3 {
+      margin-top: 3em;
+    }
+    .ui.vertical.stripe .floated.image {
+      clear: both;
+    }
+    .ui.vertical.stripe p {
+      font-size: 1.33em;
+    }
+    .ui.vertical.stripe .horizontal.divider {
+      margin: 3em 0em;
+    }
+
+    .quote.stripe.segment {
+      padding: 0em;
+    }
+    .quote.stripe.segment .grid .column {
+      padding-top: 5em;
+      padding-bottom: 5em;
+    }
+  </style>
+
+</head>
+<body>
+
+  <!-- ejs -->
+  
+  	<% include ../partials/navbar.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+
+<div class="ui container" style="margin-top:100px">	
+	
+	
+	
+<div class="ui stackable grid">
+
+	<div class="four wide column">
+	
+
+  <!-- ejs -->
+  
+  	<% include ../partials/sidebar.ejs %>
+  
+  <!-- ejs -->
+  
+	
+	</div>
+  
+  
+	<div class="twelve wide column">
+	
+	
+	
+  <!-- ejs -->
+  
+  	<% include ../partials/notifications.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+		<div class="ui center loading aligned basic segment" id="main_segment">
+		
+		
+	
+			<div class="ui pointing below medium red label" style="margin-top: 10px; margin-bottom: 60px">
+				<i class="dollar icon"></i>
+				Bot stats
+			</div>
+	
+			<div class="ui three cards">
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Voting power</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular signal icon"></i>
+							<span id="voting_power"></span>
+						</h2>
+					</div>
+				</div>
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Steem power</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular dollar icon"></i>
+							<span id="steem_power"></span>
+						</h2>
+					</div>
+				</div>
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Delegated SP</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular bolt icon"></i>
+							<span id="delegated_sp"></span>
+						</h2>
+					</div>
+				</div>
+			
+			</div>
+			
+			
+		
+			<div class="ui pointing below medium yellow label" style="margin-top: 60px; margin-bottom: 60px">
+				<i class="chevron circle up icon"></i>
+				Bot rate
+			</div>
+			
+			
+			<div class="ui three cards">
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Community</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular percent icon"></i>
+							<span id="community_rate"></span>
+						</h2>
+					</div>
+				</div>
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Team</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular percent icon"></i>
+							<span id="team_rate"></span>
+						</h2>
+					</div>
+				</div>
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Project</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular percent icon"></i>
+							<span id="project_rate"></span>
+						</h2>
+					</div>
+				</div>
+			
+			</div>
+		
+		
+		
+			<div class="ui pointing below medium olive label" style="margin-top: 60px; margin-bottom: 60px">
+				<i class="hourglass half icon"></i>
+				Curation
+			</div>
+			
+			
+			<div class="ui three cards">
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Total</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular percent icon"></i>
+							<span id="total_posts"></span>
+						</h2>
+					</div>
+				</div>
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Target</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular percent icon"></i>
+							<span id="daily_curation"></span>
+						</h2>
+					</div>
+				</div>
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Completed</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular percent icon"></i>
+							<span id="voted_posts"></span>
+						</h2>
+					</div>
+				</div>
+			
+			</div>
+		
+		
+		
+		
+		</div>
+	
+
+		<div class="ui segment" style="margin-top: 60px; display:none" id="community_segment">
+		<a class="ui orange ribbon label">Community</a>
+			<div class="ui basic segment">
+				
+		<div class="ui small four statistics">
+
+			<div class="statistic">
+				<div class="value">
+					<i class="id card icon"></i>
+					<span id="total_team"></span>
+				</div>
+				<div class="label">
+					Team
+				</div>
+			</div>
+			<div class="statistic">
+				<div class="text value">
+					<span id="total_members"></span>
+				</div>
+				<div class="label">
+					Members
+				</div>
+			</div>
+			<div class="statistic">
+				<div class="value">
+					<i class="briefcase icon"></i>
+					<span id="total_sponsors"></span>
+				</div>
+				<div class="label">
+					Sponsors
+				</div>
+			</div>
+			<div class="statistic">
+				<div class="value">
+					<i class="users icon"></i> <span id="subscribers"></span>
+				</div>
+				<div class="label">
+					Subscribers
+				</div>
+			</div>
+		
+		</div>
+	
+	
+			<div class="ui divider"></div>
+			
+				
+				<div class="meta">
+					<i class="info circle icon"></i>
+					These status were updates just now.
+				</div>
+				
+				
+				
+			</div>
+		
+		</div>
+
+	
+	
+	
+	</div>
+
+	
+</div>
+
+
+
+</div>
+
+
+<script>
+    var client = new dsteem.Client('https://api.steemit.com');
+	var bot_account = '';
+	
+	$( document ).ready(function() {
+    
+		const active_user = user_data.username;
+		const active_user_authority = user_data.authority;
+	
+	});
+	
+	
+	$.get("/api/dashboard", function(data, status){
+		
+		//console.log(data);
+		
+		$('#project_rate').text(data[0][0].project_rate + "%");
+		$('#team_rate').text(data[0][0].team_rate + "%");
+		$('#community_rate').text(data[0][0].community_rate + "%");
+		
+		$('#daily_curation').text(data[0][0].daily_curation);
+		$('#total_posts').text(data[1][0].total_posts);
+		$('#voted_posts').text(data[2][0].voted_posts);
+		
+		$('#total_team').text(data[3][0].total_team);
+		$('#total_sponsors').text(data[4][0].total_sponsors);
+		$('#total_members').html(num2str(data[5][0].total_members));
+		
+		bot_account = data[0][0].bot_account;
+		cal();
+		
+	});
+	
+	
+	
+	async function cal() {
+	
+		try{
+		
+			var c = await client.database.getConfig()
+			//console.log(c);
+		
+			var dgp = await client.database.getDynamicGlobalProperties()
+			var t_v_s = dgp.total_vesting_shares.split(' ')[0];
+			var t_v_f = dgp.total_vesting_fund_steem.split(' ')[0];
+			//console.log(dgp);
+		
+			var acc = await client.database.getAccounts([bot_account]);
+			acc = acc[0];
+			//console.log(acc);
+			var l_v_t = acc.last_vote_time;
+			var v_p = acc.voting_power;
+			var v_s = acc.vesting_shares.split(' ')[0];
+			var d_v_s = acc.delegated_vesting_shares.split(' ')[0];
+			var r_v_s = acc. received_vesting_shares.split(' ')[0];
+		
+			//var secondsago = (new Date - new Date(response[0].last_vote_time + "Z")) / 1000;
+			var s_a = (new Date() - new Date(l_v_t + "Z")) / 1000;
+		
+			//var current voting_power = response[0].voting_power + (10000 * secondsago / 432000);
+			var current_voting_power = v_p + (10000 * s_a / 432000);
+			current_voting_power = Math.min(current_voting_power / 100, 100).toFixed(2);
+			//console.log(c_v_p);
+			$('#voting_power').text(current_voting_power + "%");
+	
+			//var steemPower = totalVestingFundSteem * (vestingShares / totalVestingShares);
+			var steem_power = (t_v_f * (v_s / t_v_s)).toLocaleString();
+			//console.log(steem_power);
+			$('#steem_power').text(steem_power);
+		
+			//vesting shares for delegation is => received_vesting_shares.split(' ')[0] - delegated_vesting_shares.split(' ')[0])
+			var delegated_steem_power = (t_v_f * ((r_v_s - d_v_s) / t_v_s)).toLocaleString();
+			//console.log(delegated_steem_power);
+			$('#delegated_sp').text(delegated_steem_power);
+			
+			
+			var follow = await client.call('follow_api', 'get_follow_count', [bot_account]);
+			$('#subscribers').text(follow.follower_count);
+			
+			$('#main_segment').removeClass('loading');
+			$('#community_segment').show();
+		
+		} catch(err) {
+		
+			console.log(err)
+		
+		}
+		
+	}
+	
+	
+		
+// source:  https://gist.github.com/pehrlich/2127650
+// number to string, pluginized from http://stackoverflow.com/questions/5529934/javascript-numbers-to-words
+
+
+window.num2str = function (num) {
+    return window.num2str.convert(num);
+}
+
+window.num2str.ones = ['', 'one<br/>', 'two<br/>', 'three<br/>', 'four<br/>', 'five<br/>', 'six<br/>', 'seven<br/>', 'eight<br/>', 'nine<br/>'];
+window.num2str.tens=['','','twenty<br/>','thirty<br/>','forty<br/>','fifty<br/>','sixty<br/>','seventy<br/>','eighty<br/>','ninety<br/>'];
+window.num2str.teens=['ten<br/>','eleven<br/>','twelve<br/>','thirteen<br/>','fourteen<br/>','fifteen<br/>','sixteen<br/>','seventeen<br/>','eighteen<br/>','nineteen<br/>'];
+
+
+window.num2str.convert_millions = function(num) {
+    if (num >= 1000000) {
+        return this.convert_millions(Math.floor(num / 1000000)) + " million &<br/>" + this.convert_thousands(num % 1000000);
+    }
+    else {
+        return this.convert_thousands(num);
+    }
+}
+
+window.num2str.convert_thousands = function(num) {
+    if (num >= 1000) {
+        return this.convert_hundreds(Math.floor(num / 1000)) + " thousand &<br/>" + this.convert_hundreds(num % 1000);
+    }
+    else {
+        return this.convert_hundreds(num);
+    }
+}
+
+window.num2str.convert_hundreds = function(num) {
+    if (num > 99) {
+        return this.ones[Math.floor(num / 100)] + " hundred &<br/>" + this.convert_tens(num % 100);
+    }
+    else {
+        return this.convert_tens(num);
+    }
+}
+
+window.num2str.convert_tens = function(num) {
+    if (num < 10) return this.ones[num];
+    else if (num >= 10 && num < 20) return this.teens[num - 10];
+    else {
+        return this.tens[Math.floor(num / 10)] + " " + this.ones[num % 10];
+    }
+}
+
+window.num2str.convert = function(num) {
+    if (num == 0) return "zero";
+    else return this.convert_millions(num);
+}
+	
+	
+</script>
+
+
+  <!-- ejs -->
+  
+  	<% include ../partials/footer.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+
+</body>
+
+</html>

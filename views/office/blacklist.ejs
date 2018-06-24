@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Blacklist</title>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+<script src="/js/timeago.js"></script>
+
+  <style type="text/css">
+  body {
+    background-color: #FFFFFF;
+  }
+  .ui.menu .item img.logo {
+    margin-right: 1.5em;
+  }
+  .main.container {
+    margin-top: 7em;
+  }
+  .wireframe {
+    margin-top: 2em;
+  }
+  .ui.footer.segment {
+    margin: 5em 0em 0em;
+    padding: 5em 0em;
+  }
+  
+    .masthead.segment {
+      min-height: 700px;
+      padding: 1em 0em;
+    }
+    .masthead .logo.item img {
+      margin-right: 1em;
+    }
+    .masthead .ui.menu .ui.button {
+      margin-left: 0.5em;
+    }
+    .masthead h1.ui.header {
+      margin-top: 3em;
+      margin-bottom: 0em;
+      font-size: 4em;
+      font-weight: normal;
+    }
+    .masthead h2 {
+      font-size: 1.7em;
+      font-weight: normal;
+    }
+	
+	
+    .ui.vertical.stripe {
+      padding: 8em 0em;
+    }
+    .ui.vertical.stripe h3 {
+      font-size: 2em;
+    }
+    .ui.vertical.stripe .button + h3,
+    .ui.vertical.stripe p + h3 {
+      margin-top: 3em;
+    }
+    .ui.vertical.stripe .floated.image {
+      clear: both;
+    }
+    .ui.vertical.stripe p {
+      font-size: 1.33em;
+    }
+    .ui.vertical.stripe .horizontal.divider {
+      margin: 3em 0em;
+    }
+
+    .quote.stripe.segment {
+      padding: 0em;
+    }
+    .quote.stripe.segment .grid .column {
+      padding-top: 5em;
+      padding-bottom: 5em;
+    }
+  </style>
+
+</head>
+<body>
+
+  <!-- ejs -->
+  
+  	<% include ../partials/navbar.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+
+<div class="ui container" style="margin-top:100px">
+
+<div class="ui stackable grid">
+
+	<div class="four wide column">
+	
+
+  <!-- ejs -->
+  
+  	<% include ../partials/sidebar.ejs %>
+  
+  <!-- ejs -->
+  
+	
+	</div>
+  
+  
+	<div class="twelve wide column">
+	
+	
+  <!-- ejs -->
+  
+  	<% include ../partials/notifications.ejs %>
+  
+  <!-- ejs -->
+  
+  
+			
+  
+		<div class="ui four item menu">
+			<a class="active item" id="blacklist_reported">
+				<i class="exclamation triangle icon"></i>
+				Reported
+			</a>
+			<a class="item" id="blacklist_probation">
+				<i class="eye icon"></i>
+				Probation
+			</a>
+			<a class="item" id="blacklist_banned">
+				<i class="ban icon"></i>
+				Banned
+			</a>
+			<a class="item" id="blacklist_opt_out">
+				<i class="hand paper outline icon"></i>
+				Opted-out
+			</a>
+		</div>
+			
+
+		<div class="ui segment" id="blacklist_list_segment">
+			
+			<table class="ui very basic selectable table" id="blacklist_list">
+  <thead>
+    <tr>
+      <th>Account</th>
+      <th>Admitter</th>
+      <th>Time</th>
+      <th>Reason</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    </tr>
+    <tr>
+    </tr>
+    <tr>
+    </tr>
+  </tbody>
+</table>
+			
+			<div id="message"></div>
+			
+			<div class="ui divider"></div>
+			
+			<button class="ui basic button" id="add">
+				<i class="icon user plus"></i>
+				Add user
+			</button>
+
+
+		</div>
+
+	
+	
+	</div>
+
+</div>
+
+
+<!-- add modal -->
+
+<div class="ui new_blacklist tiny modal">
+	<i class="close icon"></i>
+	
+	<div class="header">
+			Add user to blacklist
+	</div>
+	<div class="content">
+
+	<form class="ui form" id="new_blacklist_form">
+  
+		<div class="two fields">
+	  
+			<div class="required form_inputs field" id="new_blacklist_account_field">
+				<label>Steem account</label>
+				<input type="text" name="account" maxlength="20" placeholder="@account" id="new_blacklist_account">
+			</div>
+    
+			<div class="required form_inputs field" id="new_blacklist_type_field">
+				<label>Type</label>
+				<select class="ui fluid search dropdown" name="user[role]" id="new_blacklist_type">
+					<option value="">type</option>
+					<option value="reported">report</option>
+					<option value="probation">probate</option>
+					<option value="banned">ban</option>
+					<option value="opt_out">opt out</option>
+				</select>
+			</div>
+			
+		</div>
+		
+		<div class="required form_inputs field" id="new_blacklist_reason_field">
+			<label>
+				<i class="info circle icon"></i>
+				Reason for inclusion
+			</label>
+			<textarea id="new_blacklist_reason" name="description" placeholder="Reported by Steem Cleaners as a serial plagiarist content bot."></textarea>
+		</div>
+		
+		<div class="ui success message">
+			<div class="header">Great!</div>
+			<p>You've successfully added the new user!</p>
+		</div>
+		
+		<div class="ui error message">
+			<div class="header">Sorry</div>
+			<p>There was an error, please try again.</p>
+		</div>
+		
+		<div class="ui message" id="form_message">
+			<div class="header">Important things to note:</div>
+			<ul class="list">
+				<li>Users on blacklist will keep the reputation they had prior to admission</li>
+				<li>New posts of accounts on blacklist will not be indexed for curation</li>
+				<li>You can add users as opt out if they ask you to exempt them from curation</li>
+				<li>All team members(owner, admins, mods and curies) are by default on opt out list</li>
+			</ul>
+		</div>
+  
+	</form>
+
+	</div>
+	
+	<div class="actions">
+		<div class="ui green form_inputs button" id="add_blacklist" id="add_member_button">Admit</div>
+		<div class="ui cancel button">Cancel</div>
+	</div>
+
+</div>
+
+
+<!-- modal end -->
+
+
+
+<!-- delete modal -->
+
+
+<div class="ui basic modal">
+	<div class="ui icon header">
+		<i class="user times icon"></i>
+		Remove blacklist member
+	</div>
+	<div class="content">
+		<p>Are you sure you want to part ways with this blacklist member? You could add them later.</p>
+	</div>
+	<div class="actions">
+		<div class="ui red basic cancel inverted button">
+			<i class="remove icon"></i>
+			No
+		</div>
+		<div class="ui green inverted button" id="remove_blacklist" id="remove_btn">
+			<i class="checkmark icon"></i>
+			Yes
+		</div>
+	</div>
+</div>
+
+
+<!-- modal end -->
+
+
+
+
+
+
+</div>
+
+<script>
+	//
+	
+	var index = 0;
+
+
+	function remove(i) {
+		
+		index = i;
+		
+		$('.ui.basic.modal')
+		.modal({
+			onHide: function(){
+				$("#remove_btn").removeClass("disabled");
+			}
+		})
+			.modal('show')
+		;
+	}	
+	
+$( document ).ready(function() {
+    
+	var action = "";
+	var blacklist_type = "";
+	
+	const active_user = user_data.username;
+	const active_user_authority = user_data.authority;
+	
+	
+	
+	function blacklist_reported() {
+	
+		blacklist_type = "reported";
+		
+		$("#message").html("");
+		clear_table();
+		$("#blacklist_list_segment").addClass("loading");
+	
+		$.get("/api/blacklist_reported", function(data, status){
+			
+				$("#blacklist_list_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#message").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						add_row(data[x]);
+					}
+					
+				}
+				
+		}).fail( function() {
+			alert("Err fetching results, please try again");
+		});
+	}
+	
+	
+	function blacklist_probation() {
+	
+		blacklist_type = "probation";
+		
+		$("#message").html("");
+		clear_table();
+		$("#blacklist_list_segment").addClass("loading");
+	
+		$.get("/api/blacklist_probation", function(data, status){
+			
+				$("#blacklist_list_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#message").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						add_row(data[x]);
+					}
+					
+				}
+				
+		}).fail(function () {
+			alert("Err fetching results, please try again");
+		});
+	}
+	
+	
+	function blacklist_banned() {
+	
+		blacklist_type = "banned";
+		
+		$("#message").html("");
+		clear_table();
+		$("#blacklist_list_segment").addClass("loading");
+	
+		$.get("/api/blacklist_banned", function(data, status){
+			
+				$("#blacklist_list_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#message").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						add_row(data[x]);
+					}
+					
+				}
+			
+		}).fail(function() {
+			alert("Err fetching results, please try again");
+		});
+	}
+	
+	
+	function blacklist_opt_out() {
+	
+		blacklist_type = "opt_out";
+		
+		$("#message").html("");
+		clear_table();
+		$("#blacklist_list_segment").addClass("loading");
+	
+		$.get("/api/blacklist_opt_out", function(data, status){
+			
+				$("#blacklist_list_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#message").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						add_row(data[x]);
+					}
+					
+				}
+			
+		}).fail(function() {
+			alert("Err fetching results, please try again");
+		});
+	}
+	
+	
+	
+	function add_row(data) {
+	
+		var table = document.getElementById("blacklist_list");
+	
+		var row = table.insertRow(-1);
+		
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(2);
+		var cell4 = row.insertCell(3);
+		var cell5 = row.insertCell(4);
+		
+		cell1.innerHTML = "@" + data.account;
+		cell2.innerHTML = data.admitter;
+		cell3.innerHTML =  jQuery.timeago(data.date);
+		cell4.innerHTML = data.reason;
+		if (blacklist_type == "opt_out") { 
+			cell5.innerHTML = "";
+		} else {
+			cell5.innerHTML = "<button class='circular ui icon mini button' onClick='remove(this.parentNode.parentNode.rowIndex)'>  <i class='icon user times'></i>  </button>";
+		}
+		
+		
+	}
+	
+	
+	
+	function add_blacklist() {
+		$("#message").html("");
+		
+		var new_blacklist_account = $('#new_blacklist_account').val();
+		var new_blacklist_type = $('#new_blacklist_type').val();
+		var new_blacklist_reason = $('#new_blacklist_reason').val();
+		
+		if (new_blacklist_account == "") $("#new_blacklist_account_field").addClass("error");
+		else if(new_blacklist_type == "") $('#new_blacklist_type_field').addClass("error");
+		else if(new_blacklist_reason == "") $('#new_blacklist_reason_field').addClass("error");
+		else {
+			
+			$("#new_blacklist_account_field").removeClass("error");
+			$('#new_blacklist_type_field').removeClass("error");
+			$('#new_blacklist_reason_field').removeClass("error");
+		
+			$("#new_blacklist_form").addClass("loading");
+			$(".form_inputs").addClass("disabled");
+			$('.form .ui.dropdown').addClass("disabled");
+			
+			$.post("/api/add_to_blacklist",
+			{
+				account: new_blacklist_account,
+				author: active_user,
+				type: new_blacklist_type,
+				reason: new_blacklist_reason
+			},
+			function(data, status){
+				$("#new_blacklist_form").removeClass("loading");
+					$("#new_blacklist_form").addClass("success");
+					
+					if(blacklist_type == new_blacklist_type) {
+						var data = {};
+						data.account = new_blacklist_account;
+						data.type = new_blacklist_type;
+						data.date = new Date();
+						data.admitter = active_user;
+						data.reason = new_blacklist_reason;
+						
+						add_row(data) 
+					};
+			}).fail(function () {
+				$("#new_blacklist_form").addClass("error");
+			});
+		
+		}
+		
+	}
+	
+	
+	
+	function remove_blacklist() {
+	
+		$("#remove_btn").addClass("disabled");
+		
+		var table = document.getElementById("blacklist_list");
+		
+		var delete_blacklist_account = table.rows[index].cells[0].innerHTML.substring(1);
+		
+		$.post("/api/remove_from_blacklist",
+		{
+			account: delete_blacklist_account,
+			author: active_user
+		},
+		function(data, status){
+				
+				$('.ui.basic.modal')
+					.modal({
+						onHide: function(){
+							$("#remove_btn").removeClass("disabled");
+						}
+					})
+					.modal('hide')
+				;
+				
+				document.getElementById('blacklist_list').deleteRow(index);
+				
+			
+		}).fail( function() {
+			alert("Sorry, there was an error. Pease try again.");
+				$('.ui.basic.modal')
+					.modal({
+						onHide: function(){
+							$("#remove_btn").removeClass("disabled");
+						}
+					})
+					.modal('hide')
+				;
+		});
+	
+	}
+	
+	
+
+
+	$( "#add" ).click(function() {
+	
+		$('.new_blacklist.modal').modal({
+			onHide: function(){
+				$('.ui.dropdown').removeClass("disabled");
+				$('.form_inputs').removeClass("disabled");
+				$("#new_blacklist_form").attr("class", "ui form");
+				$('form').form('clear');
+			}
+		}).modal('show');
+	
+	});
+	
+	
+	
+	function clear_table() {
+	
+		var tableHeaderRowCount = 1;
+		var table = document.getElementById('blacklist_list');
+		var rowCount = table.rows.length;
+		for (var i = tableHeaderRowCount; i < rowCount; i++) {
+			table.deleteRow(tableHeaderRowCount);
+		}
+		
+	}
+	
+	
+	
+	$('.ui.dropdown')
+		.dropdown()
+	;
+	
+	
+	
+	blacklist_reported();
+	
+	
+	//click event listeners
+	$('#blacklist_reported').click(function() {
+		blacklist_reported();
+	});
+	
+	$('#blacklist_probation').click(function() {
+		blacklist_probation();
+	});
+	
+	$('#blacklist_banned').click(function() {
+		blacklist_banned();
+	});
+	
+	$('#blacklist_opt_out').click(function() {
+		blacklist_opt_out();
+	});
+	
+	$('#add_blacklist').click(function() {
+		add_blacklist();
+	});
+	
+	$('#remove_blacklist').click(function() {
+		remove_blacklist();
+	});
+	
+	
+});
+
+
+
+	
+	
+</script>
+
+  <!-- ejs -->
+  
+  	<% include ../partials/footer.ejs %>
+  
+  <!-- ejs -->
+  
+
+</body>
+
+</html>
