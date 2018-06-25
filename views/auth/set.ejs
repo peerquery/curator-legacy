@@ -191,7 +191,6 @@ $(document).ready(function() {
 				
 			$.post("/set", { password: $('#password').val()} , function(data, status){
 		
-				if(status == "success") {
 				
 					$('form').removeClass('loading');
 					$('form').addClass('success');
@@ -199,7 +198,6 @@ $(document).ready(function() {
 					$('#action').text('Log in to your account');
 					set = true;
 			
-				}
 			
 			}).fail(function(err) {
 		
