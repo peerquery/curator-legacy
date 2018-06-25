@@ -199,6 +199,7 @@ module.exports = async function (app) {
 				if (!results) return;
 				
 				var data = {};
+				var approved = "<b>Approved for " + results.rate + "% by @" + results.curator + "</b><br/><br/>";
 				
 				//set universal variables
 				data.author = results.author;
@@ -206,7 +207,7 @@ module.exports = async function (app) {
 				data.user = bot_account;
 				data.permlink = results.permlink;
 				data.weight = results.rate * 100;
-				data.body = "<b>Remarks by @" + results.curator + "</b>:<br/><br/><em>" + results.remarks + "</em><br/><br/>" + common_comment;
+				data.body = approved + "<b>Remarks</b>: <em>" + results.remarks + "</em><br/><br/>" + common_comment;
 				data.json_metadata = '{"app": "' + process.env.PROJECT_NAME + '", "community":"' + process.env.PROJECT_COMMUNITY + '"}';
 				data.parent_author = results.author;
 				data.parent_permlink = results.permlink;
