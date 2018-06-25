@@ -120,7 +120,7 @@ module.exports = async function (app) {
 				else {console.log("Error");	res.sendStatus(500);};
 			} catch (err) {
 				//console.log("Sorry, an err occurred sending email");
-				console.log(err);
+				console.log(err.message);
 				res.sendStatus(500);
 			};
 			
