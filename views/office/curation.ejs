@@ -690,11 +690,15 @@ $( document ).ready(function() {
 		
 		var description = document.createElement("div");
 		description.className = "description";
-		description.innerHTML = "Authored by <b>@" + data.author + "</b>, curated by <b>@" + data.curator + "</b> as - <em>" + rate_name(data.rate) + "</em>";
+		
+		if(modal_mode == "ignored" || modal_mode == "lost") {
+			description.innerHTML = "Authored by <b>@" + data.author + "</b>";
+		} else {
+			description.innerHTML = "Authored by <b>@" + data.author + "</b>, curated by <b>@" + data.curator + "</b> as - <em>" + rate_name(data.rate) + "</em>";
+		}
 		
 		content.appendChild(a);
 		content.appendChild(description);
-		
 		
 		item.appendChild(button);
 		item.appendChild(img);
