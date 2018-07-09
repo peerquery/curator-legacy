@@ -9,86 +9,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.4.0/marked.min.js"></script>
-<script src="/js/timeago.js"></script>
-
-  <style type="text/css">
-  body {
-    background-color: #FFFFFF;
-  }
-  .ui.menu .item img.logo {
-    margin-right: 1.5em;
-  }
-  .main.container {
-    margin-top: 7em;
-  }
-  .wireframe {
-    margin-top: 2em;
-  }
-  .ui.footer.segment {
-    margin: 5em 0em 0em;
-    padding: 5em 0em;
-  }
+  <link rel="stylesheet" href="/css/custom.css" />
   
-    .masthead.segment {
-      min-height: 700px;
-      padding: 1em 0em;
-    }
-    .masthead .logo.item img {
-      margin-right: 1em;
-    }
-    .masthead .ui.menu .ui.button {
-      margin-left: 0.5em;
-    }
-    .masthead h1.ui.header {
-      margin-top: 3em;
-      margin-bottom: 0em;
-      font-size: 4em;
-      font-weight: normal;
-    }
-    .masthead h2 {
-      font-size: 1.7em;
-      font-weight: normal;
-    }
-	
-	
-    .ui.vertical.stripe {
-      padding: 8em 0em;
-    }
-    .ui.vertical.stripe h3 {
-      font-size: 2em;
-    }
-    .ui.vertical.stripe .button + h3,
-    .ui.vertical.stripe p + h3 {
-      margin-top: 3em;
-    }
-    .ui.vertical.stripe .floated.image {
-      clear: both;
-    }
-    .ui.vertical.stripe p {
-      font-size: 1.33em;
-    }
-    .ui.vertical.stripe .horizontal.divider {
-      margin: 3em 0em;
-    }
-
-    .quote.stripe.segment {
-      padding: 0em;
-    }
-    .quote.stripe.segment .grid .column {
-      padding-top: 5em;
-      padding-bottom: 5em;
-    }
-	img {
-		max-width: 100%;
-		max-height: 100%;
-	}
-  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/1.0.5/purify.min.js"></script>
+  
+  <script src="/js/timeago.js"></script>
+  <script src="/js/custom.js"></script>
 
 </head>
-<body>
+<body class="office">
 
   <!-- ejs -->
   
@@ -159,16 +91,20 @@
 		
 		<div id="post_meta" style="display:none">
 		
-		<div class="ui very relaxed list">
-			<div class="item">
-				<img class="ui circular tiny image" src="/img/person.png" id="post_author_img">
-				<div class="content">
-					<a class="header" id="post_author" target="_blank"></a>
-					<div class="description"><h2 id="post_title"></h2></div>
-					<time class="timeago" id="post_time"></time>
+			
+		<div id="post_meta" style="">
+		
+			<div class="content " style="display:inline">
+				<img class="ui avatar image" src="/img/person.png" id="post_author_img" style="display:inline">
+				<div style="display:inline">
+					<a class="header" id="post_author" target="_blank" style="display:inline"></a>
+					<span class="timeago" id="post_time"></span>
 				</div>
+				<div class="description"><h2 id="post_title"></h2></div>
 			</div>
+		
 		</div>
+			
 			
 			
 			<div class="ui divider"></div>
@@ -176,7 +112,7 @@
 		</div>
 			
 			
-		<div id="post_body"></div>
+		<div class="renderer" id="post_body"></div>
 		
 		<br/>
 		
@@ -247,7 +183,7 @@
 			
 			<div class="ui post-view modal">
 				<div class="header" id="modal-header"></div>
-				<div class="scrolling content" id="modal-content">
+				<div class="scrolling content" id="modal-content" class="renderer">
 					
 				</div>
 				
@@ -369,6 +305,9 @@
 		</div>
 		
 		
+		<div id="temp" style="display:none">
+		</div>
+		
 		
 	
 	</div>
@@ -395,7 +334,7 @@ $( document ).ready(function() {
 		
 		$("#curate_segment").addClass("loading");
 		
-		$.get("/api/curate", function(data, status){
+		$.get("/api/private/curate", function(data, status){
 			//console.log(data);
 			
 			if (data.length == 0) {
@@ -408,11 +347,14 @@ $( document ).ready(function() {
 				post_obj = data["0"];
 			
 				$('#post_author').text("@" + post_obj.author);
-				$('#post_author').attr("href", "/@" + post_obj.author);
+				$('#post_author').attr("href", "/user/" + post_obj.author);
 				$('#post_title').html(post_obj.title);
 				$('#post_author_img').attr("src", "https://steemitimages.com/u/" + post_obj.author + "/avatar");
-				$('#post_time').attr("datetime", post_obj.timestamp);
-				$('#post_body').html(marked(post_obj.body));
+				
+				$('#post_time').attr("timestamp", post_obj.timestamp);
+				$('#post_time').html(jQuery.timeago(post_obj.timestamp));
+				
+				renderHTML(post_obj.body, "#post_body");
 				jQuery("time.timeago").timeago();
 			
 				$('#post_meta').show();
@@ -458,7 +400,7 @@ $( document ).ready(function() {
 			
 			$("#curator_form").addClass("loading");
 			
-			$.post("/api/approve",
+			$.post("/api/private/approve",
 			{
 				author: post_obj.author,
 				title: post_obj.title,
@@ -497,7 +439,7 @@ $( document ).ready(function() {
 		
 			$("#curator_form").addClass("loading");
 			
-			$.post("/api/reject",
+			$.post("/api/private/reject",
 			{
 				author: post_obj.author,
 				title: post_obj.title,
@@ -685,22 +627,22 @@ $( document ).ready(function() {
 		var a = document.createElement("a");
 		a.className = "header";
 		a.innerHTML = data.title;
-		a.href = "https://steemit.com/@" + data.author + "/" + data.permlink;
+		a.href = "/trail/@" + data.author + "/" + data.permlink;
 		a.setAttribute("target", "_blank");
 		
 		var description = document.createElement("div");
 		description.className = "description";
 		
 		if(modal_mode == "ignored" || modal_mode == "lost") {
-			description.innerHTML = "Authored by <b>@" + data.author + "</b>";
+			description.innerHTML = "<small>Authored by <a target='_blank' href='/user/" + data.author + "'><b>@" + data.author + "</b></a></small>";
 		} else {
-			description.innerHTML = "Authored by <b>@" + data.author + "</b>, curated by <b>@" + data.curator + "</b> as - <em>" + rate_name(data.rate) + "</em>";
+			description.innerHTML = "<small>Authored by <a target='_blank' href='/user/" + data.author + "'><b>@" + data.author + "</b></a>, curated by <a target='_blank' href='/curator/" + data.curator + "'><b>@" + data.curator + "</b></a> as - <em>" + rate_name(data.rate) + "</em></small>";
 		}
 		
 		content.appendChild(a);
 		content.appendChild(description);
 		
-		item.appendChild(button);
+		if(active_user_authority >= 2) item.appendChild(button);
 		item.appendChild(img);
 		item.appendChild(content);
 		
@@ -754,7 +696,7 @@ $( document ).ready(function() {
 		
 		
 		$('#modal-header').html(dataset.title);
-		$('#modal-content').html(marked(dataset.body));
+		renderHTML(dataset.body, "#modal-content");
 		
 		$('#modal-author-img').attr("src", "https://steemitimages.com/u/" + dataset.author + "/avatar");
 		$('#modal-curator-img').attr("src", "https://steemitimages.com/u/" + dataset.curator + "/avatar");
@@ -762,8 +704,8 @@ $( document ).ready(function() {
 		$('#modal-author').text(dataset.author);
 		$('#modal-curator').text(dataset.curator);
 		
-		$('#modal-author').attr("href", "/@" + dataset.author);
-		$('#modal-curator').attr("href", "/@" + dataset.curator);
+		$('#modal-author').attr("href", "/user/" + dataset.author);
+		$('#modal-curator').attr("href", "/curator/" + dataset.curator);
 		
 		$('#modal-rate').text(dataset.rate + "% - " + rate_name(dataset.rate));
 		
@@ -805,7 +747,7 @@ $( document ).ready(function() {
 				
 			$("#modal-approve").addClass("disabled");
 				
-			$.post("/api/approve",
+			$.post("/api/private/approve",
 			{
 				author: post_obj.author,
 				title: post_obj.title,
@@ -991,6 +933,175 @@ $( document ).ready(function() {
 		curate();
 	})
 	
+	
+	
+	
+	function renderHTML(html, div) {
+	
+		//console.log(html);
+	
+		var body = html;
+	
+		var md = new Remarkable({
+			html: true, // Remarkable renders first then sanitize runs...
+			breaks: true,
+			linkify: true, // linkify is done locally
+			typographer: false, // https://github.com/jonschlinkert/remarkable/issues/142#issuecomment-221546793
+			quotes: '“”‘’',
+		});
+	
+		
+		
+		//convert image links to image tags
+		var link_images = body.replace(/([a-z\-_0-9\/\:\.]*\.(jpg|jpeg|png|gif)(?!["\)]))/gi, image => {
+			return '<img src="' + image + '">' + '<br/>';
+		});
+		
+		
+		//parser markdown
+		var markdown_text = md.render(link_images);
+		
+		
+		//convert hashtags to tags
+		var link_tags = markdown_text.replace(/(^|\s)(#[-a-z\d]+)/gi, tag => {
+			if (/#[\d]+$/.test(tag)) return tag; // Don't allow numbers to be tags
+			const space = /^\s/.test(tag) ? tag[0] : '';
+			const tag2 = tag.trim().substring(1);
+			const tagLower = tag2.toLowerCase();
+			return space + '<a target="_blank" href="https://steemit.com/trending/' + tagLower + ' ">' + tag + ' </a>';
+		});
+
+		
+		// usertag (mention)
+		// Cribbed from https://github.com/twitter/twitter-text/blob/v1.14.7/js/twitter-text.js#L90
+		var link_mentions = link_tags.replace(
+			/(^|[^a-zA-Z0-9_!#$%&*@＠\/]|(^|[^a-zA-Z0-9_+~.-\/#]))[@＠]([a-z][-\.a-z\d]+[a-z\d])/gi,
+			(match, preceeding1, preceeding2, user) => {
+				const userLower = user.toLowerCase();
+				const valid = validate_account_name(userLower) == null;
+
+				const preceedings = (preceeding1 || '') + (preceeding2 || ''); // include the preceeding matches if they exist
+
+				return valid
+					? preceedings + '<a target="_blank" href="/user/' + userLower + '">@' + user + '</a>' : preceedings + '@' + user;
+			}
+		);	
+		
+		
+		//set the content of the temp element
+		$(div).html(link_mentions);
+			
+			
+		$(div + " a").each(function () {
+			// Exit quickly if this is the wrong type of URL
+			if (this.protocol !== 'http:' && this.protocol !== 'https:') {
+				return;
+			}
+			
+			// Find the ID of the YouTube video
+			var id, matches;
+			
+			if (this.hostname === 'youtube.com' || this.hostname === 'm.youtube.com' || this.hostname === 'www.youtube.com' || this.hostname === 'youtu.be') {
+				
+				var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+				var match = this.href.match(regExp);
+				if (match && match[2].length == 11) {
+					id = match[2];
+			
+					// Add the embedded YouTube video, and remove the link.
+					if (id) {
+			
+					$(this)
+						.before('<iframe width="640" height="360" src="https://www.youtube.com/embed/' + id + '" frameborder="0" allowfullscreen></iframe>')
+						.remove();
+					}
+				
+					
+				} else {
+					 return;
+				}
+				
+				
+				
+			}
+
+			
+		});
+	
+	
+	
+	
+		var final_text = $("#temp").html();
+		$("#temp").html("");
+		
+		//
+		var _in = DOMPurify.sanitize(final_text);
+	
+		var _out = _in;
+		
+		
+		return _out;
+	
+	}	
+	
+	
+	
+	function validate_account_name(value) {
+		let i, label, len, length, ref;
+
+		if (!value) {
+			return tt('account_name_should_not_be_empty');
+		}
+		
+		length = value.length;
+		
+		if (length < 3) {
+			return tt('account_name_should_be_longer');
+		}
+		
+		if (length > 16) {
+			return tt('account_name_should_be_shorter');
+		}
+	
+		ref = value.split('.');
+	
+		for (i = 0, len = ref.length; i < len; i++) {
+		
+			label = ref[i];
+	
+			if (!/^[a-z]/.test(label)) {
+					return tt(
+						'each_account_segment_should_start_with_a_letter'
+					);
+			}
+		
+			if (!/^[a-z0-9-]*$/.test(label)) {
+					return tt(
+						'each_account_segment_should_have_only_letters_digits_or_dashes'
+					);
+			}
+			if (/--/.test(label)) {
+					return tt(
+						'each_account_segment_should_have_only_one_dash_in_a_row'
+					);
+			}
+			if (!/[a-z0-9]$/.test(label)) {
+				return tt(
+					'each_account_segment_should_end_with_a_letter_or_digit'
+				);
+			}
+			if (!(label.length >= 3)) {
+				return tt(
+					'each_account_segment_should_be_longer'
+				);
+			}
+		
+		}
+			
+		return null;
+			
+	}
+		
 	
 	
 });

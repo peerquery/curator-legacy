@@ -9,81 +9,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
-<script src="/js/timeago.js"></script>
-
-  <style type="text/css">
-  body {
-    background-color: #FFFFFF;
-  }
-  .ui.menu .item img.logo {
-    margin-right: 1.5em;
-  }
-  .main.container {
-    margin-top: 7em;
-  }
-  .wireframe {
-    margin-top: 2em;
-  }
-  .ui.footer.segment {
-    margin: 5em 0em 0em;
-    padding: 5em 0em;
-  }
+  <link rel="stylesheet" href="/css/custom.css" />
   
-    .masthead.segment {
-      min-height: 700px;
-      padding: 1em 0em;
-    }
-    .masthead .logo.item img {
-      margin-right: 1em;
-    }
-    .masthead .ui.menu .ui.button {
-      margin-left: 0.5em;
-    }
-    .masthead h1.ui.header {
-      margin-top: 3em;
-      margin-bottom: 0em;
-      font-size: 4em;
-      font-weight: normal;
-    }
-    .masthead h2 {
-      font-size: 1.7em;
-      font-weight: normal;
-    }
-	
-	
-    .ui.vertical.stripe {
-      padding: 8em 0em;
-    }
-    .ui.vertical.stripe h3 {
-      font-size: 2em;
-    }
-    .ui.vertical.stripe .button + h3,
-    .ui.vertical.stripe p + h3 {
-      margin-top: 3em;
-    }
-    .ui.vertical.stripe .floated.image {
-      clear: both;
-    }
-    .ui.vertical.stripe p {
-      font-size: 1.33em;
-    }
-    .ui.vertical.stripe .horizontal.divider {
-      margin: 3em 0em;
-    }
-
-    .quote.stripe.segment {
-      padding: 0em;
-    }
-    .quote.stripe.segment .grid .column {
-      padding-top: 5em;
-      padding-bottom: 5em;
-    }
-  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+  
+  <script src="/js/timeago.js"></script>
+  <script src="/js/custom.js"></script>
 
 </head>
-<body>
+<body class="office">
 
   <!-- ejs -->
   
@@ -174,7 +109,7 @@
 			
 			<div class="ui divider"></div>
 			
-			<button class="ui basic button" id="add">
+			<button class="ui basic 3 button" id="add">
 				<i class="icon user plus"></i>
 				Add member
 			</button>
@@ -209,13 +144,16 @@
 			</div>
     
 			<div class="required form_inputs field" id="new_team_role_field">
-				<label>Role</label>
-				<select class="ui fluid search dropdown" name="user[role]" id="new_team_role">
-					<option value="">role</option>
-					<option value="admin">admin</option>
-					<option value="moderator">moderator</option>
-					<option value="curator">curator</option>
-				</select>
+				<label>Type</label>
+				<div class="ui selection dropdown"  id="new_team_role">
+					role
+					<i class="dropdown icon"></i>
+					<div class="menu">
+						<div id="admin_option" class="item">admin</div>
+						<div id="moderator_option" class="item">moderator</div>
+						<div id="curator_option" class="item">curator</div>
+					</div>
+				</div>
 			</div>
 			
 		</div>
@@ -253,7 +191,7 @@
 		<div class="ui message" id="form_message">
 			<div class="header">Important things to note:</div>
 			<ul class="list">
-				<li>New user will receive invitation email with auto-generated password</li>
+				<li>New user will receive invitation email with instructions to activate their account and to set new password</li>
 				<li>For the sake of credibility, set account to the Steem account of new user</li>
 				<li>Account and email of new user must be unique to that of existing users </li>
 			</ul>
@@ -496,9 +434,9 @@ $( document ).ready(function() {
 		cell3.innerHTML =  jQuery.timeago(data.created);
 		cell4.innerHTML = data.status;
 		cell5.innerHTML = data.tag;
-		if (team_type == "inactive") { 
+		if (team_type == "inactive" || active_user_authority < 3) { 
 			cell6.innerHTML = "";
-		} else {
+		} else if(active_user_authority >= 3) {
 			cell6.innerHTML = "<botton class='circular ui icon mini remove button'>  <i class='icon user times'></i>  </button>";
 		}
 		
@@ -511,7 +449,7 @@ $( document ).ready(function() {
 		
 		var new_team_account = $('#new_team_account').val();
 		var new_team_email = $('#new_team_email').val();
-		var new_team_role = $('#new_team_role').val();
+		var new_team_role = $('#new_team_role').dropdown('get value');
 		var new_team_tag = $('#new_team_tag').val();
 		var new_team_message = $('#new_team_message').val();
 		var new_team_authority = get_new_team_authority(new_team_role);
@@ -533,7 +471,7 @@ $( document ).ready(function() {
 			$(".form_inputs").addClass("disabled");
 			$('.form .ui.dropdown').addClass("disabled");
 			
-			$.post("/api/new_team",
+			$.post("/api/private/new_team",
 			{
 				account: new_team_account,
 				author: active_user,
@@ -600,7 +538,7 @@ $( document ).ready(function() {
 		var delete_team_account = table.rows[index].cells[0].innerHTML.substring(1);
 		
 		
-		$.post("/api/remove_team",
+		$.post("/api/private/remove_team",
 		{
 			account: delete_team_account,
 			author: active_user

@@ -9,81 +9,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
-<script src="https://unpkg.com/dsteem@latest/dist/dsteem.js"></script>
-
-  <style type="text/css">
-  body {
-    background-color: #FFFFFF;
-  }
-  .ui.menu .item img.logo {
-    margin-right: 1.5em;
-  }
-  .main.container {
-    margin-top: 7em;
-  }
-  .wireframe {
-    margin-top: 2em;
-  }
-  .ui.footer.segment {
-    margin: 5em 0em 0em;
-    padding: 5em 0em;
-  }
+  <link rel="stylesheet" href="/css/custom.css" />
   
-    .masthead.segment {
-      min-height: 700px;
-      padding: 1em 0em;
-    }
-    .masthead .logo.item img {
-      margin-right: 1em;
-    }
-    .masthead .ui.menu .ui.button {
-      margin-left: 0.5em;
-    }
-    .masthead h1.ui.header {
-      margin-top: 3em;
-      margin-bottom: 0em;
-      font-size: 4em;
-      font-weight: normal;
-    }
-    .masthead h2 {
-      font-size: 1.7em;
-      font-weight: normal;
-    }
-	
-	
-    .ui.vertical.stripe {
-      padding: 8em 0em;
-    }
-    .ui.vertical.stripe h3 {
-      font-size: 2em;
-    }
-    .ui.vertical.stripe .button + h3,
-    .ui.vertical.stripe p + h3 {
-      margin-top: 3em;
-    }
-    .ui.vertical.stripe .floated.image {
-      clear: both;
-    }
-    .ui.vertical.stripe p {
-      font-size: 1.33em;
-    }
-    .ui.vertical.stripe .horizontal.divider {
-      margin: 3em 0em;
-    }
-
-    .quote.stripe.segment {
-      padding: 0em;
-    }
-    .quote.stripe.segment .grid .column {
-      padding-top: 5em;
-      padding-bottom: 5em;
-    }
-  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+  
+  <script src="https://unpkg.com/dsteem@latest/dist/dsteem.js"></script>
+  <script src="/js/custom.js"></script>
 
 </head>
-<body>
+
+<style>
+</style>
+
+<body class="office">
 
   <!-- ejs -->
   
@@ -278,7 +217,7 @@
 					<span id="total_members"></span>
 				</div>
 				<div class="label">
-					Members
+					Authors
 				</div>
 			</div>
 			<div class="statistic">
@@ -330,16 +269,14 @@
 
 
 <script>
+	
+$( document ).ready(function() {
+    
     var client = new dsteem.Client('https://api.steemit.com');
 	var bot_account = '';
 	
-	$( document ).ready(function() {
-    
-		const active_user = user_data.username;
-		const active_user_authority = user_data.authority;
-	
-	});
-	
+	const active_user = user_data.username;
+	const active_user_authority = user_data.authority;	
 	
 	$.get("/api/dashboard", function(data, status){
 		
@@ -361,7 +298,6 @@
 		cal();
 		
 	});
-	
 	
 	
 	async function cal() {
@@ -420,61 +356,62 @@
 	}
 	
 	
-		
-// source:  https://gist.github.com/pehrlich/2127650
-// number to string, pluginized from http://stackoverflow.com/questions/5529934/javascript-numbers-to-words
-
-
-window.num2str = function (num) {
-    return window.num2str.convert(num);
-}
-
-window.num2str.ones = ['', 'one<br/>', 'two<br/>', 'three<br/>', 'four<br/>', 'five<br/>', 'six<br/>', 'seven<br/>', 'eight<br/>', 'nine<br/>'];
-window.num2str.tens=['','','twenty<br/>','thirty<br/>','forty<br/>','fifty<br/>','sixty<br/>','seventy<br/>','eighty<br/>','ninety<br/>'];
-window.num2str.teens=['ten<br/>','eleven<br/>','twelve<br/>','thirteen<br/>','fourteen<br/>','fifteen<br/>','sixteen<br/>','seventeen<br/>','eighteen<br/>','nineteen<br/>'];
-
-
-window.num2str.convert_millions = function(num) {
-    if (num >= 1000000) {
-        return this.convert_millions(Math.floor(num / 1000000)) + " million &<br/>" + this.convert_thousands(num % 1000000);
-    }
-    else {
-        return this.convert_thousands(num);
-    }
-}
-
-window.num2str.convert_thousands = function(num) {
-    if (num >= 1000) {
-        return this.convert_hundreds(Math.floor(num / 1000)) + " thousand &<br/>" + this.convert_hundreds(num % 1000);
-    }
-    else {
-        return this.convert_hundreds(num);
-    }
-}
-
-window.num2str.convert_hundreds = function(num) {
-    if (num > 99) {
-        return this.ones[Math.floor(num / 100)] + " hundred &<br/>" + this.convert_tens(num % 100);
-    }
-    else {
-        return this.convert_tens(num);
-    }
-}
-
-window.num2str.convert_tens = function(num) {
-    if (num < 10) return this.ones[num];
-    else if (num >= 10 && num < 20) return this.teens[num - 10];
-    else {
-        return this.tens[Math.floor(num / 10)] + " " + this.ones[num % 10];
-    }
-}
-
-window.num2str.convert = function(num) {
-    if (num == 0) return "zero";
-    else return this.convert_millions(num);
-}
 	
+	// source:  https://gist.github.com/pehrlich/2127650
+	// number to string, pluginized from http://stackoverflow.com/questions/5529934/javascript-numbers-to-words
+
+	window.num2str = function (num) {
+		return window.num2str.convert(num);
+	}
+
+	window.num2str.ones = ['', 'one<br/>', 'two<br/>', 'three<br/>', 'four<br/>', 'five<br/>', 'six<br/>', 'seven<br/>', 'eight<br/>', 'nine<br/>'];
+	window.num2str.tens=['','','twenty<br/>','thirty<br/>','forty<br/>','fifty<br/>','sixty<br/>','seventy<br/>','eighty<br/>','ninety<br/>'];
+	window.num2str.teens=['ten<br/>','eleven<br/>','twelve<br/>','thirteen<br/>','fourteen<br/>','fifteen<br/>','sixteen<br/>','seventeen<br/>','eighteen<br/>','nineteen<br/>'];
+
+
+	window.num2str.convert_millions = function(num) {
+		if (num >= 1000000) {
+			return this.convert_millions(Math.floor(num / 1000000)) + " million &<br/>" + this.convert_thousands(num % 1000000);
+		}
+		else {
+			return this.convert_thousands(num);
+		}
+	}
+
+	window.num2str.convert_thousands = function(num) {
+		if (num >= 1000) {
+			return this.convert_hundreds(Math.floor(num / 1000)) + " thousand &<br/>" + this.convert_hundreds(num % 1000);
+		}
+		else {
+			return this.convert_hundreds(num);
+		}
+	}
 	
+	window.num2str.convert_hundreds = function(num) {
+		if (num > 99) {
+			return this.ones[Math.floor(num / 100)] + " hundred &<br/>" + this.convert_tens(num % 100);
+		}
+		else {
+			return this.convert_tens(num);
+		}
+	}
+
+	window.num2str.convert_tens = function(num) {
+		if (num < 10) return this.ones[num];
+		else if (num >= 10 && num < 20) return this.teens[num - 10];
+		else {
+			return this.tens[Math.floor(num / 10)] + " " + this.ones[num % 10];
+		}
+	}
+
+	window.num2str.convert = function(num) {
+		if (num == 0) return "zero";
+		else return this.convert_millions(num);
+	}
+	
+});
+	
+
 </script>
 
 

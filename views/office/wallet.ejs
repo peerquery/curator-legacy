@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Wallet</title>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
+  <link rel="stylesheet" href="/css/custom.css" />
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+  
+  <script src="https://unpkg.com/dsteem@latest/dist/dsteem.js"></script>
+  <script src="/js/timeago.js"></script>
+  <script src="/js/custom.js"></script>
+
+</head>
+<body class="office">
+
+  <!-- ejs -->
+  
+  	<% include ../partials/navbar.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+
+<div class="ui container" style="margin-top:100px">
+
+<div class="ui stackable grid">
+
+	<div class="four wide column">
+	
+
+  <!-- ejs -->
+  
+  	<% include ../partials/sidebar.ejs %>
+  
+  <!-- ejs -->
+  
+	
+	</div>
+  
+  
+	<div class="twelve wide column">
+	
+	
+	
+  <!-- ejs -->
+  
+  	<% include ../partials/notifications.ejs %>
+  
+  <!-- ejs -->
+	
+	<div class="ui center aligned blue inverted segment">
+		<span id="wallet_info"></span>
+	</div>
+	
+	<div class="ui divider"></div>
+	
+	<div>
+		<div class="ui pointing below violet label">
+			Payment history
+		</div>
+		<div id="loader" class="ui active small inline loader"></div>
+	</div>
+	
+	<table class="ui table" id="table">
+  <thead>
+    <tr>
+      <th>No.</th>
+      <th>Received</th>
+      <th>URL</th>
+      <th>Note</th>
+      <th>Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+  </tbody>
+  <tfoot>
+    <tr>
+		<th>∑<span id="total_payments"></span></th>
+		<th> $<span id="total_earned"></span></th>
+		<th> Voted</th>
+		<th>Description</th>
+		<th>This week</th>
+	</tr>
+   </tfoot>
+</table>
+	
+	
+	</div>
+
+	</div>
+
+</div>
+
+
+
+<script>
+	//
+	
+	
+$( document ).ready(function() {
+    
+	
+	(async () => {
+		
+		try{
+	
+			var client = new dsteem.Client('https://api.steemit.com');
+			
+			const active_user = user_data.username;
+			const active_user_authority = user_data.authority;
+	
+			var curator_wallet = await Promise.resolve($.get("/api/wallet/" + active_user));
+			
+			var total_curations = curator_wallet[1][0].total_curations || 0;
+			var total_payments = curator_wallet[0][0].total_payments || 0;
+			var total_earnings = curator_wallet[2][0].total_earnings || 0;
+			var wallet_history = curator_wallet[3] || 0;
+			
+			$('#total_earned').text(total_earnings);
+			$('#total_payments').text(total_payments);
+			
+			var info = "<b>This week</b>: <em>total of <b>$" + total_earnings + "</b> earned through <b>" + total_payments + "</b> votes for <b>" + total_curations + "</b> curations</em>";
+			$('#wallet_info').html(info);
+			
+			for (x in wallet_history) {
+				add_row(wallet_history[x]);
+			}
+			
+			//console.log(curator_wallet);
+			$('#loader').hide();
+	
+		} catch(err){
+	
+			console.log(err);
+	
+		}
+	
+	})()
+	
+	
+	function add_row(data) {
+		
+		var table = document.getElementById("table");
+	
+		var row = table.insertRow(1);
+		
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(2);
+		var cell4 = row.insertCell(3);
+		var cell5 = row.insertCell(4);
+		
+		cell1.innerHTML = data.id;
+		cell2.innerHTML = data.vote_amount;
+		cell3.innerHTML = "<a target='_blank' href='https://steemit.com" + data.url + "'>" + data.url + "</a>";
+		cell4.innerHTML = data.note;
+		cell5.innerHTML = jQuery.timeago(data.time);
+		
+	}
+	
+	
+	
+});
+	
+	
+</script>
+
+
+  <!-- ejs -->
+  
+  	<% include ../partials/footer.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+</body>
+
+</html>

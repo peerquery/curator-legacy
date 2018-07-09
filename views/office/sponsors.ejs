@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sponsors</title>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
+  <link rel="stylesheet" href="/css/custom.css" />
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+  
+  <script src="/js/timeago.js"></script>
+  <script src="/js/custom.js"></script>
+
+</head>
+<body class="office">
+
+  <!-- ejs -->
+  
+  	<% include ../partials/navbar.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+
+<div class="ui container" style="margin-top:100px">
+
+<div class="ui stackable grid">
+
+	<div class="four wide column">
+	
+
+  <!-- ejs -->
+  
+  	<% include ../partials/sidebar.ejs %>
+  
+  <!-- ejs -->
+  
+	
+	</div>
+  
+  
+	<div class="twelve wide column">
+	
+	
+  <!-- ejs -->
+  
+  	<% include ../partials/notifications.ejs %>
+  
+  <!-- ejs -->
+  
+  
+			
+  
+		<div class="ui two item menu">
+			<a class="active item" id="active_sponsors">
+				<i class="wait icon"></i>
+				Active
+			</a>
+			<a class="item" id="inactive_sponsors">
+				<i class="history icon"></i>
+				Past
+			</a>
+		</div>
+			
+
+		<div class="ui segment" id="sponsors_list_segment">
+			
+			<table class="ui very basic selectable table" id="sponsors_list">
+  <thead>
+    <tr>
+      <th>Account</th>
+      <th>Joined</th>
+      <th>Delegation</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    </tr>
+    <tr>
+    </tr>
+    <tr>
+    </tr>
+  </tbody>
+</table>
+			
+			<div id="message"></div>
+			
+			<div class="ui divider"></div>
+			
+			<button class="ui basic 3 button" id="add">
+				<i class="icon user plus"></i>
+				Add sponsor
+			</button>
+
+
+		</div>
+
+	
+	
+	</div>
+
+</div>
+
+
+<!-- add modal -->
+
+<div class="ui new_sponsor tiny modal">
+	<i class="close icon"></i>
+	
+	<div class="header">
+			New sponsor
+	</div>
+	<div class="content">
+
+	<form class="ui form" id="new_sponsor_form">
+  
+		<div class="two fields">
+	  
+			<div class="required form_inputs field" id="new_sponsor_account_field">
+				<label>Steem account</label>
+				<input type="text" name="account" maxlength="20" placeholder="@for-you" id="new_sponsor_account">
+			</div>
+    
+			<div class="required form_inputs field" id="new_sponsor_delegation_field">
+				<label>Delegation</label>
+				<input type="text" name="delegation" maxlength="20" placeholder="15,000" id="new_sponsor_delegation">
+			</div>
+			
+		</div>
+		
+		<div class="two fields">
+			<div class="required form_inputs field" id="new_sponsor_link_field">
+				<label>Sponsor link</label>
+				<input type="text" name="link" placeholder="https://sponsor.com" id="new_sponsor_link">
+			</div>
+			<div class="required form_inputs field" id="new_sponsor_banner_field">
+				<label>Sponsor banner</label>
+				<input type="text" placeholder="https://sponsor.com/banner.png" id="new_sponsor_banner">
+			</div>
+		</div>
+  
+		
+		<div class="required form_inputs field" id="new_sponsor_message_field">
+			<label>
+				<i class="info circle icon"></i>
+				Sponsor message, promo or bluff
+			</label>
+			<textarea id="new_sponsor_message" name="description" placeholder="We are @for-you! Your #1 community powered and community driven witness."></textarea>
+		</div>
+		
+		<div class="ui success message">
+			<div class="header">Great!</div>
+			<p>You've successfully added the new sponsor!</p>
+		</div>
+		
+		<div class="ui error message">
+			<div class="header">Sorry</div>
+			<p>There was an error, please try again.</p>
+		</div>
+		
+		<div class="ui message" id="form_message">
+			<div class="header">Important things to note:</div>
+			<ul class="list">
+				<li>Sponsor is to provide message, link, account and banner details</li>
+				<li>Some sponsor details will be appear with sponsor banner on Sponsors sections of pages and bot comments</li>
+				<li>Sponsor link is link to sponsor's products, services or witness campaign</li>
+				<li>Account should be the Steem account of the sponsor </li>
+			</ul>
+		</div>
+  
+	</form>
+
+	</div>
+	
+	<div class="actions">
+		<div class="ui green form_inputs button" id="add_button">Enlist</div>
+		<div class="ui cancel button">Cancel</div>
+	</div>
+
+</div>
+
+
+<!-- modal end -->
+
+
+
+<!-- delete modal -->
+
+
+<div class="ui basic modal">
+	<div class="ui icon header">
+		<i class="user times icon"></i>
+		Remove sponsors member
+	</div>
+	<div class="content">
+		<p>Are you sure you want to part ways with this sponsors member? You could add them later.</p>
+	</div>
+	<div class="actions">
+		<div class="ui red basic cancel inverted button">
+			<i class="remove icon"></i>
+			No
+		</div>
+		<div class="ui green inverted button" id="remove_button">
+			<i class="checkmark icon"></i>
+			Yes
+		</div>
+	</div>
+</div>
+
+
+<!-- modal end -->
+
+
+
+
+
+
+</div>
+
+<script>
+	//
+	
+
+$( document ).ready(function() {
+    
+	
+	var action = "";
+	var index = 0;
+	var sponsors_type = "";
+	
+	const active_user = user_data.username;
+	const active_user_authority = user_data.authority;
+	
+	function active_sponsors() {
+	
+		sponsors_type = "active";
+		
+		$("#message").html("");
+		clear_table();
+		$("#sponsors_list_segment").addClass("loading");
+	
+		$.get("/api/active_sponsors", function(data, status){
+			if(status == "success") {
+			
+				$("#sponsors_list_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#message").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						add_row(data[x]);
+					}
+					
+				}
+				
+			} else {
+				alert("Err fetching results, please try again");
+			}
+		});
+	}
+	
+	
+	function inactive_sponsors() {
+	
+		sponsors_type = "inactive";
+		
+		$("#message").html("");
+		clear_table();
+		$("#sponsors_list_segment").addClass("loading");
+	
+		$.get("/api/inactive_sponsors", function(data, status){
+			if(status == "success") {
+			
+				$("#sponsors_list_segment").removeClass("loading");
+				
+				if (data.length == 0) {
+					
+					$("#message").html("<h3 class='ui center aligned header'>Sorry, nothing found.</h3>");
+					
+				} else {
+				
+					for (x in data) {
+						add_row(data[x]);
+					}
+					
+				}
+				
+			} else {
+				alert("Err fetching results, please try again");
+			}
+		});
+	}
+	
+	
+	function add_row(data) {
+		
+		var table = document.getElementById("sponsors_list");
+	
+		var row = table.insertRow(-1);
+		
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(2);
+		var cell4 = row.insertCell(3);
+		
+		cell1.innerHTML = "@" + data.account;
+		cell2.innerHTML =  jQuery.timeago(data.created);
+		cell3.innerHTML = data.delegation;
+		if (sponsors_type == "inactive" || active_user_authority < 3) { 
+			cell4.innerHTML = "";
+		} else if(active_user_authority >= 3) {
+			cell4.innerHTML = "<botton class='circular ui icon 3 mini remove button' >  <i class='icon user times'></i>  </button>";
+		}
+		
+	}
+	
+	
+	
+	function add_sponsor() {
+		$("#message").html("");
+		
+		var new_sponsor_account = $('#new_sponsor_account').val();
+		var new_sponsor_link = $('#new_sponsor_link').val();
+		var new_sponsor_delegation = $('#new_sponsor_delegation').val();
+		var new_sponsor_banner = $('#new_sponsor_banner').val();
+		var new_sponsor_message = $('#new_sponsor_message').val();
+		
+		if (new_sponsor_account == "") $("#new_sponsor_account_field").addClass("error");
+		else if(new_sponsor_link == "") $('#new_sponsor_link_field').addClass("error");
+		else if(new_sponsor_delegation == "") $('#new_sponsor_delegation_field').addClass("error");
+		else if(new_sponsor_banner == "") $('#new_sponsor_banner_field').addClass("error");
+		else if(new_sponsor_message == "") $('#new_sponsor_message_field').addClass("error");
+		else {
+			
+			$("#new_sponsor_account_field").removeClass("error");
+			$('#new_sponsor_link_field').removeClass("error");
+			$('#new_sponsor_delegation_field').removeClass("error");
+			$('#new_sponsor_banner_field').removeClass("error");
+			$('#new_sponsor_message_field').removeClass("error");
+		
+			$("#new_sponsor_form").addClass("loading");
+			$(".form_inputs").addClass("disabled");
+			$('.form .ui.dropdown').addClass("disabled");
+			
+			$.post("/api/private/add_sponsor",
+			{
+				account: new_sponsor_account,
+				author: "",
+				delegation: new_sponsor_delegation,
+				link: (new_sponsor_link.indexOf('://') === -1) ? 'http://' + new_sponsor_link : new_sponsor_link,
+				banner: new_sponsor_banner,
+				message: new_sponsor_message
+			},
+			function(data, status){
+				$("#new_sponsor_form").removeClass("loading");
+				if (status === "success") {
+					$("#new_sponsor_form").addClass("success");
+					
+					if(sponsors_type == "active") {
+						var data = {};
+						data.account = new_sponsor_account;
+						data.link = new_sponsor_link;
+						data.created = new Date();
+						data.delegation = new_sponsor_delegation;
+						
+						add_row(data) 
+					};
+				} else {
+					$("#new_sponsor_form").addClass("error");
+				}
+			});
+		
+		}
+		
+	}
+	
+	
+	
+	$(document).on('click','.remove',function(){
+		
+		index = this.parentNode.parentNode.rowIndex;
+		
+		$('.ui.basic.modal')
+		.modal({
+			onHide: function(){
+				$("#remove_button").removeClass("disabled");
+			}
+		})
+			.modal('show')
+		;
+	});
+	
+	
+	
+	
+	function remove_sponsor() {
+	
+		$("#remove_button").addClass("disabled");
+		
+		var table = document.getElementById("sponsors_list");
+		
+		var delete_sponsors_account = table.rows[index].cells[0].innerHTML.substring(1);
+		
+		
+		$.post("/api/private/remove_sponsor",
+		{
+			account: delete_sponsors_account,
+			author: ''
+		},
+		function(data, status){
+			if (status === "success") {
+				
+				$('.ui.basic.modal')
+					.modal({
+						onHide: function(){
+							$("#remove_button").removeClass("disabled");
+						}
+					})
+					.modal('hide')
+				;
+				
+				document.getElementById('sponsors_list').deleteRow(index);
+				
+			} else {
+				alert("Sorry, there was an error. Pease try again.");
+				$('.ui.basic.modal')
+					.modal({
+						onHide: function(){
+							$("#remove_button").removeClass("disabled");
+						}
+					})
+					.modal('hide')
+				;
+			}
+		});
+	
+	}
+	
+	
+	
+	
+	
+
+
+	$( "#add" ).click(function() {
+	
+		$('.new_sponsor.modal').modal({
+			onHide: function(){
+				$('.ui.dropdown').removeClass("disabled");
+				$('.form_inputs').removeClass("disabled");
+				$("#new_sponsor_form").attr("class", "ui form");
+				$('form').form('clear');
+			}
+		}).modal('show');
+	
+	});
+	
+	
+	
+	function clear_table() {
+	
+		var tableHeaderRowCount = 1;
+		var table = document.getElementById('sponsors_list');
+		var rowCount = table.rows.length;
+		for (var i = tableHeaderRowCount; i < rowCount; i++) {
+			table.deleteRow(tableHeaderRowCount);
+		}
+		
+	}
+	
+	
+	
+	$('.ui.dropdown')
+		.dropdown()
+	;
+	
+	
+	active_sponsors();
+	
+	
+	//event listeners
+	
+	//sponsor listing
+	$("#active_sponsors").click(function() {
+		active_sponsors();
+	});
+	$("#inactive_sponsors").click(function() {
+		inactive_sponsors();
+	});
+	
+	//sponsor management
+	$("#add_button").click(function() {
+		add_sponsor();
+	});
+	$("#remove_button").click(function() {
+		remove_sponsor();
+	});
+	
+	
+});
+	
+</script>
+
+  <!-- ejs -->
+  
+  	<% include ../partials/footer.ejs %>
+  
+  <!-- ejs -->
+  
+
+</body>
+
+</html>

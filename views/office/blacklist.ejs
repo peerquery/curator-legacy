@@ -9,81 +9,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
-<script src="/js/timeago.js"></script>
-
-  <style type="text/css">
-  body {
-    background-color: #FFFFFF;
-  }
-  .ui.menu .item img.logo {
-    margin-right: 1.5em;
-  }
-  .main.container {
-    margin-top: 7em;
-  }
-  .wireframe {
-    margin-top: 2em;
-  }
-  .ui.footer.segment {
-    margin: 5em 0em 0em;
-    padding: 5em 0em;
-  }
+  <link rel="stylesheet" href="/css/custom.css" />
   
-    .masthead.segment {
-      min-height: 700px;
-      padding: 1em 0em;
-    }
-    .masthead .logo.item img {
-      margin-right: 1em;
-    }
-    .masthead .ui.menu .ui.button {
-      margin-left: 0.5em;
-    }
-    .masthead h1.ui.header {
-      margin-top: 3em;
-      margin-bottom: 0em;
-      font-size: 4em;
-      font-weight: normal;
-    }
-    .masthead h2 {
-      font-size: 1.7em;
-      font-weight: normal;
-    }
-	
-	
-    .ui.vertical.stripe {
-      padding: 8em 0em;
-    }
-    .ui.vertical.stripe h3 {
-      font-size: 2em;
-    }
-    .ui.vertical.stripe .button + h3,
-    .ui.vertical.stripe p + h3 {
-      margin-top: 3em;
-    }
-    .ui.vertical.stripe .floated.image {
-      clear: both;
-    }
-    .ui.vertical.stripe p {
-      font-size: 1.33em;
-    }
-    .ui.vertical.stripe .horizontal.divider {
-      margin: 3em 0em;
-    }
-
-    .quote.stripe.segment {
-      padding: 0em;
-    }
-    .quote.stripe.segment .grid .column {
-      padding-top: 5em;
-      padding-bottom: 5em;
-    }
-  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+  
+  <script src="/js/timeago.js"></script>
+  <script src="/js/custom.js"></script>
 
 </head>
-<body>
+<body class="office">
 
   <!-- ejs -->
   
@@ -205,13 +140,18 @@
     
 			<div class="required form_inputs field" id="new_blacklist_type_field">
 				<label>Type</label>
-				<select class="ui fluid search dropdown" name="user[role]" id="new_blacklist_type">
-					<option value="">type</option>
-					<option value="reported">report</option>
-					<option value="probation">probate</option>
-					<option value="banned">ban</option>
-					<option value="opt_out">opt out</option>
-				</select>
+			
+				<div class="ui selection dropdown"  id="new_blacklist_type">
+					select
+					<i class="dropdown icon"></i>
+					
+					<div class="menu">
+						<div id="report_option" class="item">reported</div>
+						<div id="probate_option" class="item">probation</div>
+						<div id="ban_option" class="item">banned</div>
+						<div id="optout_option" class="item">opt_out</div>
+					</div>
+				</div>
 			</div>
 			
 		</div>
@@ -306,6 +246,13 @@ $( document ).ready(function() {
 	const active_user = user_data.username;
 	const active_user_authority = user_data.authority;
 	
+	
+	//
+	if(active_user_authority == 1 ) {
+		$("#probate_option, #ban_option").addClass("disabled");
+	} else if(active_user_authority == 2) {
+		$("#ban_option").addClass("disabled");
+	};
 	
 	
 	function blacklist_reported() {
@@ -445,10 +392,10 @@ $( document ).ready(function() {
 		cell2.innerHTML = data.admitter;
 		cell3.innerHTML =  jQuery.timeago(data.date);
 		cell4.innerHTML = data.reason;
-		if (blacklist_type == "opt_out") { 
+		if (blacklist_type == "opt_out" || active_user_authority < 3) { 
 			cell5.innerHTML = "";
-		} else {
-			cell5.innerHTML = "<button class='circular ui icon remove mini button'>  <i class='icon user times'></i>  </button>";
+		} else if(active_user_authority >= 3) {
+			cell5.innerHTML = "<button class='circular ui icon remove 3 mini button'>  <i class='icon user times'></i>  </button>";
 		}
 		
 		
@@ -460,7 +407,7 @@ $( document ).ready(function() {
 		$("#message").html("");
 		
 		var new_blacklist_account = $('#new_blacklist_account').val();
-		var new_blacklist_type = $('#new_blacklist_type').val();
+		var new_blacklist_type = $('#new_blacklist_type').dropdown('get value');
 		var new_blacklist_reason = $('#new_blacklist_reason').val();
 		
 		if (new_blacklist_account == "") $("#new_blacklist_account_field").addClass("error");
@@ -476,7 +423,7 @@ $( document ).ready(function() {
 			$(".form_inputs").addClass("disabled");
 			$('.form .ui.dropdown').addClass("disabled");
 			
-			$.post("/api/add_to_blacklist",
+			$.post("/api/private/add_to_blacklist",
 			{
 				account: new_blacklist_account,
 				author: active_user,
@@ -515,7 +462,7 @@ $( document ).ready(function() {
 		
 		var delete_blacklist_account = table.rows[index].cells[0].innerHTML.substring(1);
 		
-		$.post("/api/remove_from_blacklist",
+		$.post("/api/private/remove_from_blacklist",
 		{
 			account: delete_blacklist_account,
 			author: active_user
