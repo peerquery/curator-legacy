@@ -11,78 +11,13 @@
   <title>Homepage</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
-
-
-  <style type="text/css">
-  body {
-    background-color: #FFFFFF;
-  }
-  .ui.menu .item img.logo {
-    margin-right: 1.5em;
-  }
-  .main.container {
-    margin-top: 7em;
-  }
-  .wireframe {
-    margin-top: 2em;
-  }
-  .ui.footer.segment {
-    margin: 5em 0em 0em;
-    padding: 5em 0em;
-  }
+  <link rel="stylesheet" href="/css/custom.css" />
   
-    .masthead.segment {
-      min-height: 700px;
-      padding: 1em 0em;
-    }
-    .masthead .logo.item img {
-      margin-right: 1em;
-    }
-    .masthead .ui.menu .ui.button {
-      margin-left: 0.5em;
-    }
-    .masthead h1.ui.header {
-      margin-top: 3em;
-      margin-bottom: 0em;
-      font-size: 4em;
-      font-weight: normal;
-    }
-    .masthead h2 {
-      font-size: 1.7em;
-      font-weight: normal;
-    }
-	
-	
-    .ui.vertical.stripe {
-      padding: 8em 0em;
-    }
-    .ui.vertical.stripe h3 {
-      font-size: 2em;
-    }
-    .ui.vertical.stripe .button + h3,
-    .ui.vertical.stripe p + h3 {
-      margin-top: 3em;
-    }
-    .ui.vertical.stripe .floated.image {
-      clear: both;
-    }
-    .ui.vertical.stripe p {
-      font-size: 1.33em;
-    }
-    .ui.vertical.stripe .horizontal.divider {
-      margin: 3em 0em;
-    }
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
 
-    .quote.stripe.segment {
-      padding: 0em;
-    }
-    .quote.stripe.segment .grid .column {
-      padding-top: 5em;
-      padding-bottom: 5em;
-    }
-  </style>
+  <script src="https://unpkg.com/dsteem@latest/dist/dsteem.js"></script>
+  <script src="/js/custom.js"></script>
 
 </head>
 <body>
@@ -94,7 +29,7 @@
   <!-- ejs -->
   
   
-  <div class="">
+  <div>
   <div class="ui teal inverted vertical masthead center aligned segment">
 
     <div class="ui text container">
@@ -131,7 +66,7 @@
 		<br/>
 		<br/>
 		<br/>
-          <a class="ui huge button">See our trail</a>
+          <a class="ui huge button" href="/trail">See our trail</a>
         </div>
       </div>
     </div>
@@ -153,11 +88,12 @@
 	
 	<div class="ui middle aligned container">
 	
-	<div class="ui four statistics" id="achievements">
+	
+	<div class="ui four statistics" id="achievements" style="display:none">
 		<div class="statistic">
 			<div class="value">
 				<i class="write icon"></i>
-				1,403
+				<span id="authors"></span>
 			</div>
 			<div class="label">
 				Authors
@@ -165,7 +101,7 @@
 		</div>
 		<div class="statistic">
 			<div class="text value">
-				NINE <BR/>THOUSAND
+				<span id="curations"></span>
 			</div>
 			<div class="label">
 				Curations
@@ -174,7 +110,7 @@
 		<div class="statistic">
 			<div class="value">
 				<i class="dollar icon"></i>
-				102,039
+				<span id="worth"></span>
 			</div>
 			<div class="label">
 				Awarded
@@ -183,13 +119,14 @@
 		<div class="statistic">
 			<div class="value">
 				<i class="eye icon"></i>
-				5M
+				<span id="views"></span>
 			</div>
 			<div class="label">
 				Est. views
 			</div>
 		</div>
 	</div>
+	
 	
 	</div>
 	
@@ -214,62 +151,6 @@
 	  
 	  <div class="ui four cards" id="cards">
 	  
-	  <a class="ui card" target="_blank">
-		<div class="image">
-			<img src="/img/sponsor.png">
-		</div>
-		<div class="content">
-			<div class="header">@sample-sponsor</div>
-			<div class="description">We love to support good content. Take a look at other things we do on Steem.</div>
-		</div>
-		<div class="ui bottom attached button">
-			<i class="add icon"></i>
-			<span>Visit</span>
-			</div>
-		</a>
-		
-	  <a class="ui card" target="_blank">
-		<div class="image">
-			<img src="/img/sponsor.png">
-		</div>
-		<div class="content">
-			<div class="header">@sample-sponsor</div>
-			<div class="description">We love to support good content. Take a look at other things we do on Steem.</div>
-		</div>
-		<div class="ui bottom attached button">
-			<i class="add icon"></i>
-			<span>Visit</span>
-			</div>
-		</a>
-		
-	  <a class="ui card" target="_blank">
-		<div class="image">
-			<img src="/img/sponsor.png">
-		</div>
-		<div class="content">
-			<div class="header">@sample-sponsor</div>
-			<div class="description">We love to support good content. Take a look at other things we do on Steem.</div>
-		</div>
-		<div class="ui bottom attached button">
-			<i class="add icon"></i>
-			<span>Visit</span>
-			</div>
-		</a>
-		
-	  <a class="ui card" target="_blank">
-		<div class="image">
-			<img src="/img/sponsor.png">
-		</div>
-		<div class="content">
-			<div class="header">@sample-sponsor</div>
-			<div class="description">We love to support good content. Take a look at other things we do on Steem.</div>
-		</div>
-		<div class="ui bottom attached button">
-			<i class="add icon"></i>
-			<span>Visit</span>
-			</div>
-		</a>
-		
 		</div>
 
   
@@ -279,7 +160,7 @@
 		<br>
 		<br>
 		<br>
-          <a class="ui huge button" href="">Become a sponsor</a>
+          <a class="ui huge button" href="/sponsors">Become a sponsor</a>
         </div>
       </div>
 	
@@ -395,7 +276,144 @@
         $('html, body').animate({scrollTop: '+=600px'}, 800);
     });
 	
-  </script>
+	//
+    var client = new dsteem.Client('https://api.steemit.com');
+	
+	$.get("/api/sponsorship", async function(data, status){
+		//console.log(data)
+		
+			for (x in data[0]) { create_sponsor(data[0][x]) };
+			$('#cards_loader').hide();
+			var worth = data[4][0].worth;
+			if(!worth) worth = 0;
+		
+			$('#authors').text(data[2][0].authors);
+			$('#curations').html(num2str(data[1][0].curations));
+			$('#worth').text(worth.toLocaleString());
+			
+			var follow = await client.call('follow_api', 'get_follow_count', [data[3][0].bot_account]);
+			$('#achievements_loader').hide();
+			$('#achievements').show();
+			$('#views').text(follow.follower_count * 5);
+		
+		
+	});
+	
+	
+	
+	function create_sponsor(sponsor) {
+		
+		var sponsor_card = document.createElement("a");
+		sponsor_card.className = "ui card";
+		sponsor_card.href = sponsor.link;
+		sponsor_card.setAttribute("target", "_blank");
+		
+		var img_div = document.createElement("div");
+		img_div.className = "image";
+		
+		var img = document.createElement("img");
+		img.src = sponsor.banner;
+		
+		var content = document.createElement("div");
+		content.className = "content";
+		
+		var header = document.createElement("div");
+		header.className = "header";
+		header.innerText = "@" + sponsor.account;
+		
+		var description = document.createElement("div");
+		description.className = "description";
+		description.innerText = sponsor.message;
+		
+		var button = document.createElement("div");
+		button.className = "ui bottom attached button";
+		
+		var i = document.createElement("i");
+		i.className = "add icon";
+		
+		var span = document.createElement("span");
+		span.innerText = "Visit";
+		
+		button.appendChild(i);
+		button.appendChild(span);
+		
+		button.appendChild(i);
+		button.appendChild(span);
+		
+		content.appendChild(header);
+		content.appendChild(description);
+		
+		img_div.appendChild(img);
+		
+		sponsor_card.appendChild(img_div);
+		sponsor_card.appendChild(content);
+		sponsor_card.appendChild(button);
+		
+		
+		document.getElementById('cards').appendChild(sponsor_card);
+		
+	}
+
+	
+
+// source:  https://gist.github.com/pehrlich/2127650
+// number to string, pluginized from http://stackoverflow.com/questions/5529934/javascript-numbers-to-words
+
+
+window.num2str = function (num) {
+    return window.num2str.convert(num);
+}
+
+
+window.num2str.ones = ['', 'one<br/>', 'two<br/>', 'three<br/>', 'four<br/>', 'five<br/>', 'six<br/>', 'seven<br/>', 'eight<br/>', 'nine<br/>'];
+window.num2str.tens=['','','twenty<br/>','thirty<br/>','forty<br/>','fifty<br/>','sixty<br/>','seventy<br/>','eighty<br/>','ninety<br/>'];
+window.num2str.teens=['ten<br/>','eleven<br/>','twelve<br/>','thirteen<br/>','fourteen<br/>','fifteen<br/>','sixteen<br/>','seventeen<br/>','eighteen<br/>','nineteen<br/>'];
+
+
+window.num2str.convert_millions = function(num) {
+    if (num >= 1000000) {
+        return this.convert_millions(Math.floor(num / 1000000)) + " million &<br/> " + this.convert_thousands(num % 1000000);
+    }
+    else {
+        return this.convert_thousands(num);
+    }
+}
+
+window.num2str.convert_thousands = function(num) {
+    if (num >= 1000) {
+        return this.convert_hundreds(Math.floor(num / 1000)) + " thousand &<br/> " + this.convert_hundreds(num % 1000);
+    }
+    else {
+        return this.convert_hundreds(num);
+    }
+}
+
+window.num2str.convert_hundreds = function(num) {
+    if (num > 99) {
+        return this.ones[Math.floor(num / 100)] + " hundred &<br/> " + this.convert_tens(num % 100);
+    }
+    else {
+        return this.convert_tens(num);
+    }
+}
+
+window.num2str.convert_tens = function(num) {
+    if (num < 10) return this.ones[num];
+    else if (num >= 10 && num < 20) return this.teens[num - 10];
+    else {
+        return this.tens[Math.floor(num / 10)] + " " + this.ones[num % 10];
+    }
+}
+
+window.num2str.convert = function(num) {
+    if (num == 0) return "zero";
+    else return this.convert_millions(num);
+}
+	
+	
+</script>
+  
+  
   
   
   <!-- ejs -->
