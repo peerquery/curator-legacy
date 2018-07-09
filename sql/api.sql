@@ -47,6 +47,8 @@ BEGIN
 		
 	UPDATE `posts` SET `posts`.`curator` = curator, `posts`.`remarks` = remarks, `posts`.`state` = state, `posts`.`rate` = rate, `posts`.`curate_time` = NOW() WHERE `posts`.`url` = url;
 	
+	UPDATE `team` SET `team`.`curations` = `team`.`curations` + 1 WHERE `team`.`account` = curator;
+	
 	INSERT IGNORE INTO `activity` (`author`, `type`, `link`, `comments`) VALUES (curator, action, url, title);
 	
 	IF action = 'approve' THEN
@@ -100,7 +102,9 @@ BEGIN
 		
 	UPDATE `posts` SET `posts`.`curator` = curator, `posts`.`remarks` = remarks, `posts`.`state` = state, `posts`.`curate_time` = NOW() WHERE `posts`.`url` = url;
 	
-	INSERT IGNORE `activity` (`author`, `type`, `link`, `comments`) VALUES (curator, action, url, title);
+	UPDATE `team` SET `team`.`curations` = `team`.`curations` + 1 WHERE `team`.`account` = curator;
+	
+	INSERT `activity` (`author`, `type`, `link`, `comments`) VALUES (curator, action, url, title);
 	
 	IF action = 'reject' THEN
   
@@ -150,11 +154,16 @@ CREATE PROCEDURE `new_team`(
 )
 BEGIN
         
-	INSERT IGNORE INTO `team` (`account`, `email`, `role`, `tag`, `status`, `message`, `authority`, `token_hash`) VALUES(account, email, role, tag, "pending", message, authority, token_hash);
+	INSERT INTO `team` (`account`, `email`, `role`, `tag`, `status`, `message`, `authority`, `invitor`, `token_hash`)
+		VALUES(account, email, role, tag, "pending", message, authority, author, token_hash)
+			ON DUPLICATE KEY UPDATE `account` = account, `email` = email, `role` = role, `tag` = 'pending', `message` = message, `authority` = authority, `invitor` = author, `token_hash` = token_hash;
 	
-	INSERT IGNORE INTO `blacklist` (`account`, `type`, `reason`, `admitter`) VALUES(account, 'opt_out', 'is_team_member', author);
+	INSERT INTO `blacklist` (`account`, `type`, `reason`, `admitter`)
+		VALUES(account, 'opt_out', 'is_team_member', author)
+			ON DUPLICATE KEY UPDATE `account` = account, `type` = 'opt_out', `reason` = 'is_team_member', `admitter` = author;
 	
-	INSERT IGNORE `activity` (`author`, `type`, `link`, `comments`) VALUES (author, 'add_team', CONCAT('/@', account), CONCAT('New user @', account, ' added to team as ', role, '!') );
+	INSERT INTO `activity` (`author`, `type`, `link`, `comments`)
+		VALUES (author, 'add_team', CONCAT('/@', account), CONCAT('New user @', account, ' added to team as ', role, '!') );
 	
 END;
 
@@ -174,7 +183,7 @@ BEGIN
 	
 	DELETE FROM `blacklist` WHERE `account` = account;
 	
-	INSERT IGNORE `activity` (`author`, `type`, `link`, `comments`) VALUES (author, 'remove_team', CONCAT('/@', account), CONCAT('Former team user @', account, ' removed!'));
+	INSERT `activity` (`author`, `type`, `link`, `comments`) VALUES (author, 'remove_team', CONCAT('/@', account), CONCAT('Former team user @', account, ' removed!'));
 	
 END;
 
@@ -269,6 +278,22 @@ BEGIN
 END;
 
 
+-- reset password_hash
+
+DROP procedure IF EXISTS `reset_password_hash`;
+
+CREATE PROCEDURE `reset_password_hash`(
+	IN email VARCHAR(125),
+	IN reset_token VARCHAR(512)
+)
+BEGIN
+    
+	UPDATE `team` SET `team`.`token_hash` = reset_token, `team`.`reset_time` = NOW() WHERE `team`.`email` = email;
+	SELECT `account` FROM `team_view` WHERE `team_view`.`email` = email;
+	
+END;
+
+
 -- get token_hash
 
 DROP procedure IF EXISTS `token_hash`;
@@ -281,6 +306,9 @@ BEGIN
 	SELECT `token_hash` FROM `team` WHERE `team`.`account` = username;
 	
 END;
+
+
+
 
 
 -- activate team
@@ -326,6 +354,46 @@ BEGIN
 END;
 
 
+-- get a team member's account
+
+DROP procedure IF EXISTS `account`;
+
+CREATE PROCEDURE `account`(
+	IN account VARCHAR(45)
+)
+BEGIN
+    
+	SELECT * FROM `team_view` WHERE `team_view`.`account` = account;
+	
+END;
+
+
+
+-- get a team member's wallet
+
+DROP procedure IF EXISTS `wallet`;
+
+CREATE PROCEDURE `wallet`(
+	IN account VARCHAR(45)
+)
+BEGIN
+    
+	SELECT COUNT(`id`) AS total_payments FROM `bot_activity_view` 
+		WHERE `bot_activity_view`.`account` = account AND YEARWEEK(`bot_activity_view`.`time`) = YEARWEEK(CURDATE());
+		
+	SELECT COUNT(`id`) AS total_curations FROM `posts_view` 
+		WHERE `posts_view`.`curator` = account AND `posts_view`.`state` > 1 AND YEARWEEK(`posts_view`.`timestamp`) = YEARWEEK(CURDATE());
+		
+	SELECT SUM(`vote_amount`) AS total_earnings FROM `bot_activity_view` 
+		WHERE `bot_activity_view`.`account` = account AND YEARWEEK(`bot_activity_view`.`time`) = YEARWEEK(CURDATE());
+		
+	SELECT * FROM `bot_activity_view`
+		WHERE `bot_activity_view`.`account` = account AND YEARWEEK(`bot_activity_view`.`time`) = YEARWEEK(CURDATE())
+			ORDER BY `bot_activity_view`.`time` DESC;
+	
+END;
+
+
 -- Get approved posts
 
 DROP procedure IF EXISTS `approved`;
@@ -334,6 +402,18 @@ CREATE PROCEDURE `approved`()
 BEGIN
         
 	SELECT * FROM `posts_view` WHERE `posts_view`.`state` > 1 AND `posts_view`.`voted` = 'false' ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
+	
+END;
+
+
+-- Get voted posts
+
+DROP procedure IF EXISTS `voted`;
+
+CREATE PROCEDURE `voted`()
+BEGIN
+        
+	SELECT * FROM `posts_view` WHERE `posts_view`.`voted` = "true" AND HOUR(TIMEDIFF(NOW(), `posts_view`.`timestamp`))>24 ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
 	
 END;
 
@@ -372,6 +452,136 @@ BEGIN
 	SELECT * FROM `posts_view` WHERE `posts_view`.`state` = -1 ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
 	
 END;
+
+
+
+-- Get approved user posts
+
+DROP procedure IF EXISTS `approved_user`;
+
+CREATE PROCEDURE `approved_user`(
+	IN account varchar(45)
+)
+BEGIN
+        
+	SELECT * FROM `posts_view` WHERE `posts_view`.`state` > 1 AND `posts_view`.`voted` = 'false' AND `posts_view`.`author` = account ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
+	
+END;
+
+
+-- Get voted user posts
+
+DROP procedure IF EXISTS `voted_user`;
+
+CREATE PROCEDURE `voted_user`(
+	IN account varchar(45)
+)
+BEGIN
+        
+	SELECT * FROM `posts_view` WHERE `posts_view`.`voted` = "true" AND `posts_view`.`author` = account ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
+	
+END;
+
+
+-- Get ignored user posts
+
+DROP procedure IF EXISTS `ignored_user`;
+
+CREATE PROCEDURE `ignored_user`(
+	IN account varchar(45)
+)
+BEGIN
+        
+	SELECT * FROM `posts_view` WHERE `posts_view`.`state` = 1 AND `posts_view`.`author` = account ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
+	
+END;
+
+
+-- Get lost user posts
+
+DROP procedure IF EXISTS `lost_user`;
+
+CREATE PROCEDURE `lost_user`(
+	IN account varchar(45)
+)
+BEGIN
+        
+	SELECT * FROM `posts_view` WHERE `posts_view`.`state` = 0 AND `posts_view`.`author` = account ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
+	
+END;
+
+
+-- Get rejected user posts
+
+DROP procedure IF EXISTS `rejected_user`;
+
+CREATE PROCEDURE `rejected_user`(
+	IN account varchar(45)
+)
+BEGIN
+        
+	SELECT * FROM `posts_view` WHERE `posts_view`.`state` = -1 AND `posts_view`.`author` = account ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
+	
+END;
+
+
+
+-- Get approved curator posts
+
+DROP procedure IF EXISTS `approved_curator`;
+
+CREATE PROCEDURE `approved_curator`(
+	IN account varchar(45)
+)
+BEGIN
+        
+	SELECT * FROM `posts_view` WHERE `posts_view`.`state` > 1 AND `posts_view`.`voted` = 'false' AND `posts_view`.`curator` = account ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
+	
+END;
+
+
+-- Get voted curator posts
+
+DROP procedure IF EXISTS `voted_curator`;
+
+CREATE PROCEDURE `voted_curator`(
+	IN account varchar(45)
+)
+BEGIN
+        
+	SELECT * FROM `posts_view` WHERE `posts_view`.`voted` = "true" AND `posts_view`.`curator` = account ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
+	
+END;
+
+
+-- Get ignored curator posts
+
+DROP procedure IF EXISTS `ignored_curator`;
+
+CREATE PROCEDURE `ignored_curator`(
+	IN account varchar(45)
+)
+BEGIN
+        
+	SELECT * FROM `posts_view` WHERE `posts_view`.`state` = 1 AND `posts_view`.`curator` = account ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
+	
+END;
+
+
+
+-- Get rejected curator posts
+
+DROP procedure IF EXISTS `rejected_curator`;
+
+CREATE PROCEDURE `rejected_curator`(
+	IN account varchar(45)
+)
+BEGIN
+        
+	SELECT * FROM `posts_view` WHERE `posts_view`.`state` = -1 AND `posts_view`.`curator` = account ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
+	
+END;
+
 
 
 
@@ -453,6 +663,196 @@ END;
 
 
 
+-- Get new users
+
+DROP procedure IF EXISTS `new_users`;
+
+CREATE PROCEDURE `new_users`(
+	IN lmt INT(11)
+)
+BEGIN
+        
+	SELECT * FROM `users_view` ORDER BY `users_view`.`created` DESC LIMIT 20 OFFSET lmt;
+	
+END;
+
+
+
+-- Get top users
+
+
+DROP procedure IF EXISTS `top_users`;
+
+CREATE PROCEDURE `top_users`(
+	IN lmt INT(11)
+)
+BEGIN
+        
+	SELECT * FROM `users_view` ORDER BY `users_view`.`score` DESC LIMIT 20 OFFSET lmt;
+	
+END;
+
+
+
+
+-- Get new curators
+
+
+DROP procedure IF EXISTS `new_curators`;
+
+CREATE PROCEDURE `new_curators`(
+	IN lmt INT(11)
+)
+BEGIN
+    
+	SELECT `account`, `created`, `curations`, `points`
+		FROM `team_view` WHERE `team_view`.`role` = 'curator' AND `team_view`.`status` = 'active' ORDER BY `team_view`.`created` ASC LIMIT 20 OFFSET lmt;
+	
+END;
+
+
+
+-- Get top curators
+
+
+DROP procedure IF EXISTS `top_curators`;
+
+CREATE PROCEDURE `top_curators`(
+	IN lmt INT(11)
+)
+BEGIN
+    
+	SELECT `account`, `created`, `curations`, `points`
+		FROM `team_view` WHERE `team_view`.`role` = 'curator' AND `team_view`.`status` = 'active' ORDER BY `team_view`.`curations` DESC LIMIT 20 OFFSET lmt;
+	
+END;
+
+
+
+-- Get top curators
+
+
+DROP procedure IF EXISTS `inactive_curators`;
+
+CREATE PROCEDURE `inactive_curators`(
+	IN lmt INT(11)
+)
+BEGIN
+    
+	SELECT `account`, `created`, `curations`, `points`
+		FROM `team_view` WHERE `team_view`.`role` = 'curator' AND `team_view`.`status` = 'inactive' ORDER BY `team_view`.`curations` DESC LIMIT 20 OFFSET lmt;
+	
+END;
+
+
+
+-- Get community stats
+
+
+DROP procedure IF EXISTS `community_stats`;
+
+CREATE PROCEDURE `community_stats`()
+BEGIN
+        
+	SELECT COUNT(`id`) AS user_count FROM `users_view`;
+	SELECT COUNT(`id`) AS blacklist_count FROM `blacklist_view` WHERE NOT `blacklist_view`.`type` = 'opt_out';
+	SELECT COUNT(`id`) AS curator_count FROM `team_view` WHERE `team_view`.`role` = 'curator';
+	SELECT COUNT(`id`) AS sponsors_count FROM `sponsors_view` WHERE `sponsors_view`.`status` = 'active';
+	
+END;
+
+
+-- Get curation stats
+
+
+DROP procedure IF EXISTS `curation_stats`;
+
+CREATE PROCEDURE `curation_stats`()
+BEGIN
+        
+	SELECT COUNT(`id`) AS approved_count FROM `posts_view` WHERE `posts_view`.`state` > 1 AND `posts_view`.`voted` = 'false' AND DATE(`posts_view`.`timestamp`) > DATE_SUB(NOW(), INTERVAL 1 MONTH);
+	SELECT COUNT(`id`) AS voted_count FROM `posts_view` WHERE `posts_view`.`voted` = 'true' AND DATE(`posts_view`.`timestamp`) > DATE_SUB(NOW(), INTERVAL 1 MONTH);
+	SELECT COUNT(`id`) AS lost_count FROM `posts_view` WHERE `posts_view`.`state` = 0 AND DATE(`posts_view`.`timestamp`) > DATE_SUB(NOW(), INTERVAL 1 MONTH);
+	SELECT COUNT(`id`) AS rejected_count FROM `posts_view` WHERE `posts_view`.`state` = -1 AND DATE(`posts_view`.`timestamp`) > DATE_SUB(NOW(), INTERVAL 1 MONTH);
+	
+END;
+
+
+-- Get user rep
+
+
+DROP procedure IF EXISTS `user_rep`;
+
+CREATE PROCEDURE `user_rep`(
+	IN author VARCHAR(45)
+)
+BEGIN
+    
+	SELECT `score` FROM `users_view` WHERE `users_view`.`account` = author;
+	
+END;
+
+
+
+-- Get curator rep
+
+DROP procedure IF EXISTS `curator_rep`;
+
+CREATE PROCEDURE `curator_rep`(
+	IN curator VARCHAR(45)
+)
+BEGIN
+    
+	SELECT `points` FROM `team_view` WHERE `team_view`.`account` = curator;
+	
+END;
+
+
+
+-- Get user stats
+
+
+DROP procedure IF EXISTS `user_stats`;
+
+CREATE PROCEDURE `user_stats`(
+	IN author VARCHAR(45)
+)
+BEGIN
+    
+	SELECT COUNT(`id`) AS approved_count FROM `posts_view`
+		WHERE `posts_view`.`state` > 1 AND `posts_view`.`author` = author AND `posts_view`.`voted` = 'false' AND DATE(`posts_view`.`timestamp`) > DATE_SUB(NOW(), INTERVAL 1 MONTH);
+	SELECT COUNT(`id`) AS voted_count FROM `posts_view` 
+		WHERE `posts_view`.`voted` = 'true' AND `posts_view`.`author` = author AND DATE(`posts_view`.`timestamp`) > DATE_SUB(NOW(), INTERVAL 1 MONTH);
+	SELECT COUNT(`id`) AS lost_count FROM `posts_view` 
+		WHERE `posts_view`.`state` = 0 AND `posts_view`.`author` = author AND DATE(`posts_view`.`timestamp`) > DATE_SUB(NOW(), INTERVAL 1 MONTH);
+	SELECT COUNT(`id`) AS rejected_count FROM `posts_view` 
+		WHERE `posts_view`.`state` = -1 AND `posts_view`.`author` = author AND DATE(`posts_view`.`timestamp`) > DATE_SUB(NOW(), INTERVAL 1 MONTH);
+	
+END;
+
+
+-- Get curator stats
+
+
+DROP procedure IF EXISTS `curator_stats`;
+
+CREATE PROCEDURE `curator_stats`(
+	IN curator VARCHAR(45)
+)
+BEGIN
+    
+	SELECT COUNT(`id`) AS approved_count FROM `posts_view`
+		WHERE `posts_view`.`state` > 1 AND `posts_view`.`curator` = curator AND `posts_view`.`voted` = 'false' AND DATE(`posts_view`.`timestamp`) > DATE_SUB(NOW(), INTERVAL 1 MONTH);
+	SELECT COUNT(`id`) AS voted_count FROM `posts_view` 
+		WHERE `posts_view`.`voted` = 'true' AND `posts_view`.`curator` = curator AND DATE(`posts_view`.`timestamp`) > DATE_SUB(NOW(), INTERVAL 1 MONTH);
+	SELECT COUNT(`id`) AS lost_count FROM `posts_view` 
+		WHERE `posts_view`.`state` = 0 AND `posts_view`.`curator` = curator AND DATE(`posts_view`.`timestamp`) > DATE_SUB(NOW(), INTERVAL 1 MONTH);
+	SELECT COUNT(`id`) AS rejected_count FROM `posts_view` 
+		WHERE `posts_view`.`state` = -1 AND `posts_view`.`curator` = curator AND DATE(`posts_view`.`timestamp`) > DATE_SUB(NOW(), INTERVAL 1 MONTH);
+	
+END;
+
+
 
 -- add to blacklist
 
@@ -467,10 +867,10 @@ CREATE PROCEDURE `add_to_blacklist`(
 )
 BEGIN
 	
-	INSERT IGNORE `blacklist` (`account`, `admitter`, `type`, `reason`) VALUES(account, author, type, reason)
+	INSERT `blacklist` (`account`, `admitter`, `type`, `reason`) VALUES(account, author, type, reason)
 	ON DUPLICATE KEY UPDATE `type` = VALUES(`type`), `admitter` = VALUES(`admitter`), `reason` = VALUES(`reason`);
 	
-	INSERT IGNORE `activity` (`author`, `type`, `link`, `comments`) VALUES (author, 'add_to_blacklist', CONCAT('/@', account), CONCAT('Added @', account, ' to blacklist!'));
+	INSERT `activity` (`author`, `type`, `link`, `comments`) VALUES (author, 'add_to_blacklist', CONCAT('/@', account), CONCAT('Added @', account, ' to blacklist!'));
 	
 END;
 
@@ -489,7 +889,7 @@ BEGIN
 	
 	DELETE FROM `blacklist` WHERE `account` = account;
 	
-	INSERT IGNORE `activity` (`author`, `type`, `link`, `comments`) VALUES (author, 'remove_from_blacklist', CONCAT('/@', account), CONCAT('Removed @', account, ' from blacklist!'));
+	INSERT `activity` (`author`, `type`, `link`, `comments`) VALUES (author, 'remove_from_blacklist', CONCAT('/@', account), CONCAT('Removed @', account, ' from blacklist!'));
 	
 END;
 
@@ -564,9 +964,74 @@ CREATE PROCEDURE `get_blacklist`(
 )
 BEGIN
 		
-	SELECT COUNT(`id`) AS user_count FROM `users_view`;
-	SELECT COUNT(`id`) AS blacklist_count FROM `blacklist_view`;
 	SELECT * FROM `blacklist_view` WHERE `blacklist_view`.`type` != 'opt_out' ORDER BY `blacklist_view`.`date` DESC LIMIT 20 OFFSET lmt;
+	
+END;
+
+
+
+-- add sponsors
+
+DROP procedure IF EXISTS `add_sponsor`;
+
+CREATE PROCEDURE `add_sponsor`(
+	IN account VARCHAR(45),
+	IN author VARCHAR(45),
+	IN delegation INT(11),
+	IN link VARCHAR(512),
+	IN banner VARCHAR(512),
+	IN message VARCHAR(512)
+)
+BEGIN
+	
+	INSERT IGNORE INTO `sponsors` (`account`, `delegation`, `message`, `link`, `banner`, `status`) VALUES(account, delegation, message, link, banner, 'active');
+	
+	INSERT `activity` (`author`, `type`, `link`, `comments`) VALUES (author, 'add_sponsor', CONCAT('/@', account), CONCAT('Add new sponsor @', account, '!'));
+	
+END;
+
+
+-- remove sponsor
+
+
+DROP procedure IF EXISTS `remove_sponsor`;
+
+CREATE PROCEDURE `remove_sponsor`(
+	IN account VARCHAR(45),
+	IN author VARCHAR(45)
+)
+BEGIN
+	
+	UPDATE `sponsors` SET `sponsors`.`status` = 'inactive' WHERE `sponsors`.`account` = account;
+	
+	INSERT `activity` (`author`, `type`, `link`, `comments`) VALUES (author, 'remove_sponsor', CONCAT('/@', account), CONCAT('Former sponsor @', account, ' removed!'));
+	
+END;
+
+
+-- get active sponsors
+
+
+DROP procedure IF EXISTS `get_active_sponsors`;
+
+CREATE PROCEDURE `get_active_sponsors`()
+BEGIN
+	
+	SELECT * FROM `sponsors_view` WHERE `sponsors_view`.`status` = 'active' ORDER BY `sponsors_view`.`delegation` DESC;
+	
+END;
+
+
+
+-- get inactive sponsors
+
+
+DROP procedure IF EXISTS `get_inactive_sponsors`;
+
+CREATE PROCEDURE `get_inactive_sponsors`()
+BEGIN
+	
+	SELECT * FROM `sponsors_view` WHERE `sponsors_view`.`status` = 'inactive' ORDER BY `sponsors_view`.`delegation` DESC;
 	
 END;
 
@@ -704,6 +1169,47 @@ BEGIN
 		`vote_interval_minutes`
 	FROM
 		`settings_view`;
+	
+END;
+
+
+
+
+-- Sponsors page
+
+DROP procedure IF EXISTS `sponsorship`;
+
+CREATE PROCEDURE `sponsorship`()
+BEGIN
+    
+	SELECT `account`, `link`, `banner`, `message` FROM `sponsors_view` WHERE `sponsors_view`.`status` = 'active' ORDER BY `sponsors_view`.`delegation` DESC;
+	SELECT COUNT(*) AS curations FROM `posts_view`;
+	SELECT COUNT(DISTINCT `author`) AS authors FROM `posts_view`;
+	SELECT `bot_account` FROM `settings_view`;
+	SELECT SUM(`vote_amount`) AS worth FROM `posts_view`;
+	
+END;
+
+
+
+
+
+-- Get content
+
+DROP procedure IF EXISTS `get_content`;
+
+CREATE PROCEDURE `get_content`(
+	IN url VARCHAR(512)
+)
+BEGIN
+    
+	DECLARE account VARCHAR(45);
+	
+	SELECT * FROM `posts_view` WHERE `posts_view`.`url` = url;
+	    
+	SELECT `author` INTO account FROM `posts_view` WHERE `posts_view`.`url` = url;
+		
+	SELECT `score`, `posts`, `approved`, `rejected` FROM `users_view` WHERE `users_view`.`account` = account;
 	
 END;
 

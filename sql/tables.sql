@@ -87,13 +87,17 @@ CREATE TABLE IF NOT EXISTS `team` (
   `account` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
   `password_hash` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
+  `invitor` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `role` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `tag` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `message` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
   `authority` int(11) NOT NULL,
+  `curations` int(11) NOT NULL,
+  `points` int(11) NOT NULL,
   `token_hash` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
+  `reset_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `account_UNIQUE` (`account`)
@@ -119,14 +123,45 @@ CREATE OR REPLACE VIEW `team_view` AS
         `team`.`email` AS `email`,
         `team`.`role` AS `role`,
         `team`.`created` AS `created`,
+        `team`.`invitor` AS `invitor`,
         `team`.`status` AS `status`,
         `team`.`tag` AS `tag`,
         `team`.`message` AS `message`,
-        `team`.`authority` AS `authority`
+        `team`.`authority` AS `authority`,
+        `team`.`curations` AS `curations`,
+        `team`.`points` AS `points`,
+        `team`.`reset_time` AS `reset_time`
     FROM
         `team`;
 
 
+		
+		
+-- Create sponsors table SQL
+
+
+CREATE TABLE IF NOT EXISTS `sponsors` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `account` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `delegation` int(11) NOT NULL DEFAULT '0',
+  `link` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
+  `banner` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
+  `message` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
+  `status` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `account_UNIQUE` (`account`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+-- Create sponsors_view table SQL
+	
+	
+CREATE OR REPLACE VIEW `sponsors_view` AS SELECT * FROM `sponsors`;
+	
+	
+		
 
 -- Create settings table SQL
 
