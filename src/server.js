@@ -23,18 +23,20 @@ module.exports = function () {
 	console.log("    > server is live on port", process.env.PORT || 80, "!");
 	
 	var vet = require('../routes/vet');
+	var api_vet = require('../routes/api_vet');
 	var authorize = require('../routes/authorize');
 	
-	var static_routes = require('../routes/index');
-	var office = require('../routes/office');
-	var auth = require('../routes/auth');
-	var api = require('../routes/api');
+	var routes = require('../routes/_index');
+	var apis = require('./apis/_index');
 	
-	//setup vetter to check is user has logged in
+	//setup vetter to check logged in auth for all requests
 	app.use(vet);
 	
 	//setup authorize(logged-in) checker for all /office routes
 	app.use('/office', authorize);
+	
+	//setup authorize(logged-in) checker for all /api/ routes
+	app.use('/api/private/', api_vet);
 	
 	//require and activate db populator
 	require('../src/app/populate')();
@@ -72,10 +74,8 @@ module.exports = function () {
 	
 
 	// setup routes
-	static_routes(app);
-	auth(app);
-	office(app);
-	api(app);
+	routes(app);
+	apis(app);
 	
 	
 	// Additional middleware which will set headers that we need on each request.
