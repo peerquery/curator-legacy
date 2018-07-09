@@ -10,6 +10,13 @@ const client = new dsteem.Client(process.env.STEEM_RPC);
 
 module.exports = async function (app) {
 	
+	//configs
+	var bot_resting = false;
+	var vote_team = true;
+	var vote_project = true;
+	var vote_sponsors = false;
+	
+	//settings
 	var curator_rate = 0;
 	var team_rate = 0;
 	var project_rate = 0;
@@ -36,6 +43,20 @@ module.exports = async function (app) {
 		
 	};
 	
+	function today() {
+		var d = new Date();
+		var weekday = new Array(7);
+		weekday[0] = "sunday";
+		weekday[1] = "monday";
+		weekday[2] = "tuesday";
+		weekday[3] = "wednesday";
+		weekday[4] = "thursday";
+		weekday[5] = "friday";
+		weekday[6] = "saturday";
+	
+		return weekday[d.getDay()];
+	}
+	
 	
 	//ready global configs
 	(async () => {
@@ -54,6 +75,9 @@ module.exports = async function (app) {
 				
 				
 				results = results[0][0];
+				
+				//do not vote if today is resting day for bot
+				if(results.bot_holiday == today()) bot_resting = true;
 				
 				curator_rate = results.curator_rate;
 				project_rate = results.project_rate;
@@ -187,6 +211,9 @@ module.exports = async function (app) {
 			
 			var actions = 'vote_comment';
 			
+			//if today is bot resting day, do not vote
+			if(bot_resting) return;
+			
 			try{
 				//fetch posts from DB
 				var sql = "CALL upvote()";
@@ -196,7 +223,7 @@ module.exports = async function (app) {
 				results = results[0][0];
 				
 				//console.log('-----db results: ', results);
-				if (!results) return;
+				if (!results || results == "") return;
 				
 				var data = {};
 				var approved = "<b>Approved for " + results.rate + "% by @" + results.curator + "</b><br/><br/>";
