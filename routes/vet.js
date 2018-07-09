@@ -2,7 +2,7 @@
 'use strict'
 
 var bcrypt = require('bcrypt');
-var pool = require('./../config/connection');
+//var pool = require('./../config/connection');
 var jwt = require('jwt-simple');
 require('dotenv').config();
 

@@ -5,11 +5,11 @@ module.exports = function (req, res, next) {
 	
 	if(!req.user) {
 		
-		res.redirect("/community");
+		res.status(403).send("You have no such authority");
 		
 	} else if(req.user && req.user == null) {
 		
-			res.redirect("/login");
+			res.status(403).send("You have no such authority");
 			
 	} else {
 		
