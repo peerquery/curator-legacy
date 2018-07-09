@@ -1,0 +1,229 @@
+	
+	
+	html {
+		/* These are technically the same, but use both */
+		overflow-wrap: break-word;
+		word-wrap: break-word;
+
+		-ms-word-break: break-all;
+		/* This is the dangerous one in WebKit, as it breaks things wherever */
+		word-break: break-all;
+		/* Instead use this non-standard one: */
+		word-break: break-word;
+
+		/* Adds a hyphen where the word breaks, if supported (No Blink) */
+		-ms-hyphens: auto;
+		-moz-hyphens: auto;
+		-webkit-hyphens: auto;
+		hyphens: auto;
+
+	}
+	
+	
+	body {
+      background-color: #ecf0f1;
+	}
+    .smallgrid {
+      height: 80%;
+    }
+    .smallcolumn {
+      max-width: 450px;
+    }
+	
+	
+	body.office{
+		background-color: #ecf0f1;
+	}
+	
+	.hide {
+		display:none !important;
+	}
+	
+	.canvas-container {
+		width: 100%;
+		text-align:center;
+	}
+
+	canvas {
+		display: inline;
+	}
+
+	.renderer > blockquote {
+		background: #f9f9f9;
+		border-left: 10px solid #ccc;
+		margin: 1.5em 10px;
+		padding: 0.5em 10px;
+		quotes: "\201C""\201D""\2018""\2019";
+	}
+
+	.renderer > blockquote:before {
+		color: #ccc;
+		content: open-quote;
+		font-size: 4em;
+		line-height: 0.1em;
+		margin-right: 0.25em;
+		vertical-align: -0.4em;
+	}
+
+	.renderer > blockquote p {
+		display: inline;
+	}
+	
+	.renderer > pre {
+		white-space: pre-wrap;
+		white-space: -moz-pre-wrap;
+		white-space: -o-pre-wrap;
+		word-wrap: break-word;
+		font-size: 12px;
+		background-color: #eee;
+		padding-left: 40px;
+		padding-right: 40px;
+		padding-top: 40px;
+		padding-bottom: 40px;
+		margin-left: 40px;
+		margin-right: 40px;
+		margin-top: 40px;
+		margin-bottom: 40px;
+	}
+
+	.renderer > code {
+		white-space: pre-wrap;
+		white-space: -moz-pre-wrap;
+		white-space: -o-pre-wrap;
+		word-wrap: break-word;
+		font-size: 12px;
+		background-color: #eee;
+		padding-left: 40px;
+		padding-right: 40px;
+		padding-top: 40px;
+		padding-bottom: 40px;
+		margin-left: 40px;
+		margin-right: 40px;
+		margin-top: 40px;
+		margin-bottom: 40px;
+	}
+	
+	
+	.renderer > iframe{
+		font-size: 20px;
+		padding: 20px;
+	}
+	
+	
+	.image.circular.small {
+		margin-top: 20px;
+		height:150px;
+		width: 150px;
+	}
+	
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+		width: 100%;
+		border: 1px solid #fff;
+		color: #333;
+		border-collapse: separate;
+		border-spacing: 5px;
+	}
+	
+	th, td {
+		text-align: left;
+		padding: 16px;
+		color: #333;
+	}
+	
+	tr:nth-child(even) {
+		background-color: #ddd;
+		color: #333;
+	}
+	
+	tr:nth-child(odd) {
+		background-color: #fefefe;
+		color: #333;
+	}
+	
+	th {
+		background-color: #f8f8f8;
+		color: #333;
+	}
+	
+	
+	.ui.menu .item img.logo {
+		margin-right: 1.5em;
+	}
+	
+	.main.container {
+		margin-top: 7em;
+	}
+	
+	.wireframe {
+		margin-top: 2em;
+	}
+	
+	.ui.footer.segment {
+		width: 100%;
+		margin: 5em 0em 0em;
+		padding: 5em 0em;
+	}
+  
+    .masthead.segment {
+      min-height: 700px;
+      padding: 1em 0em;
+    }
+    .masthead .logo.item img {
+      margin-right: 1em;
+    }
+    .masthead .ui.menu .ui.button {
+      margin-left: 0.5em;
+    }
+    .masthead h1.ui.header {
+      margin-top: 3em;
+      margin-bottom: 0em;
+      font-size: 4em;
+      font-weight: normal;
+    }
+    .masthead h2 {
+      font-size: 1.7em;
+      font-weight: normal;
+    }
+	
+	
+    .ui.vertical.stripe {
+      padding: 8em 0em;
+    }
+    .ui.vertical.stripe h3 {
+      font-size: 2em;
+    }
+    .ui.vertical.stripe .button + h3,
+    .ui.vertical.stripe p + h3 {
+      margin-top: 3em;
+    }
+    .ui.vertical.stripe .floated.image {
+      clear: both;
+    }
+    .ui.vertical.stripe p {
+      font-size: 1.33em;
+    }
+    .ui.vertical.stripe .horizontal.divider {
+      margin: 3em 0em;
+    }
+
+    .quote.stripe.segment {
+      padding: 0em;
+    }
+    .quote.stripe.segment .grid .column {
+      padding-top: 5em;
+      padding-bottom: 5em;
+    }
+	
+	.renderer img{
+	  max-width:100%;
+	  max-height:100%;
+	}
+	
+	.renderer > * {
+	  max-width:100%;
+	  max-height:100%;
+	}
+	
+	
