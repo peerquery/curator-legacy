@@ -59,6 +59,7 @@ var template = email_template.replace(/USER_NAME/gi, account);
 	template = template.replace(/PROJECT_NAME/gi, process.env.PROJECT_NAME);
 	template = template.replace(/PROJECT_HOMEPAGE/gi, process.env.PROJECT_HOMEPAGE);
 	template = template.replace(/PROJECT_INFO/gi, process.env.PROJECT_INFO);
+	template = template.replace(/USER_EMAIL/gi, email);
 	template = template.replace(/PROJECT_ADDRESS/gi, process.env.PROJECT_ADDRESS);
 	template = template.replace(/ATTRIBUTION/gi, attribution);
 	
