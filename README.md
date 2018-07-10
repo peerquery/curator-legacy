@@ -1,5 +1,5 @@
 
-# Curator
+# Curator v2
 Advanced content curator interface and with voting bot for Steem.
 
 ## How to install:
@@ -43,4 +43,4 @@ To be able to fully and independently test the demo, I would recommend that you 
 
 ### "Warning"
 
-This new version(v2) contains breaking changes and will NOT update to the DB of v1. If you already have version 1 installed, please consider emptying the schema of the current DB, or use a new DB.
+This new version(v2) contains breaking changes and will NOT run on the DB of v1. If you already have version 1 installed, please consider emptying the schema of the current DB, or use a new DB.
