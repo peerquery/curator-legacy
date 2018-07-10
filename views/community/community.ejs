@@ -335,6 +335,7 @@ $( document ).ready(function() {
 		
 		var ratings = document.createElement("div");
 		ratings.className = "ui star rating";
+		ratings.setAttribute("data-max-rating", "5");
 		ratings.setAttribute("data-rating", get_ratings(data.score));
 		
 		//--
