@@ -34,8 +34,8 @@ Full docs coming soon.
 * Owner pass: wBtvmTueTBxm9HaMZr
 
 ### Demo curator login
-* Owner login: makafuigdzivenu
-* Owner pass: nice_password
+* Login: makafuigdzivenu
+* Pass: nice_password
 
 ### Email login
 * Ethereal.email user: sdn3qwp64xb5gyzl@ethereal.email
