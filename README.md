@@ -29,9 +29,13 @@ Full docs coming soon.
 * See site: [http://steem-curator.herokuapp.com](http://steem-curator.herokuapp.com)
 * See emails: [https://ethereal.email/messages](https://ethereal.email/messages)
 
-### Demo login
+### Demo owner login
 * Owner email: wctobf7h64hu47cm@ethereal.email
 * Owner pass: wBtvmTueTBxm9HaMZr
+
+### Demo curator login
+* Owner login: makafuigdzivenu
+* Owner pass: nice_password
 
 ### Email login
 * Ethereal.email user: sdn3qwp64xb5gyzl@ethereal.email
