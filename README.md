@@ -40,3 +40,7 @@ Full docs coming soon.
 ### Recommendation
 
 To be able to fully and independently test the demo, I would recommend that you created your own account using the team page and then using that account to explore Curator.
+
+### "Warning"
+
+This new version(v2) and contains breaking changes and will NOT update to the DB of v1. If you already have version 1 installed, please consider emptying the scheme of the current DB, or use a new DB.
