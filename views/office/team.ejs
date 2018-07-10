@@ -146,7 +146,7 @@
 			<div class="required form_inputs field" id="new_team_role_field">
 				<label>Type</label>
 				<div class="ui selection dropdown"  id="new_team_role">
-					role
+					<div class="default text">role</div>
 					<i class="dropdown icon"></i>
 					<div class="menu">
 						<div id="admin_option" class="item">admin</div>
@@ -155,6 +155,9 @@
 					</div>
 				</div>
 			</div>
+			
+			
+			
 			
 		</div>
 		
@@ -583,6 +586,7 @@ $( document ).ready(function() {
 		$('.new_team.modal').modal({
 			onHide: function(){
 				$('.ui.dropdown').removeClass("disabled");
+				$('#new_team_role').dropdown('clear');
 				$('.form_inputs').removeClass("disabled");
 				$("#new_team_form").attr("class", "ui form");
 				$('form').form('clear');

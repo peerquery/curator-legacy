@@ -142,7 +142,7 @@
 				<label>Type</label>
 			
 				<div class="ui selection dropdown"  id="new_blacklist_type">
-					select
+					<div class="default text">select</div>
 					<i class="dropdown icon"></i>
 					
 					<div class="menu">
@@ -517,6 +517,7 @@ $( document ).ready(function() {
 		$('.new_blacklist.modal').modal({
 			onHide: function(){
 				$('.ui.dropdown').removeClass("disabled");
+				$('#new_blacklist_type').dropdown('clear');
 				$('.form_inputs').removeClass("disabled");
 				$("#new_blacklist_form").attr("class", "ui form");
 				$('form').form('clear');
