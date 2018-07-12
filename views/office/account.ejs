@@ -178,6 +178,21 @@
     <tr>
       <td>
         <h4 class="ui image header">
+          <i class="disabled balance scale icon"></i>
+          <div class="content">
+            Curations
+            <div class="sub header">on curator
+          </div>
+        </div>
+      </h4></td>
+      <td>
+        <span id="curations"></span>
+      </td>
+    </tr>
+	
+    <tr>
+      <td>
+        <h4 class="ui image header">
           <i class="disabled rss icon"></i>
           <div class="content">
             Last activity
@@ -381,6 +396,7 @@ $( document ).ready(function() {
 			$('#status').text(account.status);
 			$('#tag').text(account.tag);
 			$('#role').text(account.role);
+			$('#curations').text(account.curations);
 			$('#rep').html("<span class = 'ui star rating' data-max-rating='5' data-rating='" + get_ratings(account.points) + "'></span>");
 			$('#activity').text(account.activity);
 			
@@ -400,7 +416,7 @@ $( document ).ready(function() {
 			$('#proxy').text(steem_account.proxy);
 			$('#reputation').text(repLog10(steem_account.reputation));
 			$('#sbd').text(steem_account.sbd_balance);
-			$('#recovery').text(steem_account.recovery_steem_account);
+			$('#recovery').text(steem_account.recovery_account);
 			
 			//console.log(steem_account)
 			
