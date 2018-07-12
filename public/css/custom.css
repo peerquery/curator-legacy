@@ -216,12 +216,17 @@
       padding-bottom: 5em;
     }
 	
+	.renderer img{
+	  display: block;
+	}
+	
 	img{
+	  display: inline-block;
 	  max-width:100%;
 	  max-height:100%;
 	}
 	
-	.renderer > * {
+	.renderer * {
 	  max-width:100%;
 	  max-height:100%;
 	}
