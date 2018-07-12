@@ -116,7 +116,7 @@
 		width: 150px;
 	}
 	
-	table {
+	.renderer table {
 		border-collapse: collapse;
 		border-spacing: 0;
 		width: 100%;
@@ -126,23 +126,23 @@
 		border-spacing: 5px;
 	}
 	
-	th, td {
+	.renderer th, td {
 		text-align: left;
 		padding: 16px;
 		color: #333;
 	}
 	
-	tr:nth-child(even) {
+	.renderer tr:nth-child(even) {
 		background-color: #f8f8f8;
 		color: #333;
 	}
 	
-	tr:nth-child(odd) {
+	.renderer tr:nth-child(odd) {
 		background-color: #fefefe;
 		color: #333;
 	}
 	
-	th {
+	.renderer th {
 		background-color: #f8f8f8;
 		color: #333;
 	}
