@@ -94,12 +94,16 @@
 			
 		<div id="post_meta" style="">
 		
-			<div class="content " style="display:inline">
-				<img class="ui avatar image" src="/img/person.png" id="post_author_img" style="display:inline">
+			<div class="content">
 				<div style="display:inline">
-					<a class="header" id="post_author" target="_blank" style="display:inline"></a>
-					<span class="timeago" id="post_time"></span>
+					<img class="ui avatar image" src="/img/person.png" id="post_author_img" style="display:inline">
+					<div style="display:inline">
+						<a class="header" id="post_author" target="_blank" style="display:inline"></a>
+						<span><i class="disabled clock alternate icon"></i><span class="timeago" id="post_time"></span></span>
+					</div>
+					<a id="steemit_view" target="_blank" style="float:right">STEEMIT <i class="disabled external alternate icon"></i></a>
 				</div>
+				<br/>
 				<div class="description"><h2 id="post_title"></h2></div>
 			</div>
 		
@@ -348,6 +352,7 @@ $( document ).ready(function() {
 			
 				$('#post_author').text("@" + post_obj.author);
 				$('#post_author').attr("href", "/user/" + post_obj.author);
+				$('#steemit_view').attr("href", "https://steemit.com/@" + post_obj.author + "/" + post_obj.permlink);
 				$('#post_title').html(post_obj.title);
 				$('#post_author_img').attr("src", "https://steemitimages.com/u/" + post_obj.author + "/avatar");
 				
