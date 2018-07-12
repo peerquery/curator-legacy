@@ -385,7 +385,7 @@ $( document ).ready(function() {
 			$('#activity').text(account.activity);
 			
 			$('#steem').attr('href', "https://steemit.com/@" + active_user);
-			$('#curation').attr('href', "/trail?curator=" + active_user);
+			$('#curation').attr('href', "/curator/" + active_user);
 		
 			var steem_account = await client.database.getAccounts([active_user]);
 			steem_account = steem_account[0];
