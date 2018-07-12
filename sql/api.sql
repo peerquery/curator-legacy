@@ -156,11 +156,11 @@ BEGIN
         
 	INSERT INTO `team` (`account`, `email`, `role`, `tag`, `status`, `message`, `authority`, `invitor`, `token_hash`)
 		VALUES(account, email, role, tag, "pending", message, authority, author, token_hash)
-			ON DUPLICATE KEY UPDATE `account` = account, `email` = email, `role` = role, `tag` = 'pending', `message` = message, `authority` = authority, `invitor` = author, `token_hash` = token_hash;
+			ON DUPLICATE KEY UPDATE `account` = VALUES(account), `email` = VALUES(email), `role` = VALUES(role), `tag` = 'pending', `message` = VALUES(message), `authority` = VALUES(authority), `invitor` = VALUES(author), `token_hash` = VALUES(token_hash);
 	
 	INSERT INTO `blacklist` (`account`, `type`, `reason`, `admitter`)
 		VALUES(account, 'opt_out', 'is_team_member', author)
-			ON DUPLICATE KEY UPDATE `account` = account, `type` = 'opt_out', `reason` = 'is_team_member', `admitter` = author;
+			ON DUPLICATE KEY UPDATE `account` = VALUES(account), `type` = 'opt_out', `reason` = 'is_team_member', `admitter` = VALUES(author);
 	
 	INSERT INTO `activity` (`author`, `type`, `link`, `comments`)
 		VALUES (author, 'add_team', CONCAT('/@', account), CONCAT('New user @', account, ' added to team as ', role, '!') );
@@ -868,7 +868,7 @@ CREATE PROCEDURE `add_to_blacklist`(
 BEGIN
 	
 	INSERT `blacklist` (`account`, `admitter`, `type`, `reason`) VALUES(account, author, type, reason)
-	ON DUPLICATE KEY UPDATE `type` = VALUES(`type`), `admitter` = VALUES(`admitter`), `reason` = VALUES(`reason`);
+	ON DUPLICATE KEY UPDATE `type` = VALUES(type), `admitter` = VALUES(admitter), `reason` = VALUES(reason);
 	
 	INSERT `activity` (`author`, `type`, `link`, `comments`) VALUES (author, 'add_to_blacklist', CONCAT('/@', account), CONCAT('Added @', account, ' to blacklist!'));
 	
@@ -984,7 +984,8 @@ CREATE PROCEDURE `add_sponsor`(
 )
 BEGIN
 	
-	INSERT IGNORE INTO `sponsors` (`account`, `delegation`, `message`, `link`, `banner`, `status`) VALUES(account, delegation, message, link, banner, 'active');
+	INSERT INTO `sponsors` (`account`, `delegation`, `message`, `link`, `banner`, `status`) VALUES(account, delegation, message, link, banner, 'active')
+		ON DUPLICATE KEY UPDATE `delegation` = VALUES(delegation), message` = VALUES(message), `link` = VALUES(link), `banner` = VALUES(banner), `status` = 'active';
 	
 	INSERT `activity` (`author`, `type`, `link`, `comments`) VALUES (author, 'add_sponsor', CONCAT('/@', account), CONCAT('Add new sponsor @', account, '!'));
 	
