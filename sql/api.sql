@@ -985,7 +985,7 @@ CREATE PROCEDURE `add_sponsor`(
 BEGIN
 	
 	INSERT INTO `sponsors` (`account`, `delegation`, `message`, `link`, `banner`, `status`) VALUES(account, delegation, message, link, banner, 'active')
-		ON DUPLICATE KEY UPDATE `delegation` = VALUES(delegation), message` = VALUES(message), `link` = VALUES(link), `banner` = VALUES(banner), `status` = 'active';
+		ON DUPLICATE KEY UPDATE `delegation` = VALUES(delegation), `message` = VALUES(message), `link` = VALUES(link), `banner` = VALUES(banner), `status` = 'active';
 	
 	INSERT `activity` (`author`, `type`, `link`, `comments`) VALUES (author, 'add_sponsor', CONCAT('/@', account), CONCAT('Add new sponsor @', account, '!'));
 	
