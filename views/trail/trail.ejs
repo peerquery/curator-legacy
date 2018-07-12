@@ -464,7 +464,7 @@ $( document ).ready(function() {
 			var lost = data[2][0].lost_count.toLocaleString() || 0
 			var rejected = data[3][0].rejected_count.toLocaleString() || 0
 			
-			total_stats = Number(approved) + Number(lost) + Number(lost) + Number(rejected);
+			total_stats = Number(approved) + Number(voted) + Number(lost) + Number(rejected);
 			
 			$("#approved_count").text(approved + " (" + percent(approved) + "%)");
 			$("#voted_count").text(voted + " (" + percent(voted) + "%)");
