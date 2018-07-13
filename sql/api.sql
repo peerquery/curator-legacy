@@ -412,7 +412,7 @@ DROP procedure IF EXISTS `voted`;
 CREATE PROCEDURE `voted`()
 BEGIN
         
-	SELECT * FROM `posts_view` WHERE `posts_view`.`voted` = "true" AND HOUR(TIMEDIFF(NOW(), `posts_view`.`timestamp`))>24 ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
+	SELECT * FROM `posts_view` WHERE `posts_view`.`voted` = "true" ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
 	
 END;
 
@@ -424,7 +424,7 @@ DROP procedure IF EXISTS `ignored`;
 CREATE PROCEDURE `ignored`()
 BEGIN
         
-	SELECT * FROM `posts_view` WHERE `posts_view`.`state` = 1 AND HOUR(TIMEDIFF(NOW(), `posts_view`.`timestamp`))>24 ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
+	SELECT * FROM `posts_view` WHERE `posts_view`.`state` = 1 AND DATE(`posts_view`.`timestamp`) > DATE_SUB(NOW(), INTERVAL 1 DAY) ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
 	
 END;
 
@@ -436,7 +436,7 @@ DROP procedure IF EXISTS `lost`;
 CREATE PROCEDURE `lost`()
 BEGIN
         
-	SELECT * FROM `posts_view` WHERE `posts_view`.`state` = 0 AND HOUR(TIMEDIFF(NOW(), `posts_view`.`timestamp`))>24 ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
+	SELECT * FROM `posts_view` WHERE `posts_view`.`state` = 0 AND DATE(`posts_view`.`timestamp`) > DATE_SUB(NOW(), INTERVAL 1 DAY) ORDER BY `posts_view`.`timestamp` DESC LIMIT 20;
 	
 END;
 
