@@ -650,7 +650,7 @@ $( document ).ready(function() {
 	function get_curation_status(status) {
 		
 		if(!status) return "TBD";
-		else if(status == 0) return "TBD";
+		else if(status == 0) return "not seen";
 		else if(status == 1) return "pending";
 		else if(status > 1) return "approved";
 		else if(status < 0) return "rejected";
@@ -659,16 +659,17 @@ $( document ).ready(function() {
 	}
 	
 	function get_vote_status(curation, state){
-		if(!status) return "TBD";
-		else if( curation > 1 && status == "false") return "pending";
-		else if(status == "true") return "voted";
+		if(!state) return "TBD";
+		else if( curation > 1 && state == "false") return "pending";
+		else if(state == "true") return "voted";
 		else return "TBD";
 		
 	}
 	
 	function get_vote_percent(rate) {
 	
-		if(!rate || Number(rate) == 0) return "TBD";
+		if(Number(rate) == 0) return rate;
+		if(!rate) return "TBD";
 		return rate + "%";
 		
 	}
@@ -676,7 +677,8 @@ $( document ).ready(function() {
 	
 	function get_vote_worth(amount) {
 	
-		if(!amount || Number(amount) == 0) return "TBD";	
+		if(amount == 0) return "$" + amount;	
+		if(!amount) return "TBD";	
 		return "$" + amount;
 		
 	}
