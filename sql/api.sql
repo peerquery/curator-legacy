@@ -55,7 +55,7 @@ BEGIN
   
 		INSERT IGNORE `users` (`account`, `score`, `posts`, `approved`) values ( author, rate, 1, 1)
 			ON DUPLICATE KEY
-				UPDATE `score`= VALUES(`score`) + rate, `posts` = VALUES(posts) + 1, `approved` = VALUES(`approved`) + 1;
+				UPDATE `score` = `score` + rate, `posts` = `posts` + 1, `approved` = `approved` + 1;
 	
 		ELSE IF action = 're-approve' THEN
 		
@@ -69,7 +69,7 @@ BEGIN
 		
 					INSERT IGNORE `users` (`account`, `score`, `posts`, `approved`) values ( author, rate, 1, 1)
 						ON DUPLICATE KEY
-							UPDATE `score`= VALUES(`score`) + rate, `posts` = VALUES(posts) + 1, `approved` = VALUES(`approved`) + 1;
+							UPDATE `score` = `score` + rate, `posts` = `posts` + 1, `approved` = `approved` + 1;
 						
 				END IF;
 			
@@ -110,7 +110,7 @@ BEGIN
   
 		INSERT IGNORE `users` (`account`, `posts`, `rejected`) values ( author, 1, 1)
 			ON DUPLICATE KEY
-				UPDATE `posts` = VALUES(posts) + 1, `rejected` = VALUES(`rejected`) + 1;
+				UPDATE `posts` = `posts` + 1, `rejected` = `rejected` + 1;
 	
 		ELSE IF action = 're-reject' THEN
 		
@@ -118,13 +118,13 @@ BEGIN
 		
 			IF added_points > 0 THEN 
 		
-					UPDATE `users` SET `score` = VALUES(`score`) - added_points , `rejected` = VALUES(`rejected`) + 1, `approved` = VALUES(`approved`) - 1 WHERE `account` = author;
+					UPDATE `users` SET `score` = `score` - added_points , `rejected` = `rejected` + 1, `approved` = `approved` - 1 WHERE `account` = author;
 		
 				ELSE IF added_points = 0 THEN
 		
 					INSERT IGNORE `users` (`account`, `posts`, `rejected`) values ( author, 1, 1)
 						ON DUPLICATE KEY
-							UPDATE `posts` = VALUES(posts) + 1, `rejected` = VALUES(`rejected`) + 1;
+							UPDATE `posts` = `posts` + 1, `rejected` = `rejected` + 1;
 					
 				END IF;
 			
@@ -133,7 +133,6 @@ BEGIN
 		END IF;
 	
 	END IF;
-
 	
 END;
 
@@ -156,11 +155,11 @@ BEGIN
         
 	INSERT INTO `team` (`account`, `email`, `role`, `tag`, `status`, `message`, `authority`, `invitor`, `token_hash`)
 		VALUES(account, email, role, tag, "pending", message, authority, author, token_hash)
-			ON DUPLICATE KEY UPDATE `account` = VALUES(account), `email` = VALUES(email), `role` = VALUES(role), `tag` = 'pending', `message` = VALUES(message), `authority` = VALUES(authority), `invitor` = VALUES(author), `token_hash` = VALUES(token_hash);
+			ON DUPLICATE KEY UPDATE `email` = VALUES(email), `role` = VALUES(role), `tag` = 'pending', `message` = VALUES(message), `authority` = VALUES(authority), `invitor` = VALUES(invitor), `token_hash` = VALUES(token_hash);
 	
 	INSERT INTO `blacklist` (`account`, `type`, `reason`, `admitter`)
 		VALUES(account, 'opt_out', 'is_team_member', author)
-			ON DUPLICATE KEY UPDATE `account` = VALUES(account), `type` = 'opt_out', `reason` = 'is_team_member', `admitter` = VALUES(author);
+			ON DUPLICATE KEY UPDATE `type` = 'opt_out', `reason` = 'is_team_member', `admitter` = VALUES(admitter);
 	
 	INSERT INTO `activity` (`author`, `type`, `link`, `comments`)
 		VALUES (author, 'add_team', CONCAT('/@', account), CONCAT('New user @', account, ' added to team as ', role, '!') );
