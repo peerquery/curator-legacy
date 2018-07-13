@@ -211,7 +211,7 @@
 							<i class="circular inverted teal percent icon"></i>
 							<div class="content">
 								<div class="header">Rate</div>
-								<a id="modal-rate"></a>
+								<a id="modal-rate-show"></a>
 							</div>
 						</div>
 					</div>
@@ -420,11 +420,11 @@ $( document ).ready(function() {
 				$("#curator_form").removeClass("loading");
 				$(".form_inputs").attr("disabled", true);
 				$('.options .ui.dropdown').addClass("disabled");
-				if (status === "success") {
-					$("#curator_form").addClass("success");
-				} else {
-					$("#curator_form").addClass("error");
-				}
+				$('#rate').dropdown('set selected', '3');
+				$("#curator_form").addClass("success");
+				
+			}).fail( function () {
+				$("#curator_form").addClass("error");
 			});
 		
 		} else {
@@ -458,11 +458,11 @@ $( document ).ready(function() {
 				$("#curator_form").removeClass("loading");
 				$(".form_inputs").attr("disabled", true);
 				$('.ui.dropdown').addClass("disabled");
-				if (status === "success") {
-					$("#curator_form").addClass("success");
-				} else {
-					$("#curator_form").addClass("error");
-				}
+				$("#curator_form").addClass("success");
+				$('#rate').dropdown('set selected', '3');
+				
+			}).fail(function () {
+				$("#curator_form").addClass("error");
 			});
 		
 		} else {
@@ -712,7 +712,7 @@ $( document ).ready(function() {
 		$('#modal-author').attr("href", "/user/" + dataset.author);
 		$('#modal-curator').attr("href", "/curator/" + dataset.curator);
 		
-		$('#modal-rate').text(dataset.rate + "% - " + rate_name(dataset.rate));
+		$('#modal-rate-show').text(dataset.rate + "% - " + rate_name(dataset.rate));
 		
 		$('.post-view.modal')
 		.modal('show')
@@ -766,12 +766,14 @@ $( document ).ready(function() {
 			function(data, status){
 				$("#modal-approve-form").removeClass("loading");
 				$("#approve-modal-remarks").attr("disabled", true);
-				if (status === "success") {
-					$("#modal-approve-form").addClass("success");
-					$("#" + post_obj.id).remove();
-				} else {
-					$("#modal-approve-form").addClass("error");
-				}
+				
+				$("#modal-approve-form").addClass("success");
+				$("#" + post_obj.id).remove();
+				
+				$('#modal-rate').dropdown('set selected', '3');
+				
+			}).fail(function () {
+				$("#modal-approve-form").addClass("error");
 			});
 		
 		} else {
@@ -808,12 +810,15 @@ $( document ).ready(function() {
 			function(data, status){
 				$("#modal-reject-form").removeClass("loading");
 				$("#reject-modal-remarks").attr("disabled", true);
-				if (status === "success") {
-					$("#modal-reject-form").addClass("success");
-					$("#" + post_obj.id).remove();
-				} else {
-					$("#modal-reject-form").addClass("error");
-				}
+				
+				$("#modal-reject-form").addClass("success");
+				$("#" + post_obj.id).remove();
+					
+				$('#modal-rate').dropdown('set selected', '3');
+				
+				
+			}).fail(function() {
+				$("#modal-reject-form").addClass("error");
 			});
 		
 		} else {
@@ -867,6 +872,7 @@ $( document ).ready(function() {
 					$("#approve-modal-remarks").html("");
 					$("#approve-modal-remarks").attr("disabled", false);
 					$("#modal-approve").attr("class", "ui green reject button");
+					$('#modal-rate').dropdown('set selected', '3');
 				}
 		})
 	;
@@ -877,6 +883,7 @@ $( document ).ready(function() {
 					$("#modal-reject-form").attr("class", "ui form");
 					$("#reject-modal-remarks").val("");
 					$("#reject-modal-remarks").attr("disabled", false);
+					$('#modal-rate').dropdown('set selected', '3');
 					$("#modal-reject").attr("class", "ui red reject button");
 				}
 		})
