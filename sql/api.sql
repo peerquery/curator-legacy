@@ -1070,6 +1070,23 @@ END;
 
 
 
+-- Get curators of the day
+
+DROP procedure IF EXISTS `curators_activity`;
+
+CREATE PROCEDURE `curators_activity`()
+BEGIN
+    
+	SELECT `author` AS curator, COUNT(DISTINCT `author`) AS total_curation FROM `activity_view`
+		WHERE (`activity_view`.`type` = 'approve' OR `activity_view`.`type` = 'reject' OR `activity_view`.`type` = 're-approve' OR `activity_view`.`type` = 're-reject')
+		AND DATE(`activity_view`.`time`) = CURDATE()
+		GROUP BY `activity_view`.`author`;
+	
+END;
+
+
+
+
 -- Get team without curators
 
 DROP procedure IF EXISTS `team_no_curator`;
@@ -1214,4 +1231,118 @@ BEGIN
 END;
 
 
+
+
+
+-- add discussion
+
+
+DROP procedure IF EXISTS `add_discussion`;
+
+CREATE PROCEDURE `add_discussion`(
+	IN author VARCHAR(45),
+	IN receiver VARCHAR(45),
+	IN body TEXT,
+	IN type VARCHAR(45)
+)
+BEGIN
+	
+	INSERT IGNORE `discussions` (`author`, `receiver`, `body`, `type`) VALUES (author, receiver, body, type);
+	
+END;
+
+
+-- get public discussions
+
+
+DROP procedure IF EXISTS `public_discussions`;
+
+CREATE PROCEDURE `public_discussions`()
+BEGIN
+	
+	SELECT * FROM `discussions_view` ORDER BY `discussions_view`.`created` ASC LIMIT 30;
+	
+END;
+
+
+-- get private discussions
+
+
+DROP procedure IF EXISTS `personal_discussions`;
+
+CREATE PROCEDURE `personal_discussions`(
+	IN receiver VARCHAR(45)
+)
+BEGIN
+	
+	SELECT * FROM `discussions_view` WHERE `discussions_view`.`type` = 'personal' AND `discussions_view`.`receiver` = receiver ORDER BY `discussions_view`.`created` ASC LIMIT 30;
+	
+END;
+
+
+
+
+-- add online
+
+
+DROP procedure IF EXISTS `add_online`;
+
+CREATE PROCEDURE `add_online`(
+	IN socket_id VARCHAR(70),
+	IN user_name VARCHAR(45)
+)
+BEGIN
+	
+	INSERT IGNORE `online` (`socket_id`, `user_name`, `state`) VALUES (socket_id, user_name, 'active')
+	ON DUPLICATE KEY UPDATE `socket_id` = VALUES(`socket_id`), `time` = NOW(), `state` = 'active' ;
+	
+END;
+
+
+
+
+
+-- remove online
+
+
+DROP procedure IF EXISTS `remove_online`;
+
+CREATE PROCEDURE `remove_online`(
+	IN socket_id VARCHAR(70)
+)
+BEGIN
+	
+	SELECT `user_name` FROM `online` WHERE `online`.`socket_id` = socket_id;
+	UPDATE `online` SET `online`.`state` = 'offline' WHERE `online`.`socket_id` = socket_id;
+	
+END;
+
+
+
+-- get socket_id
+
+
+DROP procedure IF EXISTS `get_socket_id_from_name`;
+
+CREATE PROCEDURE `get_socket_id_from_name`(
+	IN name VARCHAR(45)
+)
+BEGIN
+	
+	SELECT `socket_id` FROM `online_view` WHERE `online_view`.`user_name` = name;
+	
+END;
+
+
+-- get online
+
+
+DROP procedure IF EXISTS `get_online`;
+
+CREATE PROCEDURE `get_online`()
+BEGIN
+	
+	SELECT * FROM `online_view` WHERE `online_view`.`state` = 'active';
+	
+END;
 
