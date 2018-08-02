@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bot</title>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
+  <link rel="stylesheet" href="/css/custom.css" />
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+  <script src="https://unpkg.com/dsteem@latest/dist/dsteem.js"></script>
+
+  <script src="/js/timeago.js"></script>
+  <script src="/js/custom.js"></script>
+
+</head>
+<body>
+
+  <!-- ejs -->
+  
+  	<% include ../partials/navbar.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+
+<div class="ui text container" style="margin-top:100px">	
+	
+	<div class="ui two column centered grid">
+		
+			<canvas id="canvas"></canvas>
+		<div class="column centered row">
+			<div id="voting_power"></div>
+		</div>
+		
+		<div class="column centered row">
+			<div id="bot_account"></div>
+			<div id="vp_message" style = "font-size:40px; font-style:bold; margin-bottom: 20px"></div>
+		</div>
+		
+	</div>
+	
+<div class="">
+  
+
+		<div class="ui center loading aligned basic segment" id="main_segment">
+		
+		
+	
+			<div class="ui pointing below medium red label" style="margin-top: 10px; margin-bottom: 60px">
+				<i class="dollar icon"></i>
+				Bot stats
+			</div>
+	
+			<div class="ui three cards">
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Vote worth</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular dollar icon"></i>
+							<span id="vote_worth"></span>
+						</h2>
+					</div>
+				</div>
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Steem power</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular money icon"></i>
+							<span id="steem_power"></span>
+						</h2>
+					</div>
+				</div>
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Delegated SP</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular bolt icon"></i>
+							<span id="delegated_sp"></span>
+						</h2>
+					</div>
+				</div>
+			
+			</div>
+			
+			
+		
+			<div class="ui pointing below medium yellow label" style="margin-top: 60px; margin-bottom: 60px">
+				<i class="chevron circle up icon"></i>
+				Bot rate
+			</div>
+			
+			
+			<div class="ui three cards">
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Community</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular percent icon"></i>
+							<span id="community_rate"></span>
+						</h2>
+					</div>
+				</div>
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Team</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular percent icon"></i>
+							<span id="team_rate"></span>
+						</h2>
+					</div>
+				</div>
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Project</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular percent icon"></i>
+							<span id="project_rate"></span>
+						</h2>
+					</div>
+				</div>
+			
+			</div>
+		
+		
+		
+			<div class="ui pointing below medium olive label" style="margin-top: 60px; margin-bottom: 60px">
+				<i class="hourglass half icon"></i>
+				Curation
+			</div>
+			
+			
+			<div class="ui three cards">
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Total</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular percent icon"></i>
+							<span id="total_posts"></span>
+						</h2>
+					</div>
+				</div>
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Target</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular percent icon"></i>
+							<span id="daily_curation"></span>
+						</h2>
+					</div>
+				</div>
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Completed</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular percent icon"></i>
+							<span id="voted_posts"></span>
+						</h2>
+					</div>
+				</div>
+			
+			</div>
+		
+		
+		
+		
+			<div class="ui pointing below medium green label" style="margin-top: 60px; margin-bottom: 60px">
+				<i class="folder open icon"></i>
+				Details
+			</div>
+			
+			
+			<div class="ui three cards">
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Steemit</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular user icon"></i>
+						</h2>
+					</div>
+					<a class="ui bottom attached button" target="_blank" id="steemit">
+						<i class="add icon"></i>
+						Learn more
+					</a>
+				</div>
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">SteemD</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular rss icon"></i>
+						</h2>
+					</div>
+					<a class="ui bottom attached button" target="_blank" id="steemd">
+						<i class="add icon"></i>
+						Learn more
+					</a>
+				</div>
+				
+				<div class="card">
+					<div class="content">
+					<div class="header">Steem DB</div>
+						<h2 class="ui center aligned icon header">
+							<i class="circular file icon"></i>
+						</h2>
+					</div>
+					<a class="ui bottom attached button" target="_blank" id="steemdb">
+						<i class="add icon"></i>
+						Learn more
+					</a>
+				</div>
+			
+			</div>
+		
+		
+		
+		
+		</div>
+	
+
+	
+</div>
+
+
+
+</div>
+
+
+
+<script>
+    var client = new dsteem.Client('https://api.steemit.com')
+	var username = '';
+  
+	
+	$.get("/api/bot", function(data, status){
+		
+		//console.log(data);
+		
+		$('#project_rate').text(data[0][0].project_rate + "%");
+		$('#team_rate').text(data[0][0].team_rate + "%");
+		$('#community_rate').text(data[0][0].community_rate + "%");
+		
+		$('#daily_curation').text(data[0][0].daily_curation);
+		$('#total_posts').text(data[1][0].total_posts);
+		$('#voted_posts').text(data[2][0].voted_posts);
+		
+		username = data[0][0].bot_account;
+		//username = "minnowsupport";
+		
+		$('#bot_account').text( "@" + data[0][0].bot_account );
+		$('#steemit').attr('href', 'https://steemit.com/@'+ data[0][0].bot_account );
+		$('#steemd').attr('href', 'https://steemd.com/@'+ data[0][0].bot_account );
+		$('#steemdb').attr('href', 'https://steemdb.com/@'+ data[0][0].bot_account );
+		
+		cal();
+		
+	});
+	
+	
+	
+	async function cal() {
+	
+		try{
+		
+			var c = await client.database.getConfig()
+			//console.log(c);
+		
+			var dgp = await client.database.getDynamicGlobalProperties()
+			var t_v_s = dgp.total_vesting_shares.split(' ')[0];
+			var t_v_f = dgp.total_vesting_fund_steem.split(' ')[0];
+			//console.log(dgp);
+		
+			var acc = await client.database.getAccounts([username])
+			acc = acc[0];
+			//console.log(acc);
+			var l_v_t = acc.last_vote_time;
+			var v_p = acc.voting_power;
+			var v_s = acc.vesting_shares.split(' ')[0];
+			var d_v_s = acc.delegated_vesting_shares.split(' ')[0];
+			var r_v_s = acc. received_vesting_shares.split(' ')[0];
+		
+			//var secondsago = (new Date - new Date(response[0].last_vote_time + "Z")) / 1000;
+			var s_a = (new Date() - new Date(l_v_t + "Z")) / 1000;
+		
+			//var current voting_power = response[0].voting_power + (10000 * secondsago / 432000);
+			var current_voting_power = v_p + (10000 * s_a / 432000);
+			current_voting_power = Math.min(current_voting_power / 100, 100).toFixed(2);
+			//console.log(c_v_p);
+			
+			draw(current_voting_power.split('.')[0]);
+			
+			$('#vp_message').text(current_voting_power + "% - voting power");
+	
+			//var steemPower = totalVestingFundSteem * (vestingShares / totalVestingShares);
+			var steem_power = (t_v_f * (v_s / t_v_s)).toLocaleString();
+			//console.log(steem_power);
+			$('#steem_power').text(steem_power);
+		
+			//vesting shares for delegation is => received_vesting_shares.split(' ')[0] - delegated_vesting_shares.split(' ')[0])
+			var delegated_steem_power = (t_v_f * ((r_v_s - d_v_s) / t_v_s)).toLocaleString();
+			//console.log(delegated_steem_power);
+			$('#delegated_sp').text(delegated_steem_power);
+			
+			
+			var follow = await client.call('follow_api', 'get_follow_count', [username]);
+			$('#subscribers').text(follow.follower_count);
+			
+			
+			//calculate full vote(weight at 10000) worth
+			var fund = await client.database.call('get_reward_fund', ['post']);
+			var recent_claims = fund.recent_claims ;
+			var reward_balance = fund.reward_balance.split(' ')[0] ;
+		
+			var price = await client.database.getCurrentMedianHistoryPrice();
+			var sbd_median_price = price.base.amount;
+			var total_vests = Number(acc.vesting_shares.split(' ')[0])  + Number(acc.received_vesting_shares.split(' ')[0])  - Number(acc.delegated_vesting_shares.split(' ')[0] );
+			var final_vest = total_vests * 1e6;
+			var power = (acc.voting_power * 10000 / 10000) / 50;
+			var rshares = power * final_vest / 10000;
+			var estimate = rshares / recent_claims * reward_balance * sbd_median_price;
+			
+			
+			$('#vote_worth').text(estimate.toFixed(2));
+			
+			$('#main_segment').removeClass('loading');
+		
+		} catch(err) {
+		
+			console.log(err)
+		
+		}
+		
+		
+		
+		
+		function draw(percent) {
+			var width = 300;
+			var height = 300;
+			
+			var canvas = document.getElementById("canvas");
+			canvas.width = width;
+			canvas.height = height;
+			var ctx = canvas.getContext("2d");
+		
+
+			ctx.beginPath();
+			ctx.arc(width/2, height/2, 100, 0, Math.PI * 2);
+			ctx.strokeStyle = "#0681c4";
+			ctx.lineWidth = 20;
+			ctx.stroke();
+			ctx.closePath();
+			
+			var angle = percent/100 * 360;
+			ctx.beginPath();
+			ctx.arc(width/2, height/2, 100, -90 * Math.PI/180, (angle - 90) * Math.PI/180);
+			ctx.strokeStyle = "#4ac5f8";
+			ctx.lineWidth = 20;
+			ctx.stroke();
+			ctx.closePath();
+
+			ctx.textBaseline = "middle";
+			ctx.textAlign = "center";
+			ctx.font = "40px arial bold";
+			ctx.fillStyle = "#4ac5f8";
+			ctx.fillText(percent + "%", width/2, height/2);
+			
+		}
+		
+		
+	}
+	
+	
+</script>
+
+
+  <!-- ejs -->
+  
+  	<% include ../partials/footer.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+
+</body>
+
+</html>
