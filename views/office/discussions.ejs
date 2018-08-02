@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Discussions</title>
+  <!-- Standard Meta -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css">
+  <link rel="stylesheet" href="/css/custom.css" />
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+
+  <script src="/js/timeago.js"></script>
+  <script src="/js/custom.js"></script>
+
+</head>
+<body class="office">
+
+  <!-- ejs -->
+  
+  	<% include ../partials/navbar.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+
+<div class="ui container" style="margin-top:100px">
+
+<div class="ui stackable grid">
+
+	<div class="four wide column">
+	
+
+  <!-- ejs -->
+  
+  	<% include ../partials/sidebar.ejs %>
+  
+  <!-- ejs -->
+  
+	
+	</div>
+  
+  
+	<div class="twelve wide column">
+	
+	
+  <!-- ejs -->
+  
+  	<% include ../partials/notifications.ejs %>
+  
+  <!-- ejs -->
+  
+  
+  
+		<div class="ui three item menu">
+			<a class="active item" id="public_c">
+				<i class="comments icon"></i>
+				Public
+			</a>
+			<a class="item" id="personal_c">
+				<i class="user secret icon"></i>
+				Personal
+			</a>
+			<a class="item" id="snap_c">
+				<i class="bomb icon"></i>
+				Snap
+			</a>
+		</div>
+		
+		
+	
+	<div class="ui cont basic segment" id="feed-area">
+	
+	<div class="stick">	
+	
+		<div class="ui feed" id="feed"></div>
+		
+	</div>
+	
+	
+	<div class="" style="position: relative; margin-top: 20px">
+		
+		<div id="status"></div>
+		
+		<form class="ui form">
+			<div class="field">
+				<div class="ui large fluid transparent left icon input">
+					<input id="m" autocomplete="off" type="text" placeholder="Messages here are stored but *visible* only to the author and receiver.">
+					<i class="angle double right icon"></i>
+				</div>
+				
+				<div class="" id="symbols" style="margin-top:15px">
+					<i class="circular link inverted red symbol thumbs up icon"></i>
+					<i class="circular link inverted yellow symbol thumbs down icon"></i>
+					<i class="circular link inverted orange symbol hand point up icon"></i>
+					<i class="circular link inverted olive symbol heart icon"></i>
+					<i class="circular link inverted green symbol heartbeat icon"></i>
+					<i class="circular link inverted teal symbol hand peace icon"></i>
+					<i class="circular link inverted blue symbol eye slash icon"></i>
+					<i class="circular link inverted violet symbol bug icon"></i>
+					<i class="circular link inverted purple symbol bomb icon"></i>
+					<i class="circular link inverted pink symbol gavel icon"></i>
+					<i class="circular link inverted brown symbol lock icon"></i>
+					<i class="circular link inverted grey symbol money icon"></i>
+					<i class="circular link inverted black symbol lightbulb icon"></i>
+					<i class="circular link inverted grey symbol trash icon"></i>
+					<i class="circular link inverted brown symbol exclamation circle icon"></i>
+					<i class="circular link inverted pink symbol bell icon"></i>
+					<i class="circular link inverted purple symbol star icon"></i>
+					<i class="circular link inverted blue symbol bed icon"></i>
+					<i class="circular link inverted teal symbol smile icon"></i>
+					<i class="circular link inverted green symbol frown icon"></i>
+				</div>
+
+			</div>
+		</form>
+	</div>
+	
+	</div>
+		
+	
+	
+	</div>
+
+	</div>
+
+</div>
+
+	
+	
+	<script>
+	//
+$(document).ready(function() {
+	
+	//first clear all snap messages incase user only freshed page - not reloaded it
+	sessionStorage.clear();
+	
+	
+	const active_user = user_data.username;
+	const active_user_authority = user_data.authority;
+	
+	
+	var on = '';
+	var to = "";
+	var n = 0;
+	
+	
+	function public_chat() {
+	
+		$('#symbols').show();
+		on = "public chat";
+		$('#feed').html('');
+		$('#m').val('');
+		$('#m').attr("placeholder", "Messages here are visible to all and stored for later retrieval.");
+		to = "all";
+		
+		$('#feed-area').addClass('loading');
+		
+		$.get("/api/private/public_discussions/", function(data, status){
+			//console.log(data);
+			
+			for(x in data) {
+				new_post(data[x]);
+			}
+			
+			$('#feed-area').removeClass('loading');
+		
+		});
+		
+	}
+	
+	
+	function personal_chat() {
+	
+		$('#symbols').hide();
+		on = "personal chat";
+		$('#feed').html('');
+		$('#m').val('');
+		$('#m').attr("placeholder", "Messages are *delivered* only to recepient but are stored. Do: (recepient-username) message...");
+		to = "personal";
+		
+		$('#feed-area').addClass('loading');
+		
+		$.get("/api/private/personal_discussions/" + active_user, function(data, status){
+			//console.log(data);
+			
+			for(x in data) {
+				new_post(data[x]);
+			}
+			
+			$('#feed-area').removeClass('loading');
+		
+		});
+		
+	}
+	
+	
+	function snap_chat() {
+		
+		$('#symbols').show();
+		on = "snap chat";
+		$('#feed').html('');
+		$('#m').val('');
+		$('#m').attr("placeholder", "Messages here are visible to all and are not stored.");
+		to = "all";
+		
+		$('#feed-area').removeClass('loading');
+		
+		if (typeof(Storage) !== "undefined") {
+		
+			if(n == 0) return;
+		
+			// Code for localStorage/sessionStorage.
+			var i = 0;
+			
+			while(i < n) {
+				
+				new_post(JSON.parse(sessionStorage.getItem(i)));
+				
+				sessionStorage.removeItem(i);
+				
+				i++;
+				
+			}
+		
+		
+			$('#feed-area').removeClass('loading');
+		
+			
+		} else {
+		
+		
+			$('#feed-area').removeClass('loading');
+		
+			new_info('Sorry, your browser does not support HTML5 Session Storage. Past snap messages are lost.');
+			
+		}
+		
+		
+	}
+	
+	
+		
+		jQuery("time.timeago").timeago();
+		
+		
+		//initialize socket.io
+		var socket = io();
+		
+		
+		//register new username
+		socket.emit('joined', active_user);
+		
+		
+		//set focus on input box
+		$("#m").focus();
+		
+		
+		$("#m").on("keyup", function (event) {
+			socket.emit("typing", active_user );
+		}); 
+		
+		
+		//publish message
+		$('form').submit(function(event){
+			event.preventDefault();
+			
+			if(to == "all") {
+				socket.emit(on, { author: active_user, receiver: to, body: $('#m').val(), created: new Date() } );
+				$('#m').val('');
+			} else {
+				
+				var regExp = /\(([^)]+)\)/;
+				var ms = $('#m').val();
+				var matches = regExp.exec(ms);
+				if(!matches) {alert("Please enter the recipient of your personal message at the start of your meassage in parentheses: (receivers-username) message"); return; }
+				to = matches[1];
+				
+				socket.emit(on, { author: active_user, receiver: to, body: $('#m').val(), created: new Date() } );
+				$('#m').val('');
+			}
+			
+		});
+		
+		
+		//publish symbol
+		$('.symbol.icon').click(function(){
+			
+			if(to == "all") {
+				
+				//console.log(this);
+				var el = this.className;
+				var sym = "<i class='" + el + " large'></i>";
+				socket.emit(on, { author: active_user, receiver: to, body: sym, created: new Date() } );
+			
+			} else {
+				
+				new_info("Sorry, symbols are not supported for personal messages.");
+				
+			}
+			
+		});
+		
+		
+		socket.on('private', function(msg) {
+			//console.log(msg);
+			
+			//display message
+			new_private(msg);
+			
+			//scroll screen down to show latest message
+			$(".stick").scrollTop(function() { return this.scrollHeight; });
+			
+		});
+		
+		socket.on('count', function(msg) {
+			//console.log(msg);
+			
+			//display message
+			new_info(msg);
+			
+			//scroll screen down to show latest message
+			$(".stick").scrollTop(function() { return this.scrollHeight; });
+			
+		});
+		
+		socket.on('newbie', function(msg) {
+			//console.log(msg);
+			
+			//display message
+			new_info(msg);
+			
+			//scroll screen down to show latest message
+			$(".stick").scrollTop(function() { return this.scrollHeight; });
+			
+		});
+		
+		
+		socket.on('activity', function(msg) {
+			//console.log(msg);
+			
+			//display message
+			new_info(msg);
+			
+			//scroll screen down to show latest message
+			$(".stick").scrollTop(function() { return this.scrollHeight; });
+			
+		});
+		
+		
+		socket.on("typing", function (active_user) {
+			$("#status").html('<b>@' + active_user + "</b> is typing...");
+			setTimeout(function () {
+				$("#status").html('');
+			}, 3000);
+		});
+		
+		
+		socket.on('public chat', function(msg) {
+			//console.log(msg);
+			if (on !== "public chat") {
+				var info = "There's a new public from: @" + msg.author + ". Click on the 'Public' menu to see all public messages.";
+				
+				new_info(info);
+				//scroll screen down to show latest message
+				$(".stick").scrollTop(function() { return this.scrollHeight; });
+			
+				//set focus on input box
+				$("#m").focus();
+				
+			} else {
+				//display new message on screen
+				new_post(msg);
+			
+				//scroll screen down to show latest message
+				$(".stick").scrollTop(function() { return this.scrollHeight; });
+			
+				//set focus on input box
+				$("#m").focus();
+				
+			}
+		});
+		
+		socket.on('personal chat', function(msg) {
+			//console.log(msg);
+			if (on !== "personal chat") {
+				var info = "You have a new message from: @" + msg.author + ". Click on the 'Personal' menu to see all your personal messages.";
+				
+				new_info(info);
+				//scroll screen down to show latest message
+				$(".stick").scrollTop(function() { return this.scrollHeight; });
+			
+				//set focus on input box
+				$("#m").focus();
+				
+			} else {
+				//display new message on screen
+				new_post(msg);
+			
+				//scroll screen down to show latest message
+				$(".stick").scrollTop(function() { return this.scrollHeight; });
+			
+				//set focus on input box
+				$("#m").focus();
+				
+			}
+		});
+		
+		socket.on('snap chat', function(msg) {
+			//console.log(msg);
+			if (on !== "snap chat") {
+				var info = "There's a snap message from: @" + msg.author + ". Click on the 'Snap' menu to see snap messages.";
+				
+				new_info(info);
+				//scroll screen down to show latest message
+				$(".stick").scrollTop(function() { return this.scrollHeight; });
+			
+				//set focus on input box
+				$("#m").focus();
+				
+				//store snap message in session storage
+				sessionStorage.setItem(n, JSON.stringify(msg));
+				
+				n = n + 1;
+				
+			} else {
+				
+				//display new message on screen
+				new_post(msg);
+			
+				//scroll screen down to show latest message
+				$(".stick").scrollTop(function() { return this.scrollHeight; });
+			
+				//set focus on input box
+				$("#m").focus();
+				
+			}	
+		});
+		
+		
+		
+	
+	
+	
+	function new_info(msg) {
+	
+		var info = document.createElement("div");
+		info.className = "ui icon message";
+		
+		var i = document.createElement("i");
+		i.className = "info circle icon";
+		
+		var content = document.createElement("div");
+		content.className = "content";
+		
+		var header = document.createElement("div");
+		header.className = "header";
+		header.innerHTML = msg;
+		
+		var date = document.createElement("time");
+		date.className = "date timeago";
+		date.setAttribute('datetime', jQuery.timeago(new Date()));
+		date.innerHTML = " <i class='wait icon'></i>" + jQuery.timeago(new Date());
+		
+		content.appendChild(header);
+		content.appendChild(date);
+		
+		info.appendChild(i);
+		info.appendChild(content);
+		
+		
+		document.getElementById("feed").appendChild(info);
+		
+		
+	}
+	
+	
+	
+	function new_private(msg) {
+	
+		var info = document.createElement("div");
+		info.className = "ui icon message";
+		
+		var i = document.createElement("i");
+		i.className = "envelope circle icon";
+		
+		var content = document.createElement("div");
+		content.className = "content";
+		
+		var header = document.createElement("div");
+		header.className = "header";
+		header.innerHTML = msg;
+		
+		var date = document.createElement("time");
+		date.className = "date timeago";
+		date.setAttribute('datetime', jQuery.timeago(new Date()));
+		date.innerHTML = " <i class='wait icon'></i>" + jQuery.timeago(new Date());
+		
+		content.appendChild(header);
+		content.appendChild(date);
+		
+		info.appendChild(i);
+		info.appendChild(content);
+		
+		
+		document.getElementById("feed").appendChild(info);
+		
+		
+	}
+	
+	
+	
+	function new_post(msg) {
+	
+		var event = document.createElement("div");
+		event.className = "event";
+		
+		var label = document.createElement("div");
+		label.className = "label";
+		
+		var img = document.createElement("img");
+		img.src = "https://steemitimages.com/u/" + msg.author + "/avatar";
+		
+		
+		var content = document.createElement("div");
+		content.className = "content";
+		
+		var summary = document.createElement("div");
+		summary.className = "summary";
+		
+		
+		var a = document.createElement("a");
+		a.href = "/@" + msg.author;
+		a.innerText = "@" + msg.author;
+		
+		var date = document.createElement("time");
+		date.className = "date timeago";
+		date.setAttribute('datetime', jQuery.timeago(msg.created));
+		date.innerText = jQuery.timeago(msg.created);
+		
+		var description = document.createElement("div");
+		description.className = "description";
+		description.innerHTML = msg.body;
+		
+		
+		label.appendChild(img);
+		
+		summary.appendChild(a);
+		summary.appendChild(date);
+		
+		content.appendChild(summary);
+		content.appendChild(description);
+		
+		event.appendChild(label);
+		event.appendChild(content);
+		
+		
+		document.getElementById("feed").appendChild(event);
+		
+	
+	}
+	
+	
+	
+	
+	
+	
+	$('#public_c').click(function() {
+		public_chat();
+	});
+	
+	
+	$('#personal_c').click(function() {
+		personal_chat();
+	});
+	
+	
+	$('#snap_c').click(function() {
+		snap_chat();
+	});
+	
+	
+	
+	
+	
+	
+	
+	
+	if(window.location.search) {
+	
+		var urlParams = new URLSearchParams(window.location.search);
+		
+		if(urlParams.get('tab') == 'personal') {
+			
+			$('#personal_c').click();
+			on = 'personal chat';
+			to = "personal";
+			
+		} else {
+			
+			$('#public_c').click();
+			on = 'public chat';
+			to = "all";
+			
+		}
+		
+	} else {
+		
+		$('#public_c').click();
+		
+	}
+	
+	
+});
+	
+	</script>
+
+
+
+
+  <!-- ejs -->
+  
+  	<% include ../partials/footer.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+</body>
+
+</html>

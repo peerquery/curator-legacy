@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Settings</title>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
+  <link rel="stylesheet" href="/css/custom.css" />
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+
+  <script src="/js/timeago.js"></script>
+  <script src="/js/custom.js"></script>
+  
+</head>
+<body class="office">
+
+  <!-- ejs -->
+  
+  	<% include ../partials/navbar.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+
+<div class="ui container" style="margin-top:100px">
+
+<div class="ui stackable grid">
+
+	<div class="four wide column">
+	
+
+  <!-- ejs -->
+  
+  	<% include ../partials/sidebar.ejs %>
+  
+  <!-- ejs -->
+  
+	
+	</div>
+  
+  
+	<div class="twelve wide column">
+	
+	
+  <!-- ejs -->
+  
+  	<% include ../partials/notifications.ejs %>
+  
+  <!-- ejs -->
+	
+	
+	<table class="ui very basic fixed table" id='settings-table'>
+  <thead>
+    <tr>
+      <th class="seven wide">Option</th>
+      <th class="seven wide">Setting</th>
+      <th class="two wide">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> <div class="ui pointing below red label"> General </div> </td>
+      <td></td>
+      <td> <div class="ui red basic label"> Admins </div> </td>
+    </tr>
+    <tr>
+      <td>Community rate</td>
+      <td> <%= settings[0].community_rate; %></td>
+		<td>
+			<a class='edit' href="javascript:void(0)" id='2edit'><i class="id edit icon"></i> Edit</a>
+			<a class="ui save circular mini green icon button" style='display:none' href="javascript:void(0)" id='2save'><i class="check icon"></i></a>
+			<a class="ui cancel circular mini red icon button" style='display:none' href="javascript:void(0)" id='2cancel'><i class="cancel icon"></i></a>
+		</td>
+    </tr>
+    <tr>
+      <td>Team rate</td>
+      <td> <%= settings[0].team_rate; %></td>
+      <td>
+			<a class='edit' href="javascript:void(0)" id='3edit'><i class="id edit icon"></i> Edit</a>
+			<a class="ui save circular mini green icon button" style='display:none' href="javascript:void(0)" id='3save'><i class="check icon"></i></a>
+			<a class="ui cancel circular mini red icon button" style='display:none' href="javascript:void(0)" id='3cancel'><i class="cancel icon"></i></a>
+	  </td>
+    </tr>
+    <tr>
+      <td>Project rate</td>
+      <td> <%= settings[0].project_rate; %></td>
+      <td> 
+			<a class='edit' href="javascript:void(0)" id='4edit'><i class="id edit icon"></i> Edit</a>
+			<a class="ui save circular mini green icon button" style='display:none' href="javascript:void(0)" id='4save'><i class="check icon"></i></a>
+			<a class="ui cancel circular mini red icon button" style='display:none' href="javascript:void(0)" id='4cancel'><i class="cancel icon"></i></a>
+	  </td>
+    </tr>
+    <tr>
+      <td>% per curation</td>
+      <td> <%= settings[0].curator_rate; %></td>
+      <td>
+			<a class='edit' href="javascript:void(0)" id='5edit'><i class="id edit icon"></i> Edit</a>
+			<a class="ui save circular mini green icon button" style='display:none' href="javascript:void(0)" id='5save'><i class="check icon"></i></a>
+			<a class="ui cancel circular mini red icon button" style='display:none' href="javascript:void(0)" id='5cancel'><i class="cancel icon"></i></a>
+	  </td>
+    </tr>
+    <tr>
+      <td>Vote message</td>
+      <td> <%= settings[0].common_comment; %></td>
+      <td>
+			<a class='edit' href="javascript:void(0)" id='6edit'><i class="id edit icon"></i> Edit</a>
+			<a class="ui save circular mini green icon button" style='display:none' href="javascript:void(0)" id='6save'><i class="check icon"></i></a>
+			<a class="ui cancel circular mini red icon button" style='display:none' href="javascript:void(0)" id='6cancel'><i class="cancel icon"></i></a>
+	  </td>
+    </tr>
+    <tr>
+      <td> <div class="ui pointing below yellow label"> Bot rate </div> </td>
+      <td></td>
+      <td> <div class="ui yellow basic label"> Owner </div> </td>
+    </tr>
+    <tr>
+      <td>Holiday</td>
+      <td> <%= settings[0].bot_holiday; %></td>
+      <td>
+			<a class='edit' href="javascript:void(0)" id='8edit'><i class="id edit icon"></i> Edit</a>
+			<a class="ui save circular mini green icon button" style='display:none' href="javascript:void(0)" id='8save'><i class="check icon"></i></a>
+			<a class="ui cancel circular mini red icon button" style='display:none' href="javascript:void(0)" id='8cancel'><i class="cancel icon"></i></a>
+	  </td>
+    </tr>
+    <tr>
+      <td>Holiday days</td>
+      <td> <%= settings[0].holiday_days; %></td>
+      <td>
+			<a class='edit' href="javascript:void(0)" id='9edit'><i class="id edit icon"></i> Edit</a>
+			<a class="ui save circular mini green icon button" style='display:none' href="javascript:void(0)" id='9save'><i class="check icon"></i></a>
+			<a class="ui cancel circular mini red icon button" style='display:none' href="javascript:void(0)" id='9cancel'><i class="cancel icon"></i></a>
+	  </td>
+    </tr>
+    <tr>
+      <td>Daily curation</td>
+      <td> <%= settings[0].daily_curation; %></td>
+      <td>
+			<a class='edit' href="javascript:void(0)" id='10edit'><i class="id edit icon"></i> Edit</a>
+			<a class="ui save circular mini green icon button" style='display:none' href="javascript:void(0)" id='10save'><i class="check icon"></i></a>
+			<a class="ui cancel circular mini red icon button" style='display:none' href="javascript:void(0)" id='10cancel'><i class="cancel icon"></i></a>
+	  </td>
+    </tr>
+    <tr>
+      <td>Vote interval minutes</td>
+      <td> <%= settings[0].vote_interval_minutes; %></td>
+      <td>
+			<a class='edit' href="javascript:void(0)" id='11edit'><i class="id edit icon"></i> Edit</a>
+			<a class="ui save circular mini green icon button" style='display:none' href="javascript:void(0)" id='11save'><i class="check icon"></i></a>
+			<a class="ui cancel circular mini red icon button" style='display:none' href="javascript:void(0)" id='11cancel'><i class="cancel icon"></i></a>
+	  </td>
+    </tr>
+  </tbody>
+</table>
+	
+	
+	</div>
+
+</div>
+
+</div>
+
+<script>
+//
+
+	$( document ).ready(function() {
+    
+		const active_user = user_data.username;
+		const active_user_authority = user_data.authority;
+	
+	});
+	
+	
+	var original_value1 = document.getElementById('settings-table').rows[2].cells[1].innerText;
+	var original_value2 = document.getElementById('settings-table').rows[3].cells[1].innerText;
+	var original_value3 = document.getElementById('settings-table').rows[4].cells[1].innerText;
+	var original_value4 = document.getElementById('settings-table').rows[5].cells[1].innerText;
+	var original_value5 = document.getElementById('settings-table').rows[6].cells[1].innerText;
+	var original_value6 = document.getElementById('settings-table').rows[8].cells[1].innerText;
+	var original_value7 = document.getElementById('settings-table').rows[9].cells[1].innerText;
+	var original_value8 = document.getElementById('settings-table').rows[10].cells[1].innerText;
+	var original_value9 = document.getElementById('settings-table').rows[11].cells[1].innerText;
+	
+	
+function original_value(i) {
+	if(i == 2) return original_value1;
+	if(i == 3) return original_value2;
+	if(i == 4) return original_value3;
+	if(i == 5) return original_value4;
+	if(i == 6) return original_value5;
+	if(i == 8) return original_value6;
+	if(i == 9) return original_value7;
+	if(i == 10) return original_value8;
+	if(i == 11) return original_value9;
+}
+
+
+function settings_api(i) {
+	if(i == 2) return 'community_rate';
+	if(i == 3) return 'team_rate';
+	if(i == 4) return 'project_rate';
+	if(i == 5) return 'curator_rate';
+	if(i == 6) return 'common_comment';
+	if(i == 8) return 'bot_holiday';
+	if(i == 9) return 'holiday_days';
+	if(i == 10) return 'daily_curation';
+	if(i == 11) return 'vote_interval_minutes';
+}
+
+
+function set_new_value(i, value) {
+	if(i == 2) original_value1 = value;
+	if(i == 3) original_value2 = value;
+	if(i == 4) original_value3 = value;
+	if(i == 5) original_value4 = value;
+	if(i == 6) original_value5 = value;
+	if(i == 8) original_value6 = value;
+	if(i == 9) original_value7 = value;
+	if(i == 10) original_value8 = value;
+	if(i == 11) original_value8 = value;
+}
+
+
+function post(i) {
+
+	var update = {};
+	update.data = document.getElementById('settings-table').rows[i].cells[1].innerText;
+	update.setting = settings_api(i);
+	
+	$.post("/api/private/settings", update, function(data, status){
+		
+		document.getElementById('settings-table').rows[i].cells[1].innerText = update.data;
+	
+		set_new_value(i, update.data);
+	
+		document.getElementById('settings-table').rows[i].cells[1].style.backgroundColor = "#fff";
+		document.getElementById('settings-table').rows[i].cells[1].setAttribute('contenteditable','false');
+		document.getElementById('settings-table').rows[i].cells[2].className = '';
+		$('#' + i + 'edit').html('<i class="id edit icon"></i> Edit');
+	
+    }).fail(function(err) {
+		alert('An error occurred, pleased try again.');
+		console.log(err.statusText);
+		document.getElementById('settings-table').rows[i].cells[1].innerText = original_value(i);
+		document.getElementById('settings-table').rows[i].cells[1].style.backgroundColor = "#fff";
+		document.getElementById('settings-table').rows[i].cells[1].setAttribute('contenteditable','false');
+		document.getElementById('settings-table').rows[i].cells[2].className = '';
+		$('#' + i + 'edit').html('<i class="id edit icon"></i> Edit');
+		
+	});
+	
+}
+
+
+
+
+$('.edit').click(function() {
+	//console.log(this);
+	var el = this.parentNode.parentNode;
+	
+	$('#' + el.rowIndex + 'edit').hide();
+	
+	//console.log(el.cells[1])
+	document.getElementById('settings-table').rows[el.rowIndex].cells[1].style.backgroundColor = "#f8f8f9";
+	document.getElementById('settings-table').rows[el.rowIndex].cells[1].setAttribute('contenteditable','true');
+	document.getElementById('settings-table').rows[el.rowIndex].cells[1].focus();
+	
+	
+	$('#' + el.rowIndex + 'save').show();
+	$('#' + el.rowIndex + 'cancel').show();
+	
+	
+});//
+
+
+$('.save').click(function() {
+	//console.log(this);
+	var el = this.parentNode.parentNode;
+	
+	$('#' + el.rowIndex + 'save').hide();
+	$('#' + el.rowIndex + 'cancel').hide();
+	
+	$('#' + el.rowIndex + 'edit').show();
+	$('#' + el.rowIndex + 'edit').html('Please wait...');
+	
+	//console.log(el.cells[1])
+	document.getElementById('settings-table').rows[el.rowIndex].cells[1].style.backgroundColor = "#ffa";
+	document.getElementById('settings-table').rows[el.rowIndex].cells[1].setAttribute('contenteditable','false');
+	document.getElementById('settings-table').rows[el.rowIndex].cells[2].className = 'disabled';
+	
+	post(el.rowIndex);
+	
+	
+});
+
+
+
+$('.cancel').click(function() {
+	//console.log(this);
+	var el = this.parentNode.parentNode;
+	
+	$('#' + el.rowIndex + 'edit').show();
+	
+	//console.log(el.cells[1])
+	document.getElementById('settings-table').rows[el.rowIndex].cells[1].innerText = original_value(el.rowIndex);
+	document.getElementById('settings-table').rows[el.rowIndex].cells[1].style.backgroundColor = "#fff";
+	document.getElementById('settings-table').rows[el.rowIndex].cells[1].setAttribute('contenteditable','false');
+	
+	
+	$('#' + el.rowIndex + 'save').hide();
+	$('#' + el.rowIndex + 'cancel').hide();
+	
+});
+
+
+</script>
+
+
+  <!-- ejs -->
+  
+  	<% include ../partials/footer.ejs %>
+  
+  <!-- ejs -->
+  
+  
+
+</body>
+
+</html>
