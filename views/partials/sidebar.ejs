@@ -45,6 +45,14 @@
 					<i class="history icon"></i>
 					Activity
 				</a>
+				<a class="item" id="discussions-menu" href="/office/discussions">
+					<i class="comments outline icon"></i>
+					Discussions
+				</a>
+				<a class="item 3" id="settings-menu" href="/office/settings">
+					<i class="settings icon"></i>
+					Settings
+				</a>
 			</div>
 
 		</div>
@@ -58,6 +66,8 @@
 	 if (page == "/office/sponsors") $("#sponsors-menu").addClass("active");
 	 if (page == "/office/team") $("#team-menu").addClass("active");
 	 if (page == "/office/activity") $("#activity-menu").addClass("active");
+	 if (page.indexOf("/office/discussions") > -1) $("#discussions-menu").addClass("active");
+	 if (page == "/office/settings") $("#settings-menu").addClass("active");
 	 
 	 $( document ).ready(function() {
 	 
