@@ -41,4 +41,23 @@ module.exports = async function (app) {
 		res.render('office/sponsors', { user: req.user} );
 	});
 
+	app.get('/office/discussions', function(req, res){ 
+		res.render('office/discussions', { user: req.user} );
+	});
+
+	app.get('/office/settings', async function(req, res){ 
+	
+		try {
+			var sql = "CALL get_settings()";
+			var results = await pool.query(sql);
+			res.render('office/settings', { user: req.user, settings: results[0]} );
+		}
+		catch(err) {
+			console.log(err.message);
+			res.sendStatus(500);
+		}
+		
+	});
+
+
 }
