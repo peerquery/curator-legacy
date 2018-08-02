@@ -264,3 +264,56 @@ CREATE TABLE IF NOT EXISTS `bot_activity` (
 
 CREATE OR REPLACE VIEW `bot_activity_view` AS SELECT * FROM `bot_activity`;
 
+
+
+
+
+-- Create discussions table SQL
+
+
+CREATE TABLE IF NOT EXISTS `discussions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `author` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `receiver` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `body` TEXT COLLATE utf8_unicode_ci NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `type` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+-- Create discussions_view table SQL
+
+
+CREATE OR REPLACE VIEW `discussions_view` AS SELECT * FROM `discussions`;
+
+
+
+
+
+-- Create online table SQL
+
+
+CREATE TABLE IF NOT EXISTS `online` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `socket_id` varchar(70) COLLATE utf8_unicode_ci NOT NULL,
+  `user_name` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `state` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_name_UNIQUE` (`user_name`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+-- Create online_view table SQL
+
+
+CREATE OR REPLACE VIEW `online_view` AS SELECT * FROM `online`;
+
+
+
+
+
+
