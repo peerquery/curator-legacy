@@ -253,7 +253,157 @@ module.exports = async function (app) {
 	
 		
 	})();
-		
+	
+	
+	
+	
+	//vote curators
+	(async () => {
+	
+		var minutes = 1440; //24 hours so curators are voted for once a day
+		var the_interval = minutes * 60 * 1000;
+	
+		setInterval(async function() {
+			
+			var actions = 'vote';
+			
+			try{
+				
+				//fetch curators of the day from DB
+				var sql = "CALL curators_activity()";
+				var results = await pool.query(sql);
+				//console.log(results)
+			
+				//ready results for use
+				results = results[0];
+				
+				//console.log('-----db results: ', results);
+				if (!results|| results == "") return;
+				
+				for(var x in results) {
+				
+					var acc = results[x].curator
+					var data = {};
+			
+					//set universal variables
+					data.author = acc;
+					data.voter = bot_account;
+					
+					//get one latest post from the author's blog
+					//the function returns posts by author and re-steemed posts by author so we fetch the last 5 posts
+					var posts = await client.database.getDiscussions('blog', {tag: acc, limit: 5});
+					//console.log(posts)
+					
+					//and we filter to get the last one authored by the user
+					var blog = function(posts) {
+						for (var i in posts) {
+							if(posts[i].author == acc) return posts[i];
+						}
+					};
+					
+					var post = blog(posts);
+					data.permlink = post.permlink;
+					
+					//calculate the vote worth for each curator based on their curation count
+					//then we multiple by 100 since we used curator rate is based on %(100) instead the true 10,000 for 100% weight
+					data.weight = results[x].total_curation * curator_rate * 100;
+					
+					voter(data, actions, "curators");
+				
+				}
+				
+				
+			} catch(err) {
+				
+				console.log(err);
+				
+			}
+			
+			
+		}, the_interval);
+	
+	})();
+	
+	
+	//vote blog of moderators, admins and project
+	(async () => {
+	
+		var minutes = 1440; //24 hours so curators are voted for once a day
+		var the_interval = minutes * 60 * 1000;
+	
+		setInterval(async function() {
+			
+			//leave no comments after voting
+			var actions = 'vote';
+			
+			try{
+				//fetch posts from DB
+				var sql = "CALL team_no_curator()";
+				var results = await pool.query(sql);
+				
+				//ready results for use
+				results = results[0];
+				//console.log(results);
+				
+				
+				//add project's blog account to voting list
+				results.push({account: process.env.PROJECT_BLOG});
+				
+				if (!results || results == "") return;
+				
+				for(var x in results) {
+					
+					//console.log(results[x].account);
+					
+					var acc = results[x].account;
+					
+					//get one latest post from the author's blog
+					//the function returns posts by author and re-steemed posts by author so we fetch the last 5 posts
+					var posts = await client.database.getDiscussions('blog', {tag: acc, limit: 5});
+					
+					//and we filter to get the last one authored by the user
+					var blog = async function(posts) {
+						for (var i in posts) {
+							if(posts[i].author == acc) return posts[i];
+						}
+					};
+					
+					
+					var post = await blog(posts);
+					
+					if(!post || post == "") continue;
+					
+					
+					//set universal variables
+					var data = {};
+					data.author = post.author;
+					data.voter = bot_account;
+					data.permlink = post.permlink;
+					
+					
+					if (results[x].author = process.env.PROJECT_BLOG) {
+						data.weight = project_rate * 100;
+					} else {
+						data.weight = team_rate * 100;
+					}
+					
+					voter(data, actions, "project_team");
+					
+					
+				}
+				
+				
+			} catch(err) {
+				
+				console.log(err);
+				
+			}
+			
+			
+		}, the_interval);
+	
+	})();
+	
 	
 	};
 	
