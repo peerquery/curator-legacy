@@ -24,7 +24,8 @@ Advanced content curator interface and with a voting bot for Steem.
 * **Full payment model**: bot votes/pays all parties in a curation system: author, curators, other curation team members(admins and moderators), and the project's blog
 * **Live settings**: curator has a settings page for admins and owners. this page allows for live updating of system configs without needing for server restart or edit or `.env`!
 * **Bot resting day**: curator has a bot resting day in-built by default. The resting day is designated as a day that the bot will not vote but recharge its voting power. it is expected there would be no curation done on the said day, allowing the system to have full resources to do CPU intensive tasks such as deleting all none-curated content(yet to be implemented), deleting all data about any user who requests for data deletion(yet to be implemented) and more
-* **Much much more features and improvements in development!**
+* **State of the art auth system**: curator comes with an Oauth 2 login system built on bcrypt hashed passwords, stateless user auth using JWT stored in `httpOnly` + `signed` cookies. all APIs and routes used by logged-in team members are secured to be accessed only by a client with valid auth cookies and the right user authority. the secure system allows new users to set their own password and change it anytime securely. email is sent to approve every password reset and email confirmations follow every successful password change
+* **Much features you would have to discover for yourself as well as new features and improvements which are still in development!**
 
 
 ## Roadmap
