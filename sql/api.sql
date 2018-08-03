@@ -1077,10 +1077,10 @@ DROP procedure IF EXISTS `curators_activity`;
 CREATE PROCEDURE `curators_activity`()
 BEGIN
     
-	SELECT `author` AS curator, COUNT(DISTINCT `author`) AS total_curation FROM `activity_view`
+	SELECT `author` AS curator, COUNT(`author`) AS total_curation FROM `activity_view`
 		WHERE (`activity_view`.`type` = 'approve' OR `activity_view`.`type` = 'reject' OR `activity_view`.`type` = 're-approve' OR `activity_view`.`type` = 're-reject')
 		AND DATE(`activity_view`.`time`) = CURDATE()
-		GROUP BY `activity_view`.`author`;
+		GROUP BY `author`;
 	
 END;
 
