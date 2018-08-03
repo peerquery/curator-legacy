@@ -17,11 +17,9 @@ module.exports = function () {
 
 	app.use(cookieParser(process.env.COOKIE_SECRET));
 	
-	
-	var server = app.listen(port);
-	
-	console.log("    > server is live on port", process.env.PORT || 80, "!");
-	
+	var http = require('http').Server(app);
+	var io = require('socket.io')(http);
+
 	var vet = require('../routes/vet');
 	var api_vet = require('../routes/api_vet');
 	var authorize = require('../routes/authorize');
@@ -37,6 +35,9 @@ module.exports = function () {
 	
 	//setup authorize(logged-in) checker for all /api/ routes
 	app.use('/api/private/', api_vet);
+	
+	//require and activate chat system
+	require('../src/app/chat')(io);
 	
 	//require and activate db populator
 	require('../src/app/populate')();
@@ -94,15 +95,20 @@ module.exports = function () {
 	
 	//custom app error handler function
 	app.use(function(err, req, res, next) {
-		console.log('process err (500) : \n' + err);
+		console.log('process err (500) : \n', err);
 		res.status(500).send("Sorry, something broken on our side. We're fixing it!");
 	});
 	
 	//custom file not found error handler function
 	app.use(function(req, res, next) {
-		console.log('files not found (404) err');
+		console.log('files not found (404) err: ', req.url);
 		//res.status(404).send("custom not found handler called");
 		res.status(404).render('static/404.ejs');
+	});
+	
+	
+	http.listen(process.env.PORT || 80, function() {
+		console.log("    > server is live on port", process.env.PORT || 80, "!");
 	});
 
 	
