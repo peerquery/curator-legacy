@@ -77,6 +77,11 @@ Advanced content curator interface and with a voting bot for Steem.
 
 To be able to fully and independently test the demo, I would recommend that you created your own account using the team page and then using that account to explore Curator.
 
+## Known issues
+
+* **No footer page templates**: the footer links have no templates. you would have to create one from the `FAQs` page template and set the routes in the routes folder. default templates will come in subsequent updates
+* **Grammarly plugin effect**: the Grammarly Chrome extension hides the `edit` option buttons on the `settings` page. if you are are not seeing any option buttons on the settings page after clicking on `edit` to a value, please disabled the extension temporarily. this issues will be fixed in subsequent updates.
+
 ### "Warning"
 
 This new version(v2) contains breaking changes and will NOT run on the DB of v1. If you already have version 1 installed, please consider emptying the schema of the current DB, or use a new DB.
