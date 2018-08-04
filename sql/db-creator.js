@@ -5,7 +5,7 @@ require('dotenv').config();
 var fs = require('fs');
 var bcrypt = require('bcrypt');
 
-let hash = bcrypt.hashSync(process.env.OWNER_PASS, 10);
+let hash = bcrypt.hashSync(process.env.OWNER_PASS, 12);
 
 var db_tables = fs.readFileSync('./sql/tables.sql').toString();
 	
