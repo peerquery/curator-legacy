@@ -1,5 +1,5 @@
 
-'use strict'
+'use strict';
 
 var bcrypt = require('bcrypt');
 //var pool = require('./../config/connection');
@@ -12,46 +12,46 @@ const saltRounds = 12;
 
 module.exports = function (req, res, next) {
 	
-	if(req.signedCookies.auth) {
+    if (req.signedCookies.auth) {
 		
-		try {
+        try {
 			
-			var auth = req.signedCookies.auth;
+            var auth = req.signedCookies.auth;
 			
-			var decoded = jwt.decode(auth, secret);
+            var decoded = jwt.decode(auth, secret);
 				
-			var expiration = new Date(decoded.expiration);
+            var expiration = new Date(decoded.expiration);
 				
-			var date = new Date();
+            var date = new Date();
 				
-			//checks to make sure that the token has NOT expired!
+            //checks to make sure that the token has NOT expired!
 				
-			if(expiration > date){
+            if (expiration > date){
 				
-				req.user = { username: decoded.username, email: decoded.email, role: decoded.role, authority: decoded.authority };
+                req.user = { username: decoded.username, email: decoded.email, role: decoded.role, authority: decoded.authority };
 				
-				next();
+                next();
 				
-			} else {
+            } else {
 					
-				req.user = null;
+                req.user = null;
 				
-				next();
+                next();
 				
-			}
+            }
 			
 			
-		} catch(err) {
+        } catch (err) {
 			
-			console.log(err);
-			res.status(401).send('Could not vet auth');
+            console.log(err);
+            res.status(401).send('Could not vet auth');
 			
-		}
+        }
 		
-	} else {
+    } else {
 		
-		next();
+        next();
 		
-	}
+    }
 
-}
+};

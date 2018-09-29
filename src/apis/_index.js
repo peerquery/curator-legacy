@@ -17,20 +17,20 @@ var users = require('./users');
 	
 module.exports = async function (app) {
 	
-	status(app);
-	activity(app);
-	_app(app);
-	blacklist(app);
-	chat(app);
-	curate(app);
-	curators(app);
-	data(app);
-	sponsor(app);
-	settings(app);
-	stats(app);
-	team(app);
-	users(app);
+    status(app);
+    activity(app);
+    _app(app);
+    blacklist(app);
+    chat(app);
+    curate(app);
+    curators(app);
+    data(app);
+    sponsor(app);
+    settings(app);
+    stats(app);
+    team(app);
+    users(app);
 	
-}
+};
 	
 	

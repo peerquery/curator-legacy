@@ -1,19 +1,19 @@
 
-'use strict'
+'use strict';
 
 var db_setup = require('./sql/db-manager');
 var server = require('./src/server');
 	
 (async function() {
-	try {
-		await db_setup();
+    try {
+        await db_setup();
 		
-		console.log('\n  * db setup successful\n');
-		console.log('  * starting main server\n');
+        console.log('\n  * db setup successful\n');
+        console.log('  * starting main server\n');
 		
-		server();
+        server();
 		
-	} catch (err) {
-		console.log(err);
-	}
-})()
+    } catch (err) {
+        console.log(err);
+    }
+})();

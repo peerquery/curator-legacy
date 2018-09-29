@@ -10,13 +10,13 @@ var trail = require('./trail');
 	
 module.exports = async function (app) {
 	
-	auth(app);
-	community(app);
-	curators(app);
-	office(app);
-	_static(app);
-	trail(app);
+    auth(app);
+    community(app);
+    curators(app);
+    office(app);
+    _static(app);
+    trail(app);
 	
-}
+};
 	
 	
