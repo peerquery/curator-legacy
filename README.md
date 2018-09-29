@@ -56,27 +56,6 @@ Advanced content curator interface and with a voting bot for Steem.
 * community-driven curation services
 * curation team of steem dapps/ apps
 
-## Curator demo
-
-* See site: [http://steem-curator.herokuapp.com](http://steem-curator.herokuapp.com)
-* See emails: [https://ethereal.email/messages](https://ethereal.email/messages)
-
-### Demo owner login
-* Owner email: wctobf7h64hu47cm@ethereal.email
-* Owner pass: wBtvmTueTBxm9HaMZr
-
-### Demo curator login
-* Login: makafuigdzivenu
-* Pass: nice_password
-
-### Email login
-* Ethereal.email user: sdn3qwp64xb5gyzl@ethereal.email
-* Ethereal.email pass: jbFTVaMGZ4QhdF6tB5
-
-### Recommendation
-
-To be able to fully and independently test the demo, I would recommend that you created your own account using the team page and then using that account to explore Curator.
-
 ## Known issues
 
 * **No footer page templates**: the footer links have no templates. you would have to create one from the `FAQs` page template and set the routes in the routes folder. default templates will come in subsequent updates
@@ -84,4 +63,4 @@ To be able to fully and independently test the demo, I would recommend that you 
 
 ### "Warning"
 
-This new version(v2) contains breaking changes and will NOT run on the DB of v1. If you already have version 1 installed, please consider emptying the schema of the current DB, or use a new DB.
+This new version contains breaking changes and will NOT run on the DB of previous versions. If you already have any of the previous versions installed, please consider emptying the schema of the current DB, or use a new DB.
