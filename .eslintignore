@@ -1,0 +1,11 @@
+# Dependencies
+node_modules/
+
+# Build files and vendor
+public/
+
+# Local files
+local/
+
+# Scripts
+scripts/
