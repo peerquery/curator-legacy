@@ -43,7 +43,7 @@
 						Messages
 					</a>
 	  
-					<a class="item" id="logout-btn">
+					<a class="item" id="logout-btn" href="/logout">
 						<i class="sign out alternate icon"></i>
 						Log out
 					</a>
@@ -59,47 +59,9 @@
   </div>
   
     
-<script>
 	
-	
-	
-  $(document).ready(function() {
-	
-	
-	<% if(typeof user == 'object' && user){ %>
-		
-		window.user_data = <%- JSON.stringify(user) %>
-		
-	<% } %>
-	
-	
-	if( typeof user_data == 'object' && user_data ) {
-		$('#office-menu').show();
-		var account = user_data.username;
-	
-		$('#user-account').text(account);
-		$('#user-img').attr('src', "https://steemitimages.com/u/" + account + "/avatar")
-	
-	} else { 
-		$('#login-menu').show();
-	}
-	
-	
-      $('.ui.menu .ui.dropdown').dropdown({
-        on: 'hover'
-      });
-      $('.ui.menu a.item')
-        .on('click', function() {
-          $(this)
-            .addClass('active')
-            .siblings()
-            .removeClass('active')
-          ;
-        });
-  });
+	<script>
+        <% if(typeof user == 'object' && user){ %>	window.user_data = <%- JSON.stringify(user) %>	<% } %>
+    </script>
+	<script src="/build/dist/navbar.js"></script>
   
-  $('#logout-btn').click(function() {
-	window.location.href = '/login';
-  });
-</script>
-
