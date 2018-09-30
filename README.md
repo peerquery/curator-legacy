@@ -1,5 +1,8 @@
 
-# Curator v3
+[![Build status](https://travis-ci.org/peerquery/curator.svg?branch=master)](https://travis-ci.org/peerquery/curator)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/peerquery/curator/blob/master/LICENSE)
+
+# Curator v4
 Advanced content curator interface and with a voting bot for Steem.
 
 ## How to install:
