@@ -1,10 +1,10 @@
 
 
-var dsteem = require('dsteem'),
-    num2str = require('../../utils/num2str.js');
+const dsteem = require('dsteem'),
+    num2str = require('../../../utils/num2str.js');
 
 
-var client = new dsteem.Client('https://api.steemit.com');
+const client = new dsteem.Client('https://api.steemit.com');
 
 window.onload = function() {
     
