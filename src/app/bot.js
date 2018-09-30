@@ -2,7 +2,7 @@
 'use strict';
 
 require('dotenv').config();
-var dsteem = require('dsteem');
+const dsteem = require('dsteem');
 var util = require('util');
 var mysql = require('mysql');
 var pool = require('./../../config/connection');

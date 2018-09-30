@@ -1,7 +1,7 @@
 
 'use strict';
 	
-var dsteem = require('dsteem');
+const dsteem = require('dsteem');
 var dotvenv = require('dotenv');
 var source_app = require('./../../config/config').source_app;
 const steem = new dsteem.Client(process.env.STEEM_RPC);
