@@ -28,17 +28,10 @@ module.exports = {
     globals: {
         $: false,
         jQuery: false,
+        user_data: false,
         Promise: false,
-        active_user: false,
-        project_slug: false,
-        project_logo: false,
-        project_logo: false,
-        ready: false,
-        responsesReady: false,
-        deadline: false,
         Buffer: false,
         process: false,
-        pqy_notify: false,
     },
     parserOptions: {
         ecmaVersion: 2017,
