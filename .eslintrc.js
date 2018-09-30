@@ -32,6 +32,7 @@ module.exports = {
         Promise: false,
         Buffer: false,
         process: false,
+        io: false
     },
     parserOptions: {
         ecmaVersion: 2017,
