@@ -59,7 +59,7 @@ module.exports = function () {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(express.static(path.join(__dirname, '../public')));
-    app.use(favicon(path.join(__dirname, '../public/img', 'favicon.ico')));
+    app.use(favicon(path.join(__dirname, '../public/assets/img', 'favicon.ico')));
 	
     // ensure log directory exists
     fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
