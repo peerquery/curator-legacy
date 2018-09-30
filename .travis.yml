@@ -1,0 +1,33 @@
+language: node_js
+node_js: 
+  - "8.6.0"
+before_install: if [[ `npm -v` != 6* ]]; then npm i -g npm@6; fi
+before_script:
+  - npm install
+script:
+  - npm run build
+  - npm run test
+cache:
+  directories:
+    - "node_modules"
+before_deploy:
+ - rm -rf .tmp
+ - rm -rf node_modules
+ - export ELASTIC_BEANSTALK_ENV=peerquery-travis-build-${TRAVIS_BRANCH}
+ - zip -r --exclude=\*.git\* --exclude=\*test\  peerquery-travis-build.zip
+  .
+ - export ELASTIC_BEANSTALK_LABEL=git-$(git rev-parse --verify HEAD --short)
+ - export ELASTIC_BEANSTALK_DESCRIPTION=https://github.com/peerquery/beta/tree/$(git rev-parse HEAD)
+after_deploy:
+ - rm peerquery-travis-build.zip
+deploy:
+  provider: elasticbeanstalk
+  zip-file: peerquery-travis-build.zip
+  skip_cleanup: true
+  access_key_id: "$access_key_id"
+  secret_access_key:
+    secure: "$secret_access_key"
+  region: "$region"
+  app: "$app"
+  env: "$env"
+  bucket_name: "$bucket_name"
