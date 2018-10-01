@@ -2,11 +2,11 @@
 'use strict';
 	
 const dsteem = require('dsteem');
-var dotvenv = require('dotenv');
-var source_app = require('./../../config/config').source_app;
-const steem = new dsteem.Client(process.env.STEEM_RPC);
-var db_engine = require('./../../config/config').db_engine;
-var engine = require('./../../src/db-engines/' + db_engine);
+const settings = require('./../../config/settings');
+const source_app = require('./../../config/config').source_app;
+const steem = new dsteem.Client(settings.STEEM_RPC);
+const db_engine = require('./../../config/config').db_engine;
+const engine = require('./../../src/db-engines/' + db_engine);
 
 module.exports = function (app) {
 	
@@ -15,14 +15,14 @@ module.exports = function (app) {
     // the stream will emit one data event for every operation that happens on the steemit blockchain
     stream.on('data', (operation) => {
 	
-        var type = operation.op[0];
-        var op = operation.op;
-        var tx_id = operation.trx_id;
-        var block = operation.block;
-        var timestamp = operation.timestamp;
+        const type = operation.op[0];
+        const op = operation.op;
+        const tx_id = operation.trx_id;
+        const block = operation.block;
+        const timestamp = operation.timestamp;
 		
         try {
-            var json_metadata = op[1].json_metadata;
+            const json_metadata = op[1].json_metadata;
             if (json_metadata && type == 'comment')  engine(op, timestamp);
         } catch (err) {
             //console.log(err);

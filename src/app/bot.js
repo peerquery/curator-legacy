@@ -1,12 +1,12 @@
 
 'use strict';
-
 require('dotenv').config();
 const dsteem = require('dsteem');
-var util = require('util');
-var mysql = require('mysql');
-var pool = require('./../../config/connection');
-const client = new dsteem.Client(process.env.STEEM_RPC);
+const util = require('util');
+const mysql = require('mysql');
+const settings = require('./../../config/settings');
+const pool = require('./../../config/connection');
+const client = new dsteem.Client(settings.STEEM_RRC);
 
 module.exports = async function (app) {
 	
@@ -125,7 +125,7 @@ module.exports = async function (app) {
 			
             console.log('    > voting bot activated!');
 		
-            var minutes = process.env.UPDATE_BOT_GLOBALS_INTERVAL_MINUTES;
+            var minutes = settings.UPDATE_BOT_GLOBALS_INTERVAL_MINUTES;
             var the_interval = minutes * 60 * 1000;
             setInterval(function(){
                 set_globals();
@@ -233,7 +233,7 @@ module.exports = async function (app) {
                     data.permlink = results.permlink;
                     data.weight = results.rate * 100;
                     data.body = approved + '<b>Remarks</b>: <em>' + results.remarks + '</em><br/><br/>' + common_comment;
-                    data.json_metadata = '{"app": "' + process.env.PROJECT_NAME + '", "community":"' + process.env.PROJECT_COMMUNITY + '"}';
+                    data.json_metadata = '{"app": "' + settings.PROJECT_NAME + '", "community":"' + settings.PROJECT_COMMUNITY + '"}';
                     data.parent_author = results.author;
                     data.parent_permlink = results.permlink;
                     data.new_permlink = Math.random().toString(36).substring(2);
@@ -345,7 +345,7 @@ module.exports = async function (app) {
 				
 				
                     //add project's blog account to voting list
-                    results.push({account: process.env.PROJECT_BLOG});
+                    results.push({account: settings.PROJECT_BLOG});
 				
                     if (!results || results == '') return;
 				
@@ -379,7 +379,7 @@ module.exports = async function (app) {
                         data.permlink = post.permlink;
 					
 					
-                        if (results[x].author == process.env.PROJECT_BLOG) {
+                        if (results[x].author == settings.PROJECT_BLOG) {
                             data.weight = project_rate * 100;
                         } else {
                             data.weight = team_rate * 100;

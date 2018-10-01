@@ -1,35 +1,35 @@
 
 'use strict';
 
-require('dotenv').config();
-var mysql = require('mysql');
-var pool = require('./../../config/connection');
-var nodemailer = require('nodemailer');
-var transporter = require('./../../config/email');
-var new_pass = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+const mysql = require('mysql');
+const pool = require('./../../config/connection');
+const settings = require('./../../config/settings');
+const nodemailer = require('nodemailer');
+const transporter = require('./../../config/email');
+const new_pass = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
-var fs = require('fs');
+const fs = require('fs');
 
 exports.new = async function(account, email, role, message, token) {
 	
     var email_template = fs.readFileSync('./templates/invite-email.html').toString();
-    var attribution = 'Powered by <a href="https://pqy.one/curator" target="_blank"><em>Curator</em>.'; //Kindly leave this attribution intact
+    const attribution = 'Powered by <a href="https://pqy.one/curator" target="_blank"><em>Curator</em>.'; //Kindly leave this attribution intact
 	
     var template = email_template.replace(/USER_NAME/gi, account);
     template = template.replace(/USER_TOKEN/gi, token);
     template = template.replace(/USER_EMAIL/gi, email);
-    template = template.replace(/PROJECT_NAME/gi, process.env.PROJECT_NAME);
-    template = template.replace(/PROJECT_HOMEPAGE/gi, process.env.PROJECT_HOMEPAGE);
-    template = template.replace(/PROJECT_INFO/gi, process.env.PROJECT_INFO);
-    template = template.replace(/PROJECT_ADDRESS/gi, process.env.PROJECT_ADDRESS);
+    template = template.replace(/PROJECT_NAME/gi, settings.PROJECT_NAME);
+    template = template.replace(/PROJECT_HOMEPAGE/gi, settings.PROJECT_HOMEPAGE);
+    template = template.replace(/PROJECT_INFO/gi, settings.PROJECT_INFO);
+    template = template.replace(/PROJECT_ADDRESS/gi, settings.PROJECT_ADDRESS);
     template = template.replace(/INVITE_MESSAGE/gi, message);
     template = template.replace(/ATTRIBUTION/gi, attribution);
 	
 	
     const mailOptions = {
-        from: process.env.PROJECT_EMAIL, // sender address
+        from: settings.PROJECT_EMAIL, // sender address
         to: email, // list of receivers
-        subject: 'Invitation to join ' + process.env.PROJECT_NAME + ' by ' + process.env.PROJECT_OWNER, // Subject line
+        subject: 'Invitation to join ' + settings.PROJECT_NAME + ' by ' + settings.PROJECT_OWNER, // Subject line
         html: template // plain text body
     };
 	
@@ -56,18 +56,18 @@ exports.reset = function (account, email, token) {
 	
     var template = email_template.replace(/USER_NAME/gi, account);
     template = template.replace('RESET_TOKEN', token);
-    template = template.replace(/PROJECT_NAME/gi, process.env.PROJECT_NAME);
-    template = template.replace(/PROJECT_HOMEPAGE/gi, process.env.PROJECT_HOMEPAGE);
-    template = template.replace(/PROJECT_INFO/gi, process.env.PROJECT_INFO);
+    template = template.replace(/PROJECT_NAME/gi, settings.PROJECT_NAME);
+    template = template.replace(/PROJECT_HOMEPAGE/gi, settings.PROJECT_HOMEPAGE);
+    template = template.replace(/PROJECT_INFO/gi, settings.PROJECT_INFO);
     template = template.replace(/USER_EMAIL/gi, email);
-    template = template.replace(/PROJECT_ADDRESS/gi, process.env.PROJECT_ADDRESS);
+    template = template.replace(/PROJECT_ADDRESS/gi, settings.PROJECT_ADDRESS);
     template = template.replace(/ATTRIBUTION/gi, attribution);
 	
 	
     const mailOptions = {
-        from: process.env.PROJECT_EMAIL, // sender address
+        from: settings.PROJECT_EMAIL, // sender address
         to: email, // list of receivers
-        subject: 'Password reset for ' + process.env.PROJECT_NAME, // Subject line
+        subject: 'Password reset for ' + settings.PROJECT_NAME, // Subject line
         html: template // plain text body
     };
 	
@@ -92,17 +92,17 @@ exports.new_pass = function (account, email) {
     var attribution = 'Powered by <a href="https://pqy.one/curator" target="_blank"><em>Curator</em>.'; //Kindly leave this attribution intact
 	
     var template = email_template.replace(/USER_NAME/gi, account);
-    template = template.replace(/PROJECT_NAME/gi, process.env.PROJECT_NAME);
-    template = template.replace(/PROJECT_HOMEPAGE/gi, process.env.PROJECT_HOMEPAGE);
-    template = template.replace(/PROJECT_INFO/gi, process.env.PROJECT_INFO);
-    template = template.replace(/PROJECT_ADDRESS/gi, process.env.PROJECT_ADDRESS);
+    template = template.replace(/PROJECT_NAME/gi, settings.PROJECT_NAME);
+    template = template.replace(/PROJECT_HOMEPAGE/gi, settings.PROJECT_HOMEPAGE);
+    template = template.replace(/PROJECT_INFO/gi, settings.PROJECT_INFO);
+    template = template.replace(/PROJECT_ADDRESS/gi, settings.PROJECT_ADDRESS);
     template = template.replace(/ATTRIBUTION/gi, attribution);
 	
 	
     const mailOptions = {
-        from: process.env.PROJECT_EMAIL, // sender address
+        from: settings.PROJECT_EMAIL, // sender address
         to: email, // list of receivers
-        subject: 'Password reset confirmation for ' + process.env.PROJECT_NAME, // Subject line
+        subject: 'Password reset confirmation for ' + settings.PROJECT_NAME, // Subject line
         html: template // plain text body
     };
 	

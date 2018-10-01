@@ -3,29 +3,30 @@
 
 module.exports = function () {
 
+    require('dotenv').config();
     const express = require('express');
     const app = express();
-    var path = require('path');
-    var favicon = require('serve-favicon');
-    var fs = require('fs');
-    var rfs = require('rotating-file-stream');
-    var morgan = require('morgan');
-    var bodyParser = require('body-parser');
-    require('dotenv').config();
-    var cookieParser = require('cookie-parser');
-    var port = process.env.PORT || 80;
+    const path = require('path');
+    const favicon = require('serve-favicon');
+    const settings = require('../config/settings');
+    const fs = require('fs');
+    const rfs = require('rotating-file-stream');
+    const morgan = require('morgan');
+    const bodyParser = require('body-parser');
+    const cookieParser = require('cookie-parser');
+    const port = process.env.NODE_ENV == 'production ' || 'staging' ? settings.PORT + 8001 : settings.PORT;
 
     app.use(cookieParser(process.env.COOKIE_SECRET));
 	
-    var http = require('http').Server(app);
-    var io = require('socket.io')(http);
+    const http = require('http').Server(app);
+    const io = require('socket.io')(http);
 
-    var vet = require('../routes/vet');
-    var api_vet = require('../routes/api_vet');
-    var authorize = require('../routes/authorize');
+    const vet = require('../routes/vet');
+    const api_vet = require('../routes/api_vet');
+    const authorize = require('../routes/authorize');
 	
-    var routes = require('../routes/_index');
-    var apis = require('./apis/_index');
+    const routes = require('../routes/_index');
+    const apis = require('./apis/_index');
 	
     //setup vetter to check logged in auth for all requests
     app.use(vet);
@@ -49,7 +50,7 @@ module.exports = function () {
     require('../src/app/email-verify')();
 	
 	
-    var logDirectory = path.join(__dirname, '../logs');
+    const logDirectory = path.join(__dirname, '../logs');
 	
     // view engine setup
     app.set('views', path.join(__dirname, '../views'));
@@ -65,7 +66,7 @@ module.exports = function () {
     fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 	
     // create a rotating write stream
-    var accessLogStream = rfs('access.log', {
+    const accessLogStream = rfs('access.log', {
         interval: '1d', // rotate daily
         path: logDirectory
     });
@@ -107,8 +108,8 @@ module.exports = function () {
     });
 	
 	
-    http.listen(process.env.PORT || 80, function() {
-        console.log('    > server is live on port', process.env.PORT || 80, '!');
+    http.listen(port, function() {
+        console.log('    > server is live on port', port , '!');
     });
 
 	
