@@ -25,9 +25,6 @@ local/
 #local dist builds
 public/dist/
 
-#amazon config, if available
-.ebextensions/
-
 # Logs
 logs
 *.log
