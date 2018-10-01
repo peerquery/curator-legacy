@@ -1,6 +1,6 @@
 {
   "name": "curator",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "steem content curation interface\u001b[D\u001b[C\u001b[C\u001b",
   "main": "setup.js",
   "scripts": {
