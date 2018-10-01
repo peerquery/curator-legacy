@@ -85,7 +85,7 @@ module.exports = async function (app) {
                 bot_account = results.bot_account;
                 bot_holiday = results.bot_holiday;
 				
-                key = dsteem.PrivateKey.fromLogin(bot_account, process.env.BOT_KEY, 'posting');
+                key = dsteem.PrivateKey.fromString(process.env.BOT_POSTING_KEY);
 		
                 //set global steem values
 				
