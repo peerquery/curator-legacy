@@ -2,7 +2,7 @@
 var config = {};
 
 //app info
-config.app_name = 'app stream';
+config.app_name = 'curator';
 config.app_version = '1.0.0';
 config.api_version = '1.0.0';
 config.app_owner = '';
