@@ -3,7 +3,7 @@
 
 require('dotenv').config();
 var fs = require('fs');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 
 let hash = bcrypt.hashSync(process.env.OWNER_PASS, 12);
 

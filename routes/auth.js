@@ -1,7 +1,7 @@
 
 'use strict';
 
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var pool = require('./../config/connection');
 var cookieParser = require('cookie-parser');
 var jwt = require('jwt-simple');

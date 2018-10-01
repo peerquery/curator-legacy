@@ -30,7 +30,7 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/runtime": "^7.1.2",
-    "bcrypt": "^2.0.1",
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.3",
     "dompurify": "^1.0.8",
     "dotenv": "^5.0.1",

@@ -2,7 +2,7 @@
 'use strict';
 
 var mysql = require('mysql');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 const uuidv1 = require('uuid/v1');
 var pool = require('./../../config/connection');
 var email_new_team = require('../app/emailer').new;
