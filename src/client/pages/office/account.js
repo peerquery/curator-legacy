@@ -2,7 +2,8 @@
 var reputation = require('../../../utils/reputation.js');
 
 const dsteem = require('dsteem');
-const client = new dsteem.Client('https://api.steemit.com');
+const settings = require('../../../../config/settings');
+const client = new dsteem.Client(settings.STEEM_RPC);
 
 $( document ).ready(function() {
 		

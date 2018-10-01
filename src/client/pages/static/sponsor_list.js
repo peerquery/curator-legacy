@@ -2,8 +2,8 @@
 const dsteem = require('dsteem'),
     num2str = require('../../../utils/num2str.js');
 
-
-const client = new dsteem.Client('https://api.steemit.com');
+const settings = require('../../../../config/settings');
+const client = new dsteem.Client(settings.STEEM_RPC);
 
 	
 $.get('/api/sponsorship', async function(data, status){
