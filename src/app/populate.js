@@ -4,13 +4,13 @@
 const dsteem = require('dsteem');
 const settings = require('./../../config/settings');
 const source_app = require('./../../config/config').source_app;
-const steem = new dsteem.Client(settings.STEEM_RPC);
+const client = new dsteem.Client(settings.STEEM_RPC);
 const db_engine = require('./../../config/config').db_engine;
 const engine = require('./../../src/db-engines/' + db_engine);
 
 module.exports = function (app) {
 	
-    const stream = steem.blockchain.getOperationsStream({});
+    const stream = client.blockchain.getOperationsStream({});
 	
     // the stream will emit one data event for every operation that happens on the steemit blockchain
     stream.on('data', (operation) => {
