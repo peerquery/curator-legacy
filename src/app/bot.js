@@ -6,7 +6,7 @@ const util = require('util');
 const mysql = require('mysql');
 const settings = require('./../../config/settings');
 const pool = require('./../../config/connection');
-const client = new dsteem.Client(settings.STEEM_RRC);
+const client = new dsteem.Client(settings.STEEM_RPC);
 
 module.exports = async function (app) {
 	
