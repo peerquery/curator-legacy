@@ -26,6 +26,7 @@ settings.BOT_HOLIDAY = 'sunday';
 settings.HOLIDAY_DAYS = 1;
 settings.DAILY_CURATION = 100;
 settings.VOTE_INTERVAL_MINUTES = 5;
+settings.UPDATE_BOT_GLOBALS_INTERVAL_MINUTES = 4;
 
 module.exports  =  settings;
 
