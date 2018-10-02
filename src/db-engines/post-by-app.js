@@ -23,13 +23,13 @@ module.exports = async function (op, timestamp) {
 					
                 }
                 catch (err) {
-                    //console.log(err.message);
+                    console.log(err.message);
                 }
 			
             }
         }
         catch (err) {
-            //console.log(err.message); //silence this error since technically its not an err - not all posts have 'app' value in their json_metadata
+            console.log(err.message); //silence this error since technically its not an err - not all posts have 'app' value in their json_metadata
         }
     }
 	
