@@ -9,7 +9,7 @@ config.app_owner = '';
 config.app_admin = '';
 
 //filter settings
-config.target = 'steemit';
+config.target = 'peerquery';
 config.streamer_app = 'ops';
 config.db_engine = 'post-by-app';
 
@@ -22,4 +22,3 @@ config.guide_api = 'on';
 config.db_setup = 'false';
 
 module.exports = config;
-
