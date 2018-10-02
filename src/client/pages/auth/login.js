@@ -63,8 +63,5 @@ $( window ).on( 'load', function() {
         
     });
     
-    $('.ui.form')
-        .form()
-    ;
     
 });
