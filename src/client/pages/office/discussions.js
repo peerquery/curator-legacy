@@ -4,7 +4,7 @@
 
 var socket = io();
     
-$(document).ready(function() {
+$( window ).on( 'load', function() {
 	
     //first clear all snap messages incase user only freshed page - not reloaded it
     sessionStorage.clear();

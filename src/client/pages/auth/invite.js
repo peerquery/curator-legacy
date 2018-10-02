@@ -1,5 +1,5 @@
 
-$(document).ready(function() {
+$( window ).on( 'load', function() {
       
     var urlParams = new URLSearchParams(window.location.search);
     var username = urlParams.get('user');
