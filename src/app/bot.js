@@ -191,7 +191,7 @@ module.exports = async function (app) {
 		
             } catch (err) {
 			
-                console.log(err.message);
+                console.log(err);
 			
             }
 		

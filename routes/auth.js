@@ -300,7 +300,7 @@ module.exports = function (app) {
             } catch (err) {
 				
                 //console.log("Sorry, an err occurred sending email");
-                //console.log(err.message);
+                //console.log(err);
                 console.log(err);
                 res.sendStatus(500);
 				

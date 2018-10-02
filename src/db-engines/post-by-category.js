@@ -21,7 +21,7 @@ module.exports = async function (op, timestamp) {
 					
             }
             catch (err) {
-                console.log(err.message);
+                console.log(err);
             }
 	
         }

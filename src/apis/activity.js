@@ -14,7 +14,7 @@ module.exports = async function (app) {
             res.json(results[0]);
         }
         catch (err) {
-            //console.log(err.message);
+            //console.log(err);
             res.sendStatus(500);
         }
 	
@@ -28,7 +28,7 @@ module.exports = async function (app) {
             res.json(results[0]);
         }
         catch (err) {
-            //console.log(err.message);
+            //console.log(err);
             res.sendStatus(500);
         }
 	
@@ -42,7 +42,7 @@ module.exports = async function (app) {
             res.json(results[0]);
         }
         catch (err) {
-            //console.log(err.message);
+            //console.log(err);
             res.sendStatus(500);
         }
 	
@@ -56,7 +56,7 @@ module.exports = async function (app) {
             res.json(results[0]);
         }
         catch (err) {
-            //console.log(err.message);
+            //console.log(err);
             res.sendStatus(500);
         }
 	
@@ -70,7 +70,7 @@ module.exports = async function (app) {
             res.json(results[0]);
         }
         catch (err) {
-            //console.log(err.message);
+            //console.log(err);
             res.sendStatus(500);
         }
 	
@@ -84,7 +84,7 @@ module.exports = async function (app) {
             res.json(results[0]);
         }
         catch (err) {
-            //console.log(err.message);
+            //console.log(err);
             res.sendStatus(500);
         }
 	

@@ -34,7 +34,7 @@ module.exports = async function (app) {
                 var results = await pool.query(sql, data);
                 res.sendStatus(200);
             } catch (err) {
-                console.log(err.message);
+                console.log(err);
                 res.sendStatus(500);
             }
 		

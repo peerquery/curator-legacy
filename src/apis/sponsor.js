@@ -23,7 +23,7 @@ module.exports = async function (app) {
                 res.sendStatus(200);
             }
             catch (err) {
-                console.log(err.message);
+                console.log(err);
                 res.sendStatus(500);
             }
 		
@@ -47,7 +47,7 @@ module.exports = async function (app) {
                 res.sendStatus(200);
             }
             catch (err) {
-                console.log(err.message);
+                console.log(err);
                 res.sendStatus(500);
             }
 		
@@ -63,7 +63,7 @@ module.exports = async function (app) {
             res.json(results[0]);
         }
         catch (err) {
-            console.log(err.message);
+            console.log(err);
             res.sendStatus(500);
         }
 	
@@ -77,7 +77,7 @@ module.exports = async function (app) {
             res.json(results[0]);
         }
         catch (err) {
-            console.log(err.message);
+            console.log(err);
             res.sendStatus(500);
         }
 	
@@ -92,7 +92,7 @@ module.exports = async function (app) {
             res.json([ results[0], results[1], results[2], results[3], results[4] ]);
         }
         catch (err) {
-            console.log(err.message);
+            console.log(err);
             res.sendStatus(500);
         }
 	

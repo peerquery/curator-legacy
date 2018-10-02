@@ -4,7 +4,6 @@ $( window ).on( 'load', function() {
         e.preventDefault();
     });
      
-     
     function form_valid() {
         
         var login = $('#email').val();
@@ -23,8 +22,6 @@ $( window ).on( 'load', function() {
         
     }
      
-     
-      
     $('.submit').click(function(event){
         event.preventDefault();
         
@@ -59,8 +56,6 @@ $( window ).on( 'load', function() {
         
     });
     
-    
-    
     $('form').click(function() {
         
         window.user_data = '';
@@ -71,7 +66,5 @@ $( window ).on( 'load', function() {
     $('.ui.form')
         .form()
     ;
-    
-    
     
 });

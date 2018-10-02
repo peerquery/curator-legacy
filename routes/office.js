@@ -53,7 +53,7 @@ module.exports = async function (app) {
             res.render('office/settings', { user: req.user, settings: results[0]} );
         }
         catch (err) {
-            console.log(err.message);
+            console.log(err);
             res.sendStatus(500);
         }
 		
