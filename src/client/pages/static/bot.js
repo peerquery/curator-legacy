@@ -3,6 +3,7 @@
 const dsteem = require('dsteem');
 
 const settings = require('../../../../config/settings');
+const voting_power = require('../../../utils/voting_power');
 const client = new dsteem.Client(settings.STEEM_RPC);
 
 var username = '';
@@ -59,11 +60,9 @@ async function cal() {
         var s_a = (new Date() - new Date(l_v_t + 'Z')) / 1000;
 		
         //var current voting_power = response[0].voting_power + (10000 * secondsago / 432000);
-        var current_voting_power = v_p + (10000 * s_a / 432000);
-        current_voting_power = Math.min(current_voting_power / 100, 100).toFixed(2);
-        //console.log(c_v_p);
-			
-        draw(current_voting_power.split('.')[0]);
+        var current_voting_power = await Promise.resolve(voting_power(acc));
+        
+        draw(current_voting_power.toFixed());
 			
         $('#vp_message').text(current_voting_power + '% - voting power');
 	
