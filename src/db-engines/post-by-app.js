@@ -12,8 +12,8 @@ module.exports = async function (op, timestamp) {
         try {
             var post_app = JSON.parse(op[1].json_metadata).app;
 	
-            if (post_app.indexOf(config.target) == -1) {
-			
+            if (post_app.indexOf(config.target) > -1) {
+                
                 try {
                     var sql = 'CALL new_post(?,?,?,?,?,?,?)';
 					
