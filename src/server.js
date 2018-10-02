@@ -14,7 +14,7 @@ module.exports = function () {
     const morgan = require('morgan');
     const bodyParser = require('body-parser');
     const cookieParser = require('cookie-parser');
-    const port = (process.env.NODE_ENV == 'production ' || process.env.NODE_ENV == 'staging') ? settings.PORT + 8001 : settings.PORT;
+    const port = (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'staging') ? settings.PORT + 8001 : settings.PORT;
     
     app.use(cookieParser(process.env.COOKIE_SECRET));
 	
