@@ -3,6 +3,7 @@
 //var io = require('socket.io');
 
 var socket = io();
+var timeago = require('timeago');
     
 $( window ).on( 'load', function() {
 	
