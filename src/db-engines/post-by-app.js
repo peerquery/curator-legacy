@@ -19,7 +19,7 @@ module.exports = async function (op, timestamp) {
 					
                     var details =  [ op[1].author, op[1].permlink, op[1].parent_permlink, op[1].title, op[1].body, ('/@' + op[1].author + '/' + op[1].permlink), timestamp ];
 					
-                    pool.query(sql, details);
+                    await pool.query(sql, details);
 					
                 }
                 catch (err) {
