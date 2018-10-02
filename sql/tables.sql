@@ -108,8 +108,13 @@ CREATE TABLE IF NOT EXISTS `team` (
 -- Create OWNER account immediately
 
 
-	INSERT IGNORE INTO `team` (`account`, `email`, `password_hash`, `role`, `tag`, `status`, `message`, `authority`)
-		VALUES("OWNER_ACCOUNT", "OWNER_EMAIL", "OWNER_PASS", "owner", "super-admin", "active", "create_owner", "4");
+	INSERT INTO `team` (`account`, `email`, `password_hash`, `role`, `tag`, `status`, `message`, `authority`)
+		VALUES("OWNER_ACCOUNT", "OWNER_EMAIL", "OWNER_PASS", "owner", "super-admin", "active", "create_owner", "4")
+        ON DUPLICATE KEY UPDATE 
+			`email`= VALUES(`email`),
+			`tag`= VALUES(`tag`),
+			`message`= VALUES(`message`),
+			`password_hash`= VALUES(`password_hash`);
 
 
 -- Create team_view: [ SELECT * FROM `team_view` ] will include the `password_hash` column! - SO USE THIS INSTEAD:
