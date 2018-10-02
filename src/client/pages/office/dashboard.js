@@ -2,6 +2,7 @@
 const dsteem = require('dsteem'),
     num2str = require('../../../utils/num2str.js');
 const settings = require('../../../../config/settings');
+const voting_power = require('../../../utils/voting_power');
 const client = new dsteem.Client(settings.STEEM_RPC);
 
 $( document ).ready(function() {
@@ -58,9 +59,8 @@ $( document ).ready(function() {
             var s_a = (new Date() - new Date(l_v_t + 'Z')) / 1000;
 		
             //var current voting_power = response[0].voting_power + (10000 * secondsago / 432000);
-            var current_voting_power = v_p + (10000 * s_a / 432000);
-            current_voting_power = Math.min(current_voting_power / 100, 100).toFixed(2);
-            //console.log(c_v_p);
+            var current_voting_power = await Promise.resolve(voting_power(acc));
+            
             $('#voting_power').text(current_voting_power + '%');
 	
             //var steemPower = totalVestingFundSteem * (vestingShares / totalVestingShares);
