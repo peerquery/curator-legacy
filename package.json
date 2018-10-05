@@ -8,7 +8,7 @@
     "lint": "./node_modules/.bin/eslint \"**/*.js\"",
     "lintstaged": "./node_modules/.bin/lint-staged",
     "qserve": "webpack && node setup.js",
-    "test": "echo \"Error: no test specified\" && exit 0",
+    "test": "npm run lintfix",
     "build": "webpack",
     "start": "node setup.js",
     "kill": "taskkill /f /im node.exe"
